@@ -12,7 +12,18 @@ class Player:
         self.rect = pygame.Rect(self.character_pos_x, self.character_pos_y, self.size, self.size)
         self.mask = pygame.mask.Mask((self.size, self.size), True)
         self.color = (20, 210, 99)
+        self.starting_velocity = -15
+        self.current_velocity = self.starting_velocity
+        self.acceleration = 0.5
+        self.isJumping = False
 
+    def jump(self):
+        
+        self.current_velocity += self.acceleration
+        self.character_pos_y += self.current_velocity
+        if self.current_velocity == abs(self.starting_velocity):
+            self.isJumping = False
+            self.current_velocity = self.starting_velocity
     
     def move(self, pressed):
         if pressed[pygame.K_UP]:

@@ -6,9 +6,12 @@ import random
 
 pygame.init()
 size = 45
-window_length = 16 * size
-window_height = 12 * size
-screen = pygame.display.set_mode((window_length, window_height))
+height_ratio = 14
+window_ratio = 22
+score_box = window_ratio * 6
+window_length = window_ratio * size
+window_height = height_ratio * size
+screen = pygame.display.set_mode((window_length, window_height + score_box))
 background = pygame.Surface((window_length, window_height))
 #sprite_surface = pygame.Surface((screen, (20, 210, 99)))
 character_size = 40
@@ -27,11 +30,7 @@ def offset(player, enemy):
     return int(enemy.x - player.character_pos_x), int(enemy.y - player.character_pos_y)
 
 def game():
-    character_pos_x = 100
-    character_pos_y = 100
     
-    image_x = 0
-    image_y = 0
     game_over = False
     clock = pygame.time.Clock()
     print(background_height, background_width)
@@ -43,10 +42,16 @@ def game():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 game_over = True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and not player.isJumping:
+                    player.isJumping = True
+        
+        if player.isJumping:
+            player.jump()
         
         
     
-        screen.blit(image, (viewpoint_x, 0))
+        screen.blit(image, (viewpoint_x, score_box))
         enemy.draw(screen)
         
         player.draw(screen)
@@ -56,7 +61,7 @@ def game():
             player.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         
         pygame.display.update()
-        clock.tick(24)
+        clock.tick(FPS)
 
 game()
     
