@@ -9,6 +9,9 @@ class Player:
         self.background_width = bg_width
         self.box_viewpoint_x = 0
         self.speed = speed
+        self.rect = pygame.Rect(self.character_pos_x, self.character_pos_y, self.size, self.size)
+        self.mask = pygame.mask.Mask((self.size, self.size), True)
+        self.color = (20, 210, 99)
 
     
     def move(self, pressed):
@@ -26,5 +29,8 @@ class Player:
                 self.character_pos_x -= self.speed
             else:
                 self.box_viewpoint_x += self.speed
-
+        self.rect = pygame.Rect(self.character_pos_x, self.character_pos_y, self.size, self.size)
         return self.box_viewpoint_x
+    
+    def draw(self, screen):
+        pygame.draw.rect(screen, self.color, self.rect)
