@@ -1,7 +1,7 @@
 import pygame
 
 class Enemy:
-    def __init__(self, enemy_size, view_width, view_height):
+    def __init__(self, enemy_size, view_width, view_height, bg_moving, bg_speed):
         self.image = pygame.image.load('Enemy.png')
         self.width = 80
         self.height = int(self.width * 1.6)
@@ -10,7 +10,8 @@ class Enemy:
         self.enemy_size = enemy_size
         self.mask = pygame.mask.Mask((self.enemy_size, self.enemy_size), True)
         self.color = (20, 210, 99)
-        self.speed = 2
+        self.speed = 5
+        self.bg_speed = bg_speed
     
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, (self.enemy_x, self.enemy_y, self.enemy_size, self.enemy_size))
