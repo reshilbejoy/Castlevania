@@ -14,10 +14,10 @@ window_height = height_ratio * size
 screen = pygame.display.set_mode((window_length, window_height + score_box))
 background = pygame.Surface((window_length, window_height))
 #sprite_surface = pygame.Surface((screen, (20, 210, 99)))
-character_size = 40
+character_size = 100
 black = (0, 0, 0)
 image = pygame.image.load('Castlevania_Test_Background.jpg')
-enemy = Enemy()
+enemy = Enemy(40, window_length, window_height)
 background_height = image.get_height()
 background_width = image.get_width()
 print(background_width)
@@ -27,7 +27,7 @@ grid = Grid()
 print(grid.grid_return())
 
 def offset(player, enemy):
-    return int(enemy.x - player.character_pos_x), int(enemy.y - player.character_pos_y)
+    return int(enemy.enemy_x - player.character_pos_x), int(enemy.enemy_y - player.character_pos_y)
 
 def game():
     
@@ -49,7 +49,7 @@ def game():
         if player.isJumping:
             player.jump()
         
-        
+        enemy.move(window_length)
     
         screen.blit(image, (viewpoint_x, score_box))
         enemy.draw(screen)

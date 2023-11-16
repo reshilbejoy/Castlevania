@@ -1,14 +1,21 @@
 import pygame
 
 class Enemy:
-    def __init__(self):
+    def __init__(self, enemy_size, view_width, view_height):
         self.image = pygame.image.load('Enemy.png')
         self.width = 80
         self.height = int(self.width * 1.6)
-        self.big_image = pygame.transform.scale(self.image, (self.width, self.height))
-        self.mask = pygame.mask.from_surface(self.big_image)
-        self.x = 100
-        self.y = 100
+        self.enemy_x = view_width - enemy_size
+        self.enemy_y = int(view_height / 2)
+        self.enemy_size = enemy_size
+        self.mask = pygame.mask.Mask((self.enemy_size, self.enemy_size), True)
+        self.color = (20, 210, 99)
+        self.speed = 2
     
     def draw(self, screen):
-        screen.blit(self.big_image, (100, 100))
+        pygame.draw.rect(screen, self.color, (self.enemy_x, self.enemy_y, self.enemy_size, self.enemy_size))
+
+    def move(self, view_width):
+        self.enemy_x -= self.speed
+        if (self.enemy_x <= 0 or self.enemy_x >= view_width - self.enemy_size):
+            self.speed *= -1
