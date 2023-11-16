@@ -3,7 +3,9 @@ import pygame
 class Enemy:
     def __init__(self):
         self.image = pygame.image.load('Enemy.png')
-        self.big_image = pygame.transform.scale(self.image, (100, 160))
+        self.width = 80
+        self.height = int(self.width * 1.6)
+        self.big_image = pygame.transform.scale(self.image, (self.width, self.height))
         self.mask = pygame.mask.from_surface(self.big_image)
         self.x = 100
         self.y = 100
