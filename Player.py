@@ -19,8 +19,8 @@ class Player:
         self.gravity = -self.starting_velocity_y * 0.05
         self.isJumping = False
         self.isBgMoving = False
-        self.horizontalForce = 0.2
-        self.frictionForce = 0.1
+        self.horizontalForce = 0.4
+        self.frictionForce = 0.3
         self.net_force = (abs(self.horizontalForce) - abs(self.frictionForce))
         self.terminal_x_velocity = terminal_x
         self.movingDir = None
@@ -35,19 +35,17 @@ class Player:
             self.jumping_y = self.character_pos_y
             self.isJumping = False
             self.current_velocity = self.starting_velocity_y
+
+    def speeding_up(self):
+        if self.speed < self.terminal_x_velocity:
+            speed_val = self.speed + self.net_force
+            self.speed = round(speed_val, 2)
     
     def move(self, pressed, enemy_x, enemy_y):
         
-        
-        #if pressed[pygame.K_UP]:
-            #self.character_pos_y -= self.speed
-        #if pressed[pygame.K_DOWN]:
-            #self.character_pos_y += self.speed
-        if pressed[pygame.K_RIGHT] and self.character_pos_x <= self.view_width - self.character_width:
+        if pressed[pygame.K_RIGHT] and self.character_pos_x <= self.view_width - self.character_width and not self.isJumping:
             self.movingDir = True
-            if self.speed < self.terminal_x_velocity:
-                speed_val = self.speed + self.net_force
-                self.speed = round(speed_val, 2)
+            self.speeding_up()
             if self.character_pos_x < (self.view_width / 2) or -self.box_viewpoint_x >= (self.background_width - self.view_width): 
                 new_pos = self.character_pos_x + self.speed
                 self.character_pos_x = round(new_pos, 2)
@@ -55,18 +53,16 @@ class Player:
                 enemy_x -= self.speed
                 self.box_viewpoint_x -= self.speed
             
-        if pressed[pygame.K_LEFT] and self.character_pos_x > 0:
+        if pressed[pygame.K_LEFT] and self.character_pos_x > 0 and not self.isJumping:
             self.movingDir = False
-            if self.speed < self.terminal_x_velocity:
-                speed_val = self.speed + self.net_force
-                self.speed = round(speed_val, 2)
+            self.speeding_up()
             if self.character_pos_x > (self.view_width / 2) or self.box_viewpoint_x >= 0:
                 new_pos = self.character_pos_x - self.speed
                 self.character_pos_x = round(new_pos, 2)
             else:
                 enemy_x += self.speed
                 self.box_viewpoint_x += self.speed
-        if not pressed[pygame.K_RIGHT] and not pressed[pygame.K_LEFT] and not self.speed == 0:
+        if not pressed[pygame.K_RIGHT] and not pressed[pygame.K_LEFT] and not self.speed <= 0:
             self.net_force = self.frictionForce
             new_speed = self.speed - self.net_force
             self.speed = round(new_speed, 2)
