@@ -20,10 +20,10 @@ class Player:
         self.isJumping = False
         self.isBgMoving = False
         self.horizontalForce = 0.2
-        self.frictionForce = -0.1
-        self.net_force = abs(self.horizontalForce) - abs(self.frictionForce)
+        self.frictionForce = 0.1
+        self.net_force = (abs(self.horizontalForce) - abs(self.frictionForce))
         self.terminal_x_velocity = terminal_x
-        self.isMoving = False
+        self.movingDir = None
         self.horizontalVelocity = self.speed
         
 
@@ -44,26 +44,36 @@ class Player:
         #if pressed[pygame.K_DOWN]:
             #self.character_pos_y += self.speed
         if pressed[pygame.K_RIGHT] and self.character_pos_x <= self.view_width - self.character_width:
+            self.movingDir = True
             if self.speed < self.terminal_x_velocity:
-                self.speed += self.net_force
+                speed_val = self.speed + self.net_force
+                self.speed = round(speed_val, 2)
             if self.character_pos_x < (self.view_width / 2) or -self.box_viewpoint_x >= (self.background_width - self.view_width): 
-                self.character_pos_x += self.speed
+                new_pos = self.character_pos_x + self.speed
+                self.character_pos_x = round(new_pos, 2)
             else:
                 enemy_x -= self.speed
                 self.box_viewpoint_x -= self.speed
             
         if pressed[pygame.K_LEFT] and self.character_pos_x > 0:
+            self.movingDir = False
             if self.speed < self.terminal_x_velocity:
-                self.speed += self.net_force
+                speed_val = self.speed + self.net_force
+                self.speed = round(speed_val, 2)
             if self.character_pos_x > (self.view_width / 2) or self.box_viewpoint_x >= 0:
-                self.character_pos_x -= self.speed
+                new_pos = self.character_pos_x - self.speed
+                self.character_pos_x = round(new_pos, 2)
             else:
                 enemy_x += self.speed
                 self.box_viewpoint_x += self.speed
         if not pressed[pygame.K_RIGHT] and not pressed[pygame.K_LEFT] and not self.speed == 0:
             self.net_force = self.frictionForce
-            self.speed += self.net_force
-            self.character_pos_x += self.speed
+            new_speed = self.speed - self.net_force
+            self.speed = round(new_speed, 2)
+            if self.movingDir:
+                self.character_pos_x += self.speed
+            else:
+                self.character_pos_x -= self.speed
         if not self.speed == 0:
             print(self.speed)
         #self.rect = pygame.Rect(self.character_pos_x, self.character_pos_y, self.size, self.size)
