@@ -31,10 +31,13 @@ player = Player(100, 300, character_size, window_length, background_width, movem
 grid = Grid()
 enemy = Enemy(40, window_length, window_height, player.isBgMoving, movement_speed)
 #print(grid.grid_return())
-platform = Platform(100, 10, window_length / 2, (window_height / 2) - 28)
+platform = Platform(100, 10, window_length / 2, (window_height / 2) - 25)
 
 def offset(player, enemy):
     return int(enemy.enemy_x - player.character_pos_x), int(enemy.enemy_y - player.character_pos_y)
+
+def offset_platform(player, platform):
+    return int(platform.x - player.character_pos_x), int(platform.y - player.character_pos_y)
 
 def game():
     
@@ -65,9 +68,13 @@ def game():
         player.draw(screen)
         platform.draw(screen)
 
-        if (enemy.enemy_x > 400):
-            print(enemy.enemy_x)
-
+        #if (enemy.enemy_x > 400):
+            #print(enemy.enemy_x)
+        overlap = player.mask.overlap(platform.mask, offset_platform(player, platform))
+        print(platform.y, overlap)
+        #if overlap != None and overlap[1] == platform.y:
+            #print(overlap)
+        
         if player.mask.overlap(enemy.mask, offset(player, enemy)):
             
             enemy.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))

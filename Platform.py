@@ -9,6 +9,7 @@ class Platform:
         self.y = y
         self.speed = -5
         self.color = (178, 172, 19)
+        self.mask = pygame.mask.Mask((self.width, self.length), True)
 
     def move(self, box_viewpoint):
         self.x = box_viewpoint + 300
