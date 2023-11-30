@@ -3,6 +3,7 @@ from Player import Player
 from Grid import Grid
 from Enemy import Enemy
 import random
+from Platform import Platform
 
 pygame.init()
 size = 45
@@ -18,7 +19,10 @@ background = pygame.Surface((window_length, window_height))
 character_size = 50
 black = (0, 0, 0)
 image = pygame.image.load('Castlevania_Test_Background.jpg')
-
+ground = pygame.image.load('Background-easy.png')
+ground_height = ground.get_height()
+ground_width = ground.get_width()
+print(ground_height, ground_width)
 background_height = image.get_height()
 background_width = image.get_width()
 print(background_width)
@@ -26,7 +30,8 @@ print(background_width)
 player = Player(100, 300, character_size, window_length, background_width, movement_speed)
 grid = Grid()
 enemy = Enemy(40, window_length, window_height, player.isBgMoving, movement_speed)
-print(grid.grid_return())
+#print(grid.grid_return())
+platform = Platform(100, 10, window_length / 2, (window_height / 2) - 28)
 
 def offset(player, enemy):
     return int(enemy.enemy_x - player.character_pos_x), int(enemy.enemy_y - player.character_pos_y)
@@ -35,7 +40,7 @@ def game():
     
     game_over = False
     clock = pygame.time.Clock()
-    print(background_height, background_width)
+    #print(background_height, background_width)
     FPS = 60
     while not game_over:
         pressed = pygame.key.get_pressed()
@@ -52,11 +57,16 @@ def game():
             player.jump()
         
         enemy.move(window_length)
+        platform.move(player.box_viewpoint_x)
     
         screen.blit(image, (viewpoint_x, score_box))
         enemy.draw(screen)
         
         player.draw(screen)
+        platform.draw(screen)
+
+        if (enemy.enemy_x > 400):
+            print(enemy.enemy_x)
 
         if player.mask.overlap(enemy.mask, offset(player, enemy)):
             
