@@ -42,8 +42,10 @@ class Player:
             self.speed = round(speed_val, 2)
     
     def move(self, pressed, enemy_x, enemy_y):
+
         
-        if pressed[pygame.K_RIGHT] and self.character_pos_x <= self.view_width - self.character_width and not self.isJumping:
+        
+        if pressed[pygame.K_RIGHT] and self.character_pos_x <= self.view_width - self.character_width and not (self.isJumping and not self.movingDir):
             self.movingDir = True
             self.speeding_up()
             if self.character_pos_x < (self.view_width / 2) or -self.box_viewpoint_x >= (self.background_width - self.view_width): 
@@ -53,7 +55,7 @@ class Player:
                 enemy_x -= self.speed
                 self.box_viewpoint_x -= self.speed
             
-        if pressed[pygame.K_LEFT] and self.character_pos_x > 0 and not self.isJumping:
+        elif pressed[pygame.K_LEFT] and self.character_pos_x > 0 and not (self.isJumping and self.movingDir):
             self.movingDir = False
             self.speeding_up()
             if self.character_pos_x > (self.view_width / 2) or self.box_viewpoint_x >= 0:
@@ -70,8 +72,9 @@ class Player:
                 self.character_pos_x += self.speed
             else:
                 self.character_pos_x -= self.speed
-        if not self.speed == 0:
-            print(self.speed)
+        if self.speed == 0:
+            self.movingDir = None
+        
         #self.rect = pygame.Rect(self.character_pos_x, self.character_pos_y, self.size, self.size)
         return self.box_viewpoint_x, enemy_x, enemy_y
     
