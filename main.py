@@ -71,7 +71,12 @@ def game():
         #if (enemy.enemy_x > 400):
             #print(enemy.enemy_x)
         overlap = player.mask.overlap(platform.mask, offset_platform(player, platform))
-        print(platform.y, overlap)
+        if overlap != None:
+            if overlap[1] > 70:
+                player.isJumping = False
+            else:
+                player.current_velocity *= -1
+            
         #if overlap != None and overlap[1] == platform.y:
             #print(overlap)
         
