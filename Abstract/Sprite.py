@@ -1,7 +1,7 @@
 from typing import List
 import pygame
 from abc import ABC, abstractmethod
-from BackgroundEngine import BackgroundEngine
+from background_engine import BackgroundEngine
 
 class Sprite(pygame.sprite):
     def __init__(self,images:List[pygame.Surface],hitbox:List[pygame.Rect]):

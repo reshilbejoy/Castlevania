@@ -1,0 +1,1 @@
+This is where the abstract sprite abstract classes will be located

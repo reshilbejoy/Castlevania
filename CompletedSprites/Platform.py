@@ -1,6 +1,6 @@
 from typing import List
 import pygame
-from Sprite import Sprite
+from sprite import Sprite
 import pygame
 from pygame import Surface,Rect
 from enum import Enum

@@ -1,4 +1,4 @@
-from Abstract.DynamicSprite import DynamicSprite
+from dynamic_sprite import DynamicSprite
 from typing import List
 from abc import ABC, abstractmethod 
 import pygame

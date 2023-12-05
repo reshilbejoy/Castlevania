@@ -1,8 +1,10 @@
 from typing import List
-from BackgroundEngine import BackgroundEngine
-from Abstract.Player import Player
-from Sprite import Sprite
+from background_engine import BackgroundEngine
+import pygame
+from Abstract.player import Player
+from Abstract.sprite import Sprite
 class Game():
+    
     def __init__(self):
         #initialize all sprites in this array
         self._all_sprites:List[Sprite] = []

@@ -7,6 +7,12 @@ _timer = pygame.time.Clock()
 _draw_frame_size:Tuple[float,float] = (500,600)  #Width, Height
 _update_frame_size:Tuple[float,float] = (700,800)  #Width, Height
 class BackgroundEngine(ABC):
+    
+    pygame.init()
+    window_size = _draw_frame_size
+    window = pygame.display.set_mode(window_size)
+    pygame.display.set_caption("Castlevania")
+    
     @staticmethod
     def get_current_image(player_hitbox:pygame.Rect) -> pygame.Surface:
         #Return a surface with the current background image TODO

@@ -1,12 +1,12 @@
 from abc import abstractmethod
 from abc import ABC
-from Sprite import Sprite
-from CompletedSprites.Platform import Platform
-from Abstract.Interaction import DamageMessage,InventoryMessage
+from sprite import Sprite
+from CompletedSprites.platform import Platform
+from interaction import DamageMessage,InventoryMessage
 from typing import List
 import pygame
 
-class DyanmicSprite(Sprite,ABC):
+class DynamicSprite(Sprite,ABC):
     def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox:List[pygame.Rect], health:int):
         super().__init__(images,hitbox)
         self._terminal_vel_x = terminal_vel_x
