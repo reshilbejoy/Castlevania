@@ -7,7 +7,6 @@ class Game():
         #initialize all sprites in this array
         self._all_sprites:List[Sprite] = []
         self._player:Player = None
-        self._background_engine:BackgroundEngine = BackgroundEngine()
         self._active_sprites:List[Sprite] = []
 
     def game_loop(self):
@@ -23,7 +22,7 @@ class Game():
                         i.draw()
                 else:
                     self._active_sprites.remove(i)
-            self._background_engine.tick_timer()
+            BackgroundEngine.tick_timer()
     
     def handle_collisions(self):
         #handle collisions between Interactable objects and active sprites TODO
