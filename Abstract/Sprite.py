@@ -25,7 +25,7 @@ class Sprite(pygame.sprite):
         # return wether or not to draw sprite based on player loc TODO
         if self._screen.colliderect(player_hitbox):
             return True
-        
+    
     
     def should_update(self,player_hitbox:pygame.Rect)->bool:
         # return wether or not to call update function based on player loc TODO
