@@ -1,9 +1,9 @@
 from abc import abstractmethod,ABC
 from typing import List
 import pygame
-from dynamic_sprite import DynamicSprite
+from dynamic_sprite import DyanmicSprite
 
-class Enemy(DynamicSprite,ABC):
+class Enemy(DyanmicSprite,ABC):
     def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox:List[pygame.Rect], health:int):
         super.__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health)
     
