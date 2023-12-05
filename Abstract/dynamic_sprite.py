@@ -6,7 +6,7 @@ from Interaction import DamageMessage,InventoryMessage
 from typing import List
 import pygame
 
-class DynamicSprite(Sprite,ABC):
+class DyanmicSprite(Sprite,ABC):
     def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox:List[pygame.Rect], health:int):
         super().__init__(images,hitbox)
         self._terminal_vel_x = terminal_vel_x
@@ -23,7 +23,6 @@ class DynamicSprite(Sprite,ABC):
         #handle inventory
         pass
 
-    @abstractmethod
     def apply_force(self,x_force,y_force, all_platforms:List[Platform])->None:
         #Use all platforms list to move the sprite hitbox according to x and y forces TODO
         pass
