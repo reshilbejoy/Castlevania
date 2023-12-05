@@ -8,10 +8,10 @@ class Sprite(pygame.sprite):
         self._image_arr:List[pygame.Surface] = images
         self._hitbox_arr:List[pygame.Rect] = hitbox
         self._screen:pygame.Surface = BackgroundEngine.get_current_image()
-        
+
+    @abstractmethod    
     def return_hitbox(self) -> pygame.Rect:
-        # return a compound hitbox of the sprite from rect_arr TODO
-        pass
+        return self._hitbox_arr[0]
 
     @abstractmethod
     def return_current_image(self) -> pygame.Surface:

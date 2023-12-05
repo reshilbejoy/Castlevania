@@ -1,8 +1,8 @@
 from typing import List
 from background_engine import BackgroundEngine
 import pygame
-from Abstract.player import Player
-from Abstract.sprite import Sprite
+from Abstract.Player import Player
+from Abstract.Sprite import Sprite
 class Game():
     
     def __init__(self):
@@ -25,20 +25,37 @@ class Game():
                 else:
                     self._active_sprites.remove(i)
             BackgroundEngine.tick_timer()
+
     
     def handle_collisions(self):
         #handle collisions between Interactable objects and active sprites TODO
         pass
     
     def handle_keystrokes(self):
-        #handle forces applied to player based on keystrokes TODO
-        pass
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.type == pygame.K_SPACE:
+                    self._player.apply_force(0, 0.5)
+                if event.type == pygame.K_d:
+                    self._player.apply_force(0.4, 0)
+                if event.type == pygame.K_a:
+                    self._player.apply_force(-0.4, 0)
+                if event.type == pygame.K_s:
+                    pass
+                if event.type == pygame.K_k:
+                    pass
+                if event.type == pygame.K_w:
+                    pass
+            
 
     def exit_condition(self):
-        #wether or not to quit the game
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return True
         return False
     
 if __name__ == "main":
     Castlevania = Game()
     while True:
         Castlevania.game_loop()
+        pygame.quit()
