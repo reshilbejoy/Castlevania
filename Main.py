@@ -27,7 +27,7 @@ class Game():
             BackgroundEngine.tick_timer()
     
     def handle_collisions(self):
-        #handle collisions between Interactable objects and active sprites TODO
+        #handle collisions between Interactable objects and active dynamic sprites TODO
         pass
     
     def handle_keystrokes(self):
