@@ -27,17 +27,18 @@ background_height = image.get_height()
 background_width = image.get_width()
 print(background_width)
 
-player = Player(100, 300, character_size, window_length, background_width, movement_speed)
+
+player = Player(character_size, window_length, background_width, movement_speed, window_height + score_box, int(ground_height / 5))
 grid = Grid()
 enemy = Enemy(40, window_length, window_height, player.isBgMoving, movement_speed)
 #print(grid.grid_return())
-platform = Platform(100, 10, window_length / 2, (window_height / 2) - 25)
+platform = Platform(100, 10, window_length / 2, (window_height) - 150)
+ground = Platform(int(ground_width / 5), int(ground_height / 5), 0, window_height + score_box - int(ground_height / 5))
 
 def offset(player, enemy):
     return int(enemy.enemy_x - player.character_pos_x), int(enemy.enemy_y - player.character_pos_y)
 
-def offset_platform(player, platform):
-    return int(platform.x - player.character_pos_x), int(platform.y - player.character_pos_y)
+
 
 def game():
     
@@ -67,15 +68,12 @@ def game():
         
         player.draw(screen)
         platform.draw(screen)
+        ground.draw(screen)
 
         #if (enemy.enemy_x > 400):
             #print(enemy.enemy_x)
-        overlap = player.mask.overlap(platform.mask, offset_platform(player, platform))
-        if overlap != None:
-            if overlap[1] > 70:
-                player.isJumping = False
-            else:
-                player.current_velocity *= -1
+        
+        
             
         #if overlap != None and overlap[1] == platform.y:
             #print(overlap)

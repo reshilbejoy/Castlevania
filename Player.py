@@ -1,11 +1,11 @@
 import pygame
 
 class Player:
-    def __init__(self, x, y, character_width, window_width, bg_width, terminal_x):
-        self.character_pos_x = x
-        self.character_pos_y = y
+    def __init__(self, character_width, window_width, bg_width, terminal_x, window_height, ground_height):
+        self.character_height = int(character_width * 1.6)
+        self.character_pos_x = 100
+        self.character_pos_y = window_height - self.character_height - ground_height
         self.character_width = character_width
-        self.character_height = int(self.character_width * 1.6)
         self.view_width = window_width
         self.background_width = bg_width
         self.box_viewpoint_x = 0
@@ -15,7 +15,7 @@ class Player:
         self.olist = self.mask.outline()
         self.jumping_y = self.character_pos_y
         self.starting_velocity_y = -10
-        self.current_velocity = self.starting_velocity_y
+        self.current_velocity = 0
         self.gravity = -self.starting_velocity_y * 0.05
         self.isJumping = False
         self.isBgMoving = False
@@ -25,7 +25,12 @@ class Player:
         self.terminal_x_velocity = terminal_x
         self.movingDir = None
         self.horizontalVelocity = self.speed
-        
+    
+    def applyForce(self, collision_detection):
+        if not collision_detection: # collision_detection is true if there is a normal force
+            self.current_velocity += self.gravity
+            self.character_pos_y += self.current_velocity
+
 
     def jump(self):
         
