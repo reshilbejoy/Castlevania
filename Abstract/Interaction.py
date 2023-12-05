@@ -2,7 +2,7 @@ from enum import Enum
 from typing import List
 import pygame
 from abc import abstractmethod,ABC
-from dynamic_sprite import DynamicSprite
+from dynamic_sprite import DyanmicSprite
 from sprite import Sprite
 
 from enum import Enum
@@ -27,7 +27,7 @@ class InventoryMessage():
         return self._item
     
 class Interactable(Sprite,ABC):
-    def __init__(self, images: List[pygame.Surface], hitbox: List[pygame.Rect], damage: int, attackable:DynamicSprite):
+    def __init__(self, images: List[pygame.Surface], hitbox: List[pygame.Rect], damage: int, attackable:DyanmicSprite):
         self._damage = damage
         super().__init__(images, hitbox)
     
@@ -39,10 +39,10 @@ class Interactable(Sprite,ABC):
     def life_span(self):
         pass
     
-    def damage_interaction(self,obj:DynamicSprite,msg:DamageMessage):
+    def damage_interaction(self,obj:DyanmicSprite,msg:DamageMessage):
         obj.handle_damage_interaction(msg)
     
-    def inventory_interaction(self,obj:DynamicSprite,msg:InventoryMessage):
+    def inventory_interaction(self,obj:DyanmicSprite,msg:InventoryMessage):
         obj.handle_inventory_interaction(msg)
 
     def update(self):
