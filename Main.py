@@ -1,6 +1,6 @@
 from typing import List
 from BackgroundEngine import BackgroundEngine
-from Player import Player
+from Abstract.Player import Player
 from Sprite import Sprite
 class Game():
     def __init__(self):
@@ -11,12 +11,16 @@ class Game():
         self._active_sprites:List[Sprite] = []
 
     def game_loop(self):
+        #Main game loop logic (this should be ready to go)
         if not self.exit_condition():
+            self.handle_collisions()
+            self.handle_keystrokes()
             for i in self._all_sprites:
-                if i.should_draw:
-                    self._active_sprites.append(i)
+                if i.should_update():
                     i.update()
-                    i.draw()
+                    if i.should_draw():
+                        self._active_sprites.append(i)
+                        i.draw()
                 else:
                     self._active_sprites.remove(i)
             self._background_engine.tick_timer()

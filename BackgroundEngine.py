@@ -4,7 +4,8 @@ from abc import ABC
 
 _background_arr:List[pygame.Surface] = []
 _timer = pygame.time.Clock() 
-_frame_size:Tuple[float,float] = (500,600)  #Width, Height
+_draw_frame_size:Tuple[float,float] = (500,600)  #Width, Height
+_update_frame_size:Tuple[float,float] = (700,800)  #Width, Height
 class BackgroundEngine(ABC):
     @staticmethod
     def get_current_image(player_hitbox:pygame.Rect) -> pygame.Surface:
@@ -16,13 +17,16 @@ class BackgroundEngine(ABC):
     def get_current_image_frame(player_hitbox:pygame.Rect)-> pygame.Rect:
         #Return a Rect with the current global frame that the screen is on TODO
         pass
+    
+    @staticmethod
+    def get_current_update_frame(player_hitbox:pygame.Rect)-> pygame.Rect:
+        #Return a Rect with the frame objects should update in TODO
+        pass
 
     @staticmethod
     def get_current_time()-> float:
         _timer.get_time()
-        pass
 
     @staticmethod
     def tick_timer()-> float:
         _timer.tick()
-        pass

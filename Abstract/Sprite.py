@@ -25,6 +25,10 @@ class Sprite(pygame.sprite):
         # return wether or not to draw sprite based on player loc TODO
         pass
     
+    def should_update(self,player_hitbox:pygame.Rect)->bool:
+        # return wether or not to call update function based on player loc TODO
+        pass
+    
     @abstractmethod
     def update(self):
         # update the coords or hitbox every frame IMPLEMENT IN DAUGHTER CLASSES

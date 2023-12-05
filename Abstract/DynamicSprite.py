@@ -1,8 +1,8 @@
 from abc import abstractmethod
 from abc import ABC
 from Sprite import Sprite
-from Platform import Platform
-from Interaction import DamageMessage,InventoryMessage
+from CompletedSprites.Platform import Platform
+from Abstract.Interaction import DamageMessage,InventoryMessage
 from typing import List
 import pygame
 

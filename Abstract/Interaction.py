@@ -2,7 +2,7 @@ from enum import Enum
 from typing import List
 import pygame
 from abc import abstractmethod,ABC
-from DynamicSprite import DyanmicSprite
+from Abstract.DynamicSprite import DyanmicSprite
 from Sprite import Sprite
 
 from enum import Enum

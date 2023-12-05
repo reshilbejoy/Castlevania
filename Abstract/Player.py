@@ -1,27 +1,20 @@
-from abc import abstractmethod,ABC
+from Abstract.DynamicSprite import DynamicSprite
 from typing import List
+from abc import ABC, abstractmethod 
 import pygame
-from DynamicSprite import DyanmicSprite
 
-
-class Enemy(DyanmicSprite,ABC):
+class Player(DynamicSprite):
     def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox:List[pygame.Rect], health:int):
         super.__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health)
     
     @abstractmethod
     def attack(self):
         pass
-
-    def update(self):
-        if self.lifespan():
-            self.AI()
-        else:
-            del self
-
-    @abstractmethod       
-    def lifespan(self):
-        pass
     
-    @abstractmethod
-    def AI(self):
-        pass
+    def update(self):
+        if not self.lifespan():
+            del self
+            
+    def lifespan(self):
+        return self._health>0
+    
