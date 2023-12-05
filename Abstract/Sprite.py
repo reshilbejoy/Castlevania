@@ -7,7 +7,7 @@ class Sprite(pygame.sprite):
     def __init__(self,images:List[pygame.Surface],hitbox:List[pygame.Rect]):
         self._image_arr:List[pygame.Surface] = images
         self._hitbox_arr:List[pygame.Rect] = hitbox
-        self._screen:pygame.Surface = BackgroundEngine.get_current_image()
+        self._screen:pygame.Rect = BackgroundEngine.get_current_image_frame()
         
     def return_hitbox(self) -> pygame.Rect:
         # return a compound hitbox of the sprite from rect_arr TODO
@@ -23,7 +23,9 @@ class Sprite(pygame.sprite):
 
     def should_draw(self,player_hitbox:pygame.Rect) -> bool:
         # return wether or not to draw sprite based on player loc TODO
-        pass
+        if self._screen.colliderect(player_hitbox):
+            return True
+        
     
     def should_update(self,player_hitbox:pygame.Rect)->bool:
         # return wether or not to call update function based on player loc TODO
