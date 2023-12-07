@@ -9,22 +9,20 @@ class Platform:
         self.y = y
         self.speed = -5
         self.color = (178, 172, 19)
-        self.mask = pygame.mask.Mask((self.width, self.length), True)
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.length)
 
     def move(self, box_viewpoint):
         self.x = box_viewpoint + 300
+        self.rect.left = self.x
     
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.length))
+        pygame.draw.rect(screen, self.color, self.rect)
     
-    def offset_platform(self, player):
-        return int(self.x - player.character_pos_x), int(self.y - player.character_pos_y)
     
-    def player_collision(self, player_x, player_y, player_height):
-       """overlap = player.mask.overlap(platform.mask, offset_platform(player, platform))
-        if overlap != None:
-            if overlap[1] > 70:
-                player.isJumping = False
-            else:
-                player.current_velocity *= -1"""
+    def player_collision(self, player_rect):
+        if self.rect.colliderect(player_rect):
+            print(self.rect.top, player_rect.top + player_rect.height)
+            return True
+        return False
+       
         

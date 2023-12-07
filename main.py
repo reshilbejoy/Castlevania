@@ -4,6 +4,7 @@ from Grid import Grid
 from Enemy import Enemy
 import random
 from Platform import Platform
+import time
 
 pygame.init()
 size = 45
@@ -28,17 +29,17 @@ background_width = image.get_width()
 print(background_width)
 
 
-player = Player(character_size, window_length, background_width, movement_speed, window_height + score_box, int(ground_height / 5))
+player = Player(character_size, window_length, background_width, movement_speed, window_height + score_box, int(ground_height / 5), window_height)
 grid = Grid()
 enemy = Enemy(40, window_length, window_height, player.isBgMoving, movement_speed)
 #print(grid.grid_return())
-platform = Platform(100, 10, window_length / 2, (window_height) - 150)
-ground = Platform(int(ground_width / 5), int(ground_height / 5), 0, window_height + score_box - int(ground_height / 5))
+platform = Platform(100, 10, window_length / 2, (window_height) - 50)
+ground = Platform(background_width, int(ground_height / 5), 0, window_height + score_box - int(ground_height / 5))
 
-def offset(player, enemy):
-    return int(enemy.enemy_x - player.character_pos_x), int(enemy.enemy_y - player.character_pos_y)
+#def offset(player, enemy):
+    #return int(enemy.enemy_x - player.character_pos_x), int(enemy.enemy_y - player.character_pos_y)
 
-
+platforms = [platform, ground]
 
 def game():
     
@@ -55,10 +56,9 @@ def game():
                 game_over = True
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and not player.isJumping:
-                    player.isJumping = True
+                    player.jump()
         
-        if player.isJumping:
-            player.jump()
+        
         
         enemy.move(window_length)
         platform.move(player.box_viewpoint_x)
@@ -73,14 +73,15 @@ def game():
         #if (enemy.enemy_x > 400):
             #print(enemy.enemy_x)
         
-        
+        player.applyForce(platforms)
             
         #if overlap != None and overlap[1] == platform.y:
             #print(overlap)
         
-        if player.mask.overlap(enemy.mask, offset(player, enemy)):
-            
+        #if player.mask.overlap(enemy.mask, offset(player, enemy)):
+        if player.rect.colliderect(enemy.rect):
             enemy.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+            #time.sleep(5)
         
         pygame.display.update()
         clock.tick(FPS)
