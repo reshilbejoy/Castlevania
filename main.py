@@ -1,15 +1,17 @@
 from typing import List
 from background_engine import BackgroundEngine
 import pygame
-from Abstract.Player import Player
-from Abstract.Sprite import Sprite
+from Abstract.player import Player
+from Abstract.sprite import Sprite
 class Game():
     
     def __init__(self):
         #initialize all sprites in this array
+        BackgroundEngine.initBackground()
         self._all_sprites:List[Sprite] = []
         self._player:Player = None
         self._active_sprites:List[Sprite] = []
+        BackgroundEngine.initBackground()
 
     def game_loop(self):
         #Main game loop logic (this should be ready to go)
@@ -54,8 +56,7 @@ class Game():
                 return True
         return False
     
-if __name__ == "main":
+if __name__ == "__main__":
     Castlevania = Game()
     while True:
         Castlevania.game_loop()
-        pygame.quit()
