@@ -23,6 +23,8 @@ class Sprite():
 
     def should_draw(self,player_hitbox:pygame.Rect) -> bool:
         # return wether or not to draw sprite based on player loc TODO
+        player_x = player_hitbox.left
+        player_y = player_hitbox.top
         pass
     
     def should_update(self,player_hitbox:pygame.Rect)->bool:
