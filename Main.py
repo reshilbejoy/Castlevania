@@ -38,7 +38,7 @@ class Game():
         #wether or not to quit the game
         return False
     
-if __name__ == "main":
+if __name__ == "__main__":
     Castlevania = Game()
     while True:
         Castlevania.game_loop()
