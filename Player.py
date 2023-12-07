@@ -38,15 +38,15 @@ class Player:
                 self.current_velocity = 0
                 collision_detection = True
                 self.isJumping = False
-                self.character_pos_y = platform.rect.top - self.rect.height
-                
+                self.character_pos_y = platform.rect.top - self.rect.height + 1
+                self.rect = self.updateRect()
                 #print(self.rect.top, self.character_pos_y, platform.rect.top, self.rect.height, platform.player_collision(self.rect))
                 break
         if not collision_detection: # collision_detection is true if there is a normal force
-            #print(self.current_velocity, self.rect.top + self.rect.height)
+            print(self.current_velocity, self.rect.top + self.rect.height)
             self.current_velocity += self.gravity
             self.character_pos_y += self.current_velocity
-        self.rect = self.updateRect()
+            self.rect = self.updateRect()
 
 
     def jump(self):
