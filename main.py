@@ -29,7 +29,7 @@ background_width = image.get_width()
 print(background_width)
 
 
-player = Player(character_size, window_length, background_width, movement_speed, window_height + score_box, int(ground_height / 5), window_height)
+player = Player(character_size, window_length, background_width, movement_speed, window_height + score_box, int(ground_height / 5), window_height, score_box)
 grid = Grid()
 enemy = Enemy(40, window_length, window_height, player.isBgMoving, movement_speed)
 #print(grid.grid_return())

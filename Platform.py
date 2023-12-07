@@ -21,8 +21,8 @@ class Platform:
     
     def player_collision(self, player_rect):
         if self.rect.colliderect(player_rect):
-            #print(self.rect.top, player_rect.top + player_rect.height)
-            return True
+            if abs(player_rect.top + player_rect.height - self.rect.top) == 1: # using 1 as offset
+                return True
         return False
        
         
