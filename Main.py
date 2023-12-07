@@ -3,6 +3,7 @@ from background_engine import BackgroundEngine
 import pygame
 from Abstract.Player import Player
 from Abstract.Sprite import Sprite
+from Abstract.dynamic_sprite import DynamicSprite
 class Game():
     
     def __init__(self):
@@ -54,7 +55,7 @@ class Game():
                 return True
         return False
     
-if __name__ == "main":
+if __name__ == "__main__":
     Castlevania = Game()
     while True:
         Castlevania.game_loop()
