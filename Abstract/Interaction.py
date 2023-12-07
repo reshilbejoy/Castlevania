@@ -2,32 +2,15 @@ from enum import Enum
 from typing import List
 import pygame
 from abc import abstractmethod,ABC
-from dynamic_sprite import DyanmicSprite
-from sprite import Sprite
+from Abstract.dynamic_sprite import DyanmicSprite
+from Abstract.Sprite import Sprite
+from Utils.signals import DamageMessage, InventoryMessage
 
 from enum import Enum
 
-class Item(Enum):
-    WHIP = 1
-    DAGGER = 2
-
-
-class DamageMessage():
-    def __init__(self, damage:int) -> None:
-        self._damage = damage
-
-    def get_damage(self):   
-        return self._damage
-    
-class InventoryMessage():
-    def __init__(self, equip:Item) -> None:
-        self._item = equip
-
-    def get_item(self):
-        return self._item
     
 class Interactable(Sprite,ABC):
-    def __init__(self, images: List[pygame.Surface], hitbox: List[pygame.Rect], damage: int, attackable:DyanmicSprite):
+    def __init__(self, images: List[pygame.Surface], hitbox: List[pygame.Rect], damage: int):
         self._damage = damage
         super().__init__(images, hitbox)
     
