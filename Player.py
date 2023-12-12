@@ -43,7 +43,7 @@ class Player:
                 #print(self.rect.top, self.character_pos_y, platform.rect.top, self.rect.height, platform.player_collision(self.rect))
                 break
         if not collision_detection: # collision_detection is true if there is a normal force
-            print(self.current_velocity, self.rect.top + self.rect.height)
+            #print(self.current_velocity, self.rect.top + self.rect.height)
             self.current_velocity += self.gravity
             self.character_pos_y += self.current_velocity
             self.rect = self.updateRect()
