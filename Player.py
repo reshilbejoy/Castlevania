@@ -27,6 +27,9 @@ class Player:
         self.movingDir = None
         self.horizontalVelocity = self.speed
         self.rect = self.updateRect()
+        self.walkLeft = [pygame.transform.scale(pygame.image.load('Sprites/Player_walk/2.png'),(self.character_width, self.character_height)), pygame.transform.scale(pygame.image.load('Sprites/Player_walk/3.png'),(self.character_width, self.character_height)), pygame.transform.scale(pygame.image.load('Sprites/Player_walk/4.png'),(self.character_width, self.character_height)), pygame.transform.scale(pygame.image.load('Sprites/Player_walk/5.png'),(self.character_width, self.character_height))]
+        self.walkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Sprites/Player_walk/2.png'), True, False), (self.character_width, self.character_height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Sprites/Player_walk/3.png'), True, False), (self.character_width, self.character_height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Sprites/Player_walk/4.png'), True, False), (self.character_width, self.character_height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Sprites/Player_walk/5.png'), True, False), (self.character_width, self.character_height))]
+        
     
     def updateRect(self):
         return pygame.Rect(self.character_pos_x, self.character_pos_y, self.character_width, self.character_height)
@@ -63,7 +66,9 @@ class Player:
     
     def move(self, pressed, enemy_x, enemy_y):
 
-        
+        self.left = False
+        self.right = False
+        self.walk_count = 0
         
         if pressed[pygame.K_RIGHT] and self.character_pos_x <= self.view_width - self.character_width and not (self.isJumping and not self.movingDir):
             self.movingDir = True
@@ -74,6 +79,8 @@ class Player:
             else:
                 enemy_x -= self.speed
                 self.box_viewpoint_x -= self.speed
+            self.right = True
+            self.left = False
             
         elif pressed[pygame.K_LEFT] and self.character_pos_x > 0 and not (self.isJumping and self.movingDir):
             self.movingDir = False
@@ -84,6 +91,9 @@ class Player:
             else:
                 enemy_x += self.speed
                 self.box_viewpoint_x += self.speed
+            self.right = False
+            self.left = True
+            
         if not pressed[pygame.K_RIGHT] and not pressed[pygame.K_LEFT] and not self.speed <= 0:
             self.net_force = self.frictionForce
             new_speed = self.speed - self.net_force
@@ -94,12 +104,27 @@ class Player:
                 self.character_pos_x -= self.speed
         if self.speed == 0:
             self.movingDir = None
+            self.left = False
+            self.right = False
+            self.walkCount = 0
         self.rect = self.updateRect()
         
         #self.rect = pygame.Rect(self.character_pos_x, self.character_pos_y, self.size, self.size)
         return self.box_viewpoint_x, enemy_x, enemy_y
     
     def draw(self, screen):
+        if self.walkCount + 1 >= 17:
+             self.walkCount = 0
+                
+        if self.left:  
+            screen.blit(self.walkLeft[int(self.walkCount//4)], (self.character_pos_x, self.character_pos_y))
+            self.walkCount += 0.5                          
+        elif self.right:
+            screen.blit(self.walkRight[int(self.walkCount//4)], (self.character_pos_x, self.character_pos_y))
+            self.walkCount += 0.5
+        else:
+            screen.blit(self.image, (self.character_pos_x, self.character_pos_y))
+            self.walkCount = 0
         pygame.draw.rect(screen, (1, 1, 1), self.rect)
         screen.blit(self.image, (self.character_pos_x, self.character_pos_y))
         
