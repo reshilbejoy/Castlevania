@@ -5,7 +5,7 @@ class Player:
     def __init__(self, character_width, window_width, bg_width, terminal_x, window_height, ground_height, view_height, score_box):
         self.character_height = int(character_width * 1.6)
         self.character_pos_x = 100
-        self.character_pos_y = window_height + score_box - int(ground_height / 5) + 1#window_height - self.character_height - ground_height
+        self.character_pos_y = 200
         self.character_width = character_width
         self.view_width = window_width
         self.background_width = bg_width

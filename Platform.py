@@ -1,6 +1,6 @@
 import pygame
 from Player import Player
-
+COLLISION_THRESHOLD = 2
 class Platform:
     def __init__(self, width, length, x, y):
         self.length = length
@@ -20,9 +20,9 @@ class Platform:
     
     
     def player_collision(self, player_rect):
+        print("called")
         if self.rect.colliderect(player_rect):
-            if abs(player_rect.top + player_rect.height - self.rect.top) == 1: # using 1 as offset
                 return True
         return False
-       
+
         
