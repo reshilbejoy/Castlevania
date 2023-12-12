@@ -125,6 +125,6 @@ class Player:
         else:
             screen.blit(self.image, (self.character_pos_x, self.character_pos_y))
             self.walkCount = 0
-        pygame.draw.rect(screen, (1, 1, 1), self.rect)
-        screen.blit(self.image, (self.character_pos_x, self.character_pos_y))
+        #pygame.draw.rect(screen, (1, 1, 1), self.rect)
+        #screen.blit(self.image, (self.character_pos_x, self.character_pos_y))
         
