@@ -68,7 +68,7 @@ class Player:
             speed_val = self.speed + self.net_force
             self.speed = round(speed_val, 2)
     
-    def move(self, pressed, enemy_x, enemy_y):
+    def move(self, pressed, enemy_x, enemy_y, platforms):
 
         self.left = False
         self.right = False
@@ -83,6 +83,8 @@ class Player:
                 else:
                     enemy_x -= self.speed
                     self.box_viewpoint_x -= self.speed
+                    for p in platforms:
+                        p.move(-self.speed)
                 self.right = True
                 self.left = False
                 
@@ -95,6 +97,8 @@ class Player:
                 else:
                     enemy_x += self.speed
                     self.box_viewpoint_x += self.speed
+                    for p in platforms:
+                        p.move(self.speed)
                 self.right = False
                 self.left = True
                 

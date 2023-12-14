@@ -11,11 +11,11 @@ class Platform:
         self.color = (178, 172, 19)
         self.rect = pygame.Rect(self.x, self.y, self.width, self.length)
 
-    def move(self, box_viewpoint):
-        self.x = box_viewpoint + 300
-        self.rect.left = self.x
+    def move(self, speed):
+        self.rect.left += speed
     
     def draw(self, screen):
+        #print("Hello?")
         pygame.draw.rect(screen, self.color, self.rect)
     
     
