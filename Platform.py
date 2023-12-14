@@ -22,7 +22,7 @@ class Platform:
     def player_collision(self, player_rect):
         #print("called")
         if self.rect.colliderect(player_rect):
-                return True
+            return True    
         return False
 
         

@@ -36,7 +36,7 @@ pygame.draw.rect(screen, (255, 0, 0), player.rect, 2)
 grid = Grid()
 enemy = Enemy(40, window_length, window_height, player.isBgMoving, movement_speed, window_height + score_box - int(ground_height / 5))
 #print(grid.grid_return())
-platform = Platform(100, 10, window_length / 2, (window_height) - 50)
+platform = Platform(100, 30, window_length / 2, (window_height) - 200)
 ground = Platform(background_width, int(630 / 5), 0, window_height + score_box - int(630 / 5))
 
 #def offset(player, enemy):
@@ -72,7 +72,7 @@ def game():
         player.draw(screen)
         platform.draw(screen)
         ground.draw(screen)
-
+        print(player.current_velocity)
         #if (enemy.enemy_x > 400):
             #print(enemy.enemy_x)
         

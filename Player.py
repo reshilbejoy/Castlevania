@@ -15,7 +15,7 @@ class Player:
         #self.mask = pygame.mask.from_surface(self.image)
         #self.olist = self.mask.outline()
         self.jumping_y = self.character_pos_y
-        self.starting_velocity_y = -10
+        self.starting_velocity_y = -15
         self.current_velocity = 0
         self.gravity = -self.starting_velocity_y * 0.05
         self.isJumping = False
@@ -29,22 +29,26 @@ class Player:
         self.rect = self.updateRect()
         self.walkLeft = [pygame.transform.scale(pygame.image.load('Sprites/Player_walk/2.png'),(self.character_width, self.character_height)), pygame.transform.scale(pygame.image.load('Sprites/Player_walk/3.png'),(self.character_width, self.character_height)), pygame.transform.scale(pygame.image.load('Sprites/Player_walk/4.png'),(self.character_width, self.character_height)), pygame.transform.scale(pygame.image.load('Sprites/Player_walk/5.png'),(self.character_width, self.character_height))]
         self.walkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Sprites/Player_walk/2.png'), True, False), (self.character_width, self.character_height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Sprites/Player_walk/3.png'), True, False), (self.character_width, self.character_height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Sprites/Player_walk/4.png'), True, False), (self.character_width, self.character_height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Sprites/Player_walk/5.png'), True, False), (self.character_width, self.character_height))]
-        
+        self.canMove = True
     
     def updateRect(self):
         return pygame.Rect(self.character_pos_x, self.character_pos_y, self.character_width, self.character_height)
 
     def applyForce(self, platforms):
         collision_detection = False
+        self.canMove = True
         for platform in platforms:
             if platform.player_collision(self.rect):
-                self.current_velocity = 0
-                collision_detection = True
-                self.isJumping = False
-                self.character_pos_y = platform.rect.top - self.rect.height + 1
-                self.rect = self.updateRect()
-                #print(self.rect.top, self.character_pos_y, platform.rect.top, self.rect.height, platform.player_collision(self.rect))
-                break
+                #print(self.rect.bottom, platform.rect.top, platform.rect.bottom)
+                #time.sleep(5)
+                
+                if (self.rect.bottom >= platform.rect.top and self.rect.bottom <= platform.rect.bottom) and (self.current_velocity > 0): # collides from top
+                    self.current_velocity = 0
+                    collision_detection = True
+                    self.isJumping = False
+                    self.character_pos_y = platform.rect.top - self.rect.height + 1
+                    self.rect = self.updateRect()
+                    break
         if not collision_detection: # collision_detection is true if there is a normal force
             #print(self.current_velocity, self.rect.top + self.rect.height)
             self.current_velocity += self.gravity
@@ -69,50 +73,51 @@ class Player:
         self.left = False
         self.right = False
         self.walk_count = 0
-        
-        if pressed[pygame.K_RIGHT] and self.character_pos_x <= self.view_width - self.character_width and not (self.isJumping and not self.movingDir):
-            self.movingDir = True
-            self.speeding_up()
-            if self.character_pos_x < (self.view_width / 2) or -self.box_viewpoint_x >= (self.background_width - self.view_width): 
-                new_pos = self.character_pos_x + self.speed
-                self.character_pos_x = round(new_pos, 2)
-            else:
-                enemy_x -= self.speed
-                self.box_viewpoint_x -= self.speed
-            self.right = True
-            self.left = False
-            
-        elif pressed[pygame.K_LEFT] and self.character_pos_x > 0 and not (self.isJumping and self.movingDir):
-            self.movingDir = False
-            self.speeding_up()
-            if self.character_pos_x > (self.view_width / 2) or self.box_viewpoint_x >= 0:
-                new_pos = self.character_pos_x - self.speed
-                self.character_pos_x = round(new_pos, 2)
-            else:
-                enemy_x += self.speed
-                self.box_viewpoint_x += self.speed
-            self.right = False
-            self.left = True
-            
-        if not pressed[pygame.K_RIGHT] and not pressed[pygame.K_LEFT] and not self.speed <= 0:
-            self.net_force = self.frictionForce
-            new_speed = self.speed - self.net_force
-            self.speed = round(new_speed, 2)
-            if self.movingDir:
-                self.character_pos_x += self.speed
-            else:
-                self.character_pos_x -= self.speed
-        if self.speed == 0:
-            self.movingDir = None
-            self.left = False
-            self.right = False
-            self.walkCount = 0
-        self.rect = self.updateRect()
+        if self.canMove: 
+            if pressed[pygame.K_RIGHT] and self.character_pos_x <= self.view_width - self.character_width and not (self.isJumping and not self.movingDir):
+                self.movingDir = True
+                self.speeding_up()
+                if self.character_pos_x < (self.view_width / 2) or -self.box_viewpoint_x >= (self.background_width - self.view_width): 
+                    new_pos = self.character_pos_x + self.speed
+                    self.character_pos_x = round(new_pos, 2)
+                else:
+                    enemy_x -= self.speed
+                    self.box_viewpoint_x -= self.speed
+                self.right = True
+                self.left = False
+                
+            elif pressed[pygame.K_LEFT] and self.character_pos_x > 0 and not (self.isJumping and self.movingDir):
+                self.movingDir = False
+                self.speeding_up()
+                if self.character_pos_x > (self.view_width / 2) or self.box_viewpoint_x >= 0:
+                    new_pos = self.character_pos_x - self.speed
+                    self.character_pos_x = round(new_pos, 2)
+                else:
+                    enemy_x += self.speed
+                    self.box_viewpoint_x += self.speed
+                self.right = False
+                self.left = True
+                
+            if not pressed[pygame.K_RIGHT] and not pressed[pygame.K_LEFT] and not self.speed <= 0:
+                self.net_force = self.frictionForce
+                new_speed = self.speed - self.net_force
+                self.speed = round(new_speed, 2)
+                if self.movingDir:
+                    self.character_pos_x += self.speed
+                else:
+                    self.character_pos_x -= self.speed
+            if self.speed == 0:
+                self.movingDir = None
+                self.left = False
+                self.right = False
+                self.walkCount = 0
+            self.rect = self.updateRect()
         
         #self.rect = pygame.Rect(self.character_pos_x, self.character_pos_y, self.size, self.size)
         return self.box_viewpoint_x, enemy_x, enemy_y
     
     def draw(self, screen):
+        #pygame.draw.rect(screen, (1, 1, 1), self.rect)
         if self.walkCount + 1 >= 17:
              self.walkCount = 0
                 
