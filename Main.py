@@ -11,9 +11,11 @@ class Game():
         self._all_sprites:List[Sprite] = []
         self._player:Player = None
         self._active_sprites:List[Sprite] = []
+        self._game_over = False
 
     def game_loop(self):
         #Main game loop logic (this should be ready to go)
+        pygame.init()
         if not self.exit_condition():
             self.handle_collisions()
             self.handle_keystrokes()
@@ -33,6 +35,11 @@ class Game():
         pass
     
     def handle_keystrokes(self):
+        pressed = pygame.key.get_pressed()
+        
+
+
+
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.type == pygame.K_SPACE:
@@ -52,11 +59,12 @@ class Game():
     def exit_condition(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                self._game_over = True
                 return True
         return False
     
 if __name__ == "__main__":
     Castlevania = Game()
-    while True:
+    while not Castlevania._game_over:
         Castlevania.game_loop()
-        pygame.quit()
+    pygame.quit()
