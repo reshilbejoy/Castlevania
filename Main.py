@@ -35,25 +35,26 @@ class Game():
         pass
     
     def handle_keystrokes(self):
-        pressed = pygame.key.get_pressed()
-        
-
-
-
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.type == pygame.K_SPACE:
-                    self._player.apply_force(0, 0.5)
+                    pass # change y velocity here
                 if event.type == pygame.K_d:
-                    self._player.apply_force(0.4, 0)
+                    self._player.change_force(0.4, 0)
                 if event.type == pygame.K_a:
-                    self._player.apply_force(-0.4, 0)
+                    self._player.change_force(-0.4, 0)
                 if event.type == pygame.K_s:
                     pass
                 if event.type == pygame.K_k:
                     pass
                 if event.type == pygame.K_w:
                     pass
+            if event.type == pygame.KEYUP:
+                if event.type == pygame.K_d:
+                    self._player.change_force(-0.2, 0)
+                if event.type == pygame.K_a:
+                    self._player.change_force(0.2, 0)
+            
             
 
     def exit_condition(self):
