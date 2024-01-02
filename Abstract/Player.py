@@ -17,4 +17,8 @@ class Player(DynamicSprite):
             
     def lifespan(self):
         return self._health>0
+
+    def return_current_image(self) -> pygame.Surface:
+        pass
+       # return super().return_current_image()
     
