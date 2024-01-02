@@ -2,6 +2,11 @@ import pygame
 from typing import List,Tuple
 from abc import ABC
 
+_background_arr:List[pygame.Surface] = []
+_timer = pygame.time.Clock() 
+_draw_frame_size:Tuple[float,float] = (500,600)  #Width, Height
+_update_frame_size:Tuple[float,float] = (700,800)  #Width, Height
+
 pygame.init()
 size = 35
 height_ratio = 14
@@ -20,8 +25,10 @@ class BackgroundEngine(ABC):
     def get_current_image(player_hitbox:pygame.Rect) -> pygame.Surface:
         #Return a surface with the current background image TODO
         #Preform paralax scrolling overlay here TODO
-        pass
-    
+        background = pygame.Surface(window_size)
+        return background
+
+
     @staticmethod
     def get_current_image_frame(player_hitbox:pygame.Rect)-> pygame.Rect:
         #Return a Rect with the current global frame that the screen is on TODO
@@ -38,4 +45,5 @@ class BackgroundEngine(ABC):
 
     @staticmethod
     def tick_timer()-> float:
+        pygame.display.update()
         _timer.tick()

@@ -14,6 +14,7 @@ class Game():
         self._game_over = False
 
     def game_loop(self):
+        
         #Main game loop logic (this should be ready to go)
         pygame.init()
         if not self.exit_condition():
@@ -27,6 +28,7 @@ class Game():
                         i.draw()
                 else:
                     self._active_sprites.remove(i)
+            
             BackgroundEngine.tick_timer()
 
     
