@@ -14,6 +14,7 @@ class Game():
         self._game_over = False
 
     def game_loop(self):
+        
         #Main game loop logic (this should be ready to go)
         pygame.init()
         if not self.exit_condition():
@@ -27,6 +28,7 @@ class Game():
                         i.draw()
                 else:
                     self._active_sprites.remove(i)
+            
             BackgroundEngine.tick_timer()
 
     
@@ -38,8 +40,6 @@ class Game():
         pressed = pygame.key.get_pressed()
         
 
-
-
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.type == pygame.K_SPACE:
@@ -47,7 +47,7 @@ class Game():
                 if event.type == pygame.K_d:
                     self._player.apply_force(0.4, 0)
                 if event.type == pygame.K_a:
-                    self._player.apply_force(-0.4, 0)
+                    self._player.apply_force(0.4, 0)
                 if event.type == pygame.K_s:
                     pass
                 if event.type == pygame.K_k:
@@ -59,12 +59,12 @@ class Game():
     def exit_condition(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self._game_over = True
                 return True
         return False
     
 if __name__ == "__main__":
     Castlevania = Game()
-    while not Castlevania._game_over:
+    while True:
         Castlevania.game_loop()
-    pygame.quit()
+        pygame.quit()
+    
