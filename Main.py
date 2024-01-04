@@ -8,8 +8,8 @@ class Game():
     
     def __init__(self):
         #initialize all sprites in this array
-        self._all_sprites:List[Sprite] = [Sprite(pygame.image.load('Assets/Sprites/Player/1.png'), pygame.Rect(100, 100, 100, 160))]
-        #self._player:Player = Player(0, 0, [], [pygame.Rect(100, 100, 100, 160)], 5)
+        self._all_sprites:List[Sprite] = [Sprite(pygame.image.load('Assets/Sprites/Player_walk/1.png'), pygame.Rect(100, 100, 100, 160))]
+        self._player:Player = Player(0, 0, [], [pygame.Rect(100, 100, 100, 160)], 5)
         self._active_sprites:List[Sprite] = []
         self._game_over = False
 
