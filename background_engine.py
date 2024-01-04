@@ -11,30 +11,39 @@ pygame.init()
 size = 35
 height_ratio = 14
 length_ratio = 22
-window_size = (length_ratio * size, height_ratio * size)
-window = pygame.display.set_mode(window_size)
+window_size = (600,500)
+window = pygame.display.set_mode((length_ratio * size, height_ratio * size))
 pygame.display.set_caption("Castlevania")
-_normal_background = pygame.transform.scale(pygame.image.load('Assets/Background-easy.png'), (1200, 490))
-window.blit(_normal_background, (0, 0))
+_normal_background = pygame.transform.scale(pygame.image.load('Assets/Background-easy.png'), (1200, 1600))
 _background_arr:List[pygame.Surface] = []
 _timer = pygame.time.Clock() 
 _draw_frame_size:Tuple[float,float] = (500,600)  #Width, Height
 _update_frame_size:Tuple[float,float] = (700,800)  #Width, Height
+
 class BackgroundEngine(ABC):
+
+    box_viewpoint = 0
     
     @staticmethod
     def get_current_image(player_hitbox:pygame.Rect) -> pygame.Surface:
         #Return a surface with the current background image TODO
         #Preform paralax scrolling overlay here TODO
         background = pygame.Surface(window_size)
-        
-        return background
+        background.blit(_normal_background, (BackgroundEngine.get_current_image(), 22*6))
 
 
     @staticmethod
     def get_current_image_frame(player_hitbox:pygame.Rect)-> pygame.Rect:
-        #Return a Rect with the current global frame that the screen is on TODO
-        pass
+        if not (player_hitbox.x < window_size[0] / 2 or -box_viewpoint >= (_normal_background.get_width() - window_size[0])): 
+            box_viewpoint -= 5
+        
+        if not (player_hitbox.x > (window_size[0] / 2) or box_viewpoint >= 0):
+            box_viewpoint +=5
+        
+        return box_viewpoint
+
+
+        
     
     @staticmethod
     def get_current_update_frame(player_hitbox:pygame.Rect)-> pygame.Rect:
