@@ -4,14 +4,16 @@ import pygame
 from Abstract.Player import Player
 from Abstract.Sprite import Sprite
 from Abstract.dynamic_sprite import DynamicSprite
+from CompletedSprites.Players.main_player import MainPlayer
 class Game():
     
     def __init__(self):
         #initialize all sprites in this array
-        self._all_sprites:List[Sprite] = []
-        self._player:Player = Player(0, 0, [], [pygame.Rect(100, 100, 100, 160)], 5)
-        self._active_sprites:List[Sprite] = []
+        
+        self._player:MainPlayer = MainPlayer(0, 0, [], pygame.Rect(100, 100, 100, 160), 5)
+        self._active_sprites:List[Sprite] = [self._player]
         self._game_over = False
+        self._all_sprites:List[Sprite] = [self._player]
 
     def game_loop(self):
         
@@ -21,13 +23,14 @@ class Game():
             self.handle_collisions()
             self.handle_keystrokes()
             for i in self._all_sprites:
-                if i.should_update():
+                if i.should_update(self._player.get_hitbox()):
                     i.update()
                     if i.should_draw():
                         self._active_sprites.append(i)
                         i.draw()
                 else:
-                    self._active_sprites.remove(i)
+                    ...
+                    #self._active_sprites.remove(i)
             
             BackgroundEngine.tick_timer()
 

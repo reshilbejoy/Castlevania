@@ -4,14 +4,14 @@ from abc import ABC, abstractmethod
 from background_engine import BackgroundEngine
 
 class Sprite():
-    def __init__(self,images:List[pygame.Surface],hitbox:List[pygame.Rect]):
+    def __init__(self,images:List[pygame.Surface],hitbox:pygame.Rect):
         self._image_arr:List[pygame.Surface] = images
-        self._hitbox_arr:List[pygame.Rect] = hitbox
-        self._screen:pygame.Rect = BackgroundEngine.get_current_image_frame()
+        self._hitbox: pygame.Rect = hitbox
+        self._screen:pygame.Rect = BackgroundEngine.get_current_image_frame(hitbox)
 
     @abstractmethod    
     def return_hitbox(self) -> pygame.Rect:
-        return self._hitbox_arr[0]
+        return self._hitbox
 
     @abstractmethod
     def return_current_image(self) -> pygame.Surface:
@@ -26,10 +26,15 @@ class Sprite():
         if self._screen.colliderect(player_hitbox):
             return True
     
+    def get_hitbox(self):
+        return self._hitbox
     
     def should_update(self,player_hitbox:pygame.Rect)->bool:
         # return wether or not to call update function based on player loc TODO
-        pass
+        if (0 < player_hitbox.left < self._screen.width) and (0 < player_hitbox.top < self._screen.height):
+            return True
+        return False
+        
     
     @abstractmethod
     def update(self):
