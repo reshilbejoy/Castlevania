@@ -29,7 +29,9 @@ class BackgroundEngine(ABC):
         #Return a surface with the current background image TODO
         #Preform paralax scrolling overlay here TODO
         background = pygame.Surface(window_size)
-        background.blit(_normal_background, (BackgroundEngine.get_current_image(), 22*6))
+        box_viewpoint = BackgroundEngine.get_current_image(player_hitbox)
+        background.blit(_normal_background, (box_viewpoint, 22*6))
+        return background
 
 
     @staticmethod
