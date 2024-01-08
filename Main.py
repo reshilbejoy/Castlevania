@@ -25,9 +25,9 @@ class Game():
             for i in self._all_sprites:
                 if i.should_update(self._player.get_hitbox()):
                     i.update()
-                    if i.should_draw():
+                    if i.should_draw(self._player.return_hitbox()):
                         self._active_sprites.append(i)
-                        i.draw()
+                        i.draw(BackgroundEngine.get_window())
                 else:
                     ...
                     #self._active_sprites.remove(i)

@@ -29,11 +29,16 @@ class BackgroundEngine(ABC):
         background = pygame.Surface(window_size)
         
         return background
+    
+    @staticmethod
+    def get_window():
+        return window
 
 
     @staticmethod
     def get_current_image_frame(player_hitbox:pygame.Rect)-> pygame.Rect:
         #Return a Rect with the current global frame that the screen is on TODO
+        return pygame.Rect(0, 0, window_size[0], window_size[1])
         pass
     
     @staticmethod

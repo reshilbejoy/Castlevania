@@ -14,6 +14,9 @@ class DynamicSprite(Sprite,ABC):
         self._health = health
         self.current_velocity = 0
         self.net_force = 0 # net force needs to be a multiple of terminal velocity
+        self.walkCount = 0
+        self.left = False
+        self.right = False
     
     @abstractmethod
     def handle_damage_interaction(interaction_msg:InventoryMessage)->None:
