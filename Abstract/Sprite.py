@@ -16,11 +16,10 @@ class Sprite():
 
     @abstractmethod
     def return_current_image(self) -> pygame.Surface:
-        # return an image based off the animation timing IMPLEMENT IN DAUGHTER CLASSES
-        pass
+        return self._image_arr[0]
 
-    def draw(self):
-        self._screen.blit(self.return_current_image(), self.return_hitbox())
+    def draw(self, window):
+        window.blit(self.return_current_image(), self.get_hitbox())
 
     def should_draw(self,player_hitbox:pygame.Rect) -> bool:
         # return wether or not to draw sprite based on player loc TODO
