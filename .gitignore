@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .DS_Store
 /Assets/__pycache__
 /CompletedSprites/__pycache__
@@ -53,3 +54,6 @@ dist/**
 *.xlf
 package.nls.*.json
 l10n/
+=======
+__pycache__
+>>>>>>> daf7f17d538fbc13787cd59d4ebab7d224a01caf
