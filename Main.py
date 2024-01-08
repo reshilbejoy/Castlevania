@@ -36,7 +36,8 @@ class Game():
                     else:
                         ...
                         #self._active_sprites.remove(i)
-            
+                window = BackgroundEngine.get_window()
+                window.blit(BackgroundEngine.get_current_image(MainPlayer.get_hitbox()))
                 BackgroundEngine.tick_timer()
             #would be nice to add a pause icon sprite to the screen and destroy it upon unpause but unneeded
             else:
