@@ -1,0 +1,28 @@
+Key:
+{
+    x;placeholder_path_ground,
+    y:placeholder_path_unmoving_platform,
+     :null,
+    O->x
+}
+
+Meta:
+{
+
+
+
+}
+
+
+Map:
+{
+
+
+
+
+  yyyyy   yyyyy
+        
+
+Oxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxx
+}
