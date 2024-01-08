@@ -23,16 +23,10 @@ _update_frame_size:Tuple[float,float] = (700,800)  #Width, Height
 
 class BackgroundEngine(ABC):
 
-    box_viewpoint = 0
     
     @staticmethod
     def get_current_image(player_hitbox:pygame.Rect) -> pygame.Surface:
-        #Return a surface with the current background image TODO
-        #Preform paralax scrolling overlay here TODO
-        background = pygame.Surface(window_size)
-        box_viewpoint = BackgroundEngine.get_current_image_frame(player_hitbox)
-        background.blit(_normal_background, (box_viewpoint, 22*6))
-        return background
+        return _normal_background
     
     @staticmethod
     def get_window():
@@ -41,13 +35,7 @@ class BackgroundEngine(ABC):
 
     @staticmethod
     def get_current_image_frame(player_hitbox:pygame.Rect)-> pygame.Rect:
-        if not (player_hitbox.x < window_size[0] / 2 or -box_viewpoint >= (_normal_background.get_width() - window_size[0])): 
-            box_viewpoint -= 5
-        
-        if not (player_hitbox.x > (window_size[0] / 2) or box_viewpoint >= 0):
-            box_viewpoint +=5
-        
-        return box_viewpoint
+       return _normal_background
 
 
         

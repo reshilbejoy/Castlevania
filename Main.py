@@ -17,6 +17,7 @@ class Game():
         self._active_sprites:List[Sprite] = []
         self._game_over = False
         self._all_sprites:List[Sprite] = [self._player, self._testingGround]
+        self._is_paused = False
 
     def game_loop(self):
         
