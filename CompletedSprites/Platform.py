@@ -10,8 +10,8 @@ class PlatformType(Enum):
     STAIRWAY = 2
 
 class Platform(Sprite):
-    def __init__(self, images: List[Surface], hitbox: List[Rect], platform: PlatformType):
-        self._platform = platform
+    def __init__(self, images: List[Surface], hitbox: Rect, platform: PlatformType):
+        self._platform = platform # How to convert images to surfaces TODO
         super().__init__(images, hitbox)
     
     def get_platform_type(self) -> PlatformType:
