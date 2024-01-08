@@ -26,4 +26,4 @@ class MainPlayer(Player):
             return self.walkRight[int(self.walkCount//4)]
         else:
             self.walkCount = 0
-            return self.image
+        return self.image
