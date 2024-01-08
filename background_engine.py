@@ -1,6 +1,7 @@
 import pygame
 from typing import List,Tuple
 from abc import ABC
+from Constants.window_constants import length, height
 
 _background_arr:List[pygame.Surface] = []
 _timer = pygame.time.Clock() 
@@ -32,6 +33,10 @@ class BackgroundEngine(ABC):
         box_viewpoint = BackgroundEngine.get_current_image(player_hitbox)
         background.blit(_normal_background, (box_viewpoint, 22*6))
         return background
+    
+    @staticmethod
+    def get_window():
+        return window
 
 
     @staticmethod

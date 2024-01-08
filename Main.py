@@ -5,15 +5,18 @@ from Abstract.Player import Player
 from Abstract.Sprite import Sprite
 from Abstract.dynamic_sprite import DynamicSprite
 from CompletedSprites.Players.main_player import MainPlayer
+from CompletedSprites.Platform import Platform, PlatformType
+from Constants.window_constants import size, length_ratio, height_ratio, height, length
 class Game():
     
     def __init__(self):
         #initialize all sprites in this array
         
         self._player:MainPlayer = MainPlayer(0, 0, [], pygame.Rect(100, 100, 100, 160), 5)
-        self._active_sprites:List[Sprite] = [self._player]
+        self._testingGround = Platform([pygame.transform.scale(pygame.image.load('Assets/Sprites/Platform/Platform1.png'), (length, (40)))], pygame.Rect(0, 0, length, (40)), PlatformType.NORMAL_PLATFORM)
+        self._active_sprites:List[Sprite] = []
         self._game_over = False
-        self._all_sprites:List[Sprite] = [self._player]
+        self._all_sprites:List[Sprite] = [self._player, self._testingGround]
 
     def game_loop(self):
         
@@ -25,9 +28,9 @@ class Game():
             for i in self._all_sprites:
                 if i.should_update(self._player.get_hitbox()):
                     i.update()
-                    if i.should_draw():
+                    if i.should_draw(self._player.return_hitbox()):
                         self._active_sprites.append(i)
-                        i.draw()
+                        i.draw(BackgroundEngine.get_window())
                 else:
                     ...
                     #self._active_sprites.remove(i)
