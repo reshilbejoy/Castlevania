@@ -8,6 +8,7 @@ class Sprite():
         self._image_arr:List[pygame.Surface] = images
         self._hitbox: pygame.Rect = hitbox
         self._screen:pygame.Rect = BackgroundEngine.get_current_image_frame(hitbox)
+        self._global_coords = [self._hitbox.top, self._hitbox.left]
         
 
     @abstractmethod    
