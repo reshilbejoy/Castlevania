@@ -35,7 +35,8 @@ class Game():
                         i.update()
                     if i.should_draw(self._player.return_hitbox()):
                         self._active_sprites.append(i)
-                        window = i.draw(BackgroundEngine.get_window())
+                        surface = i.draw(BackgroundEngine.get_window())
+                        window.blit(surface, (0, 0))
                     else:
                         ...
                         #self._active_sprites.remove(i)

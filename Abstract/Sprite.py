@@ -20,7 +20,10 @@ class Sprite():
         return self._image_arr[0]
 
     def draw(self, window):
-        window.blit(self.return_current_image(), self.get_hitbox())
+        rect, surface = BackgroundEngine.get_current_image(self._hitbox)
+        player_hitbox = self.get_hitbox()
+        surface.blit(self.return_current_image(), (player_hitbox.left - rect.left, player_hitbox.top - rect.top))
+        return surface
 
     def should_draw(self,player_hitbox:pygame.Rect) -> bool:
         # return wether or not to draw sprite based on player loc TODO

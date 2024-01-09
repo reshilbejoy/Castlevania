@@ -27,12 +27,13 @@ class BackgroundEngine(ABC):
 
     
     @staticmethod
-    def get_current_image(player_global_hitbox:pygame.Rect) -> pygame.Surface:
+    def get_current_image(player_global_hitbox:pygame.Rect): #-> pygame.Rect, pygame.Surface:
 
         # a surface which is the same dimensions
-        image_surface = BackgroundEngine.get_current_image_frame(player_global_hitbox)
+        image_rect = BackgroundEngine.get_current_image_frame(player_global_hitbox)
+        surface = pygame.Surface((image_rect.width, image_rect.height))
 
-        return image_surface
+        return image_rect, surface
     
     @staticmethod
     def get_window():
