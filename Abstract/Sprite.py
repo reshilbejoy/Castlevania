@@ -19,10 +19,9 @@ class Sprite():
     def return_current_image(self) -> pygame.Surface:
         return self._image_arr[0]
 
-    def draw(self, window):
-        rect, surface = BackgroundEngine.get_current_image(self._hitbox)
-        player_hitbox = self.get_hitbox()
-        surface.blit(self.return_current_image(), (player_hitbox.left - rect.left, player_hitbox.top - rect.top))
+    def draw(self, rect, surface):
+        hitbox = self.get_hitbox()
+        surface.blit(self.return_current_image(), (hitbox.left - rect.left, hitbox.top - rect.top))
         return surface
 
     def should_draw(self,player_hitbox:pygame.Rect) -> bool:
@@ -36,7 +35,7 @@ class Sprite():
     
     def should_update(self,player_hitbox:pygame.Rect)->bool:
         # return wether or not to call update function based on player loc TODO
-        if (0 < player_hitbox.left < self._screen.get_width()) and (0 < player_hitbox.top < self._screen.get_height()):
+        if (0 < player_hitbox.left < self._screen.width) and (0 < player_hitbox.top < self._screen.height):
             return True
         return False
         

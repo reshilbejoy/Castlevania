@@ -27,7 +27,8 @@ class Game():
             self.handle_pauses()
             if self._is_paused is False:
                 window = BackgroundEngine.get_window()
-                window.blit(BackgroundEngine.get_current_image(self._player.get_hitbox()), (0,0))
+                rect, surface = BackgroundEngine.get_current_image(self._player.get_hitbox())
+                #window.blit(surface, (0,0))
                 self.handle_collisions()
                 self.handle_keystrokes()
                 for i in self._all_sprites:
@@ -35,11 +36,11 @@ class Game():
                         i.update()
                     if i.should_draw(self._player.return_hitbox()):
                         self._active_sprites.append(i)
-                        surface = i.draw(BackgroundEngine.get_window())
-                        window.blit(surface, (0, 0))
+                        surface = i.draw(rect, surface)
                     else:
                         ...
                         #self._active_sprites.remove(i)
+                window.blit(surface, (0, 0))
                 BackgroundEngine.tick_timer()
             #would be nice to add a pause icon sprite to the screen and destroy it upon unpause but unneeded
             else:

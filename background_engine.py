@@ -32,6 +32,7 @@ class BackgroundEngine(ABC):
         # a surface which is the same dimensions
         image_rect = BackgroundEngine.get_current_image_frame(player_global_hitbox)
         surface = pygame.Surface((image_rect.width, image_rect.height))
+        surface.blit(_normal_background, (0, 0))
 
         return image_rect, surface
     
