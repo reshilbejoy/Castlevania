@@ -17,7 +17,7 @@ class Sprite():
 
     @abstractmethod
     def return_current_image(self) -> pygame.Surface:
-        return self._image_arr[0]
+        pass
 
     def draw(self, rect, surface):
         hitbox = self.get_hitbox()
@@ -26,8 +26,8 @@ class Sprite():
 
     def should_draw(self,player_hitbox:pygame.Rect) -> bool:
         # return wether or not to draw sprite based on player loc TODO
-        #if self._screen.colliderect(player_hitbox):
-            #return True
+        if self._screen.colliderect(player_hitbox):
+            return True
         return True
     
     def get_hitbox(self):
