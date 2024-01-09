@@ -10,6 +10,16 @@ class MainPlayer(Player):
         self.walkLeft = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/2.png'),(hitbox.width, hitbox.height)), pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/3.png'),(hitbox.width, hitbox.height)), pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/4.png'),(hitbox.width, hitbox.height)), pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/5.png'),(hitbox.width, hitbox.height))]
         self.walkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/2.png'), True, False), (hitbox.width, hitbox.height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/3.png'), True, False), (hitbox.width, hitbox.height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/4.png'), True, False), (hitbox.width, hitbox.height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/5.png'), True, False), (hitbox.width, hitbox.height))] 
         self.image = pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/1.png'), (hitbox.width, hitbox.height))
+        self.horizontalForce = 0.2
+        self.frictionForce = 0.2
+        self.net_force = (abs(self.horizontalForce) - abs(self.frictionForce))
+        self.starting_velocity_y = -15
+        self.verticalForce = 0
+        self.current_velocity = 0
+        self.speed = 0
+        self.walkCount = 0
+        self.left = False
+        self.right = False
         
     
     def attack(self):

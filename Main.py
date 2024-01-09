@@ -12,7 +12,7 @@ class Game():
     def __init__(self):
         #initialize all sprites in this array
         
-        self._player:MainPlayer = MainPlayer(0, 0, [], pygame.Rect(100, 100, 100, 160), 5)
+        self._player:MainPlayer = MainPlayer(5, 5, [], pygame.Rect(100, 100, 100, 160), 5)
         self._testingGround = Platform([pygame.transform.scale(pygame.image.load('Assets/Sprites/Platform/Platform1.png'), (length, (40)))], pygame.Rect(0, 0, length, (40)), PlatformType.NORMAL_PLATFORM)
         self._active_sprites:List[Sprite] = []
         self._game_over = False
@@ -22,16 +22,22 @@ class Game():
     def game_loop(self):
         
         #Main game loop logic (this should be ready to go)
-        pygame.init()
+        pressed = pygame.key.get_pressed()
         if not self.exit_condition():
             self.handle_pauses()
             if self._is_paused is False:
                 window = BackgroundEngine.get_window()
+<<<<<<< HEAD
                 rect, surface = BackgroundEngine.get_current_image(self._player.get_hitbox())
                 #window.blit(surface, (0,0))
+=======
+                window.blit(BackgroundEngine.get_current_image(self._player.get_hitbox()), (0,0))
+                pressed = pygame.key.get_pressed()
+>>>>>>> adding movement
                 self.handle_collisions()
-                self.handle_keystrokes()
+                self.handle_keystrokes(pressed)
                 for i in self._all_sprites:
+                    self._player.apply_force(self._testingGround)
                     if i.should_update(self._player.get_hitbox()):
                         i.update()
                     if i.should_draw(self._player.return_hitbox()):
@@ -51,26 +57,20 @@ class Game():
         #handle collisions between Interactable objects and active dynamic sprites TODO
         pass
     
-    def handle_keystrokes(self):
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.type == pygame.K_SPACE:
+    def handle_keystrokes(self, pressed):
+                if pressed[pygame.K_SPACE]:
                     pass # change y velocity here
-                if event.type == pygame.K_d:
+                if pressed[pygame.K_d]:
                     self._player.change_force(0.4, 0)
-                if event.type == pygame.K_a:
+                if pressed[pygame.K_a]:
                     self._player.change_force(-0.4, 0)
-                if event.type == pygame.K_s:
+                if pressed[pygame.K_s]:
                     pass
-                if event.type == pygame.K_k:
+                if pressed[pygame.K_k]:
                     pass
-                if event.type == pygame.K_w:
+                if pressed[pygame.K_w]:
                     pass
-            if event.type == pygame.KEYUP:
-                if event.type == pygame.K_d:
-                    self._player.change_force(-0.2, 0)
-                if event.type == pygame.K_a:
-                    self._player.change_force(0.2, 0)
+
             
     # bad implementation to still allow toggle to be changed in a unpaused state, will probably need to make a smarter solution some other time 
     def handle_pauses(self):
