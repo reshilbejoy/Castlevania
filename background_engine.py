@@ -38,8 +38,6 @@ class BackgroundEngine(ABC):
        return _normal_background
 
 
-        
-    
     @staticmethod
     def get_current_update_frame(player_hitbox:pygame.Rect)-> pygame.Rect:
         #Return a Rect with the frame objects should update in TODO

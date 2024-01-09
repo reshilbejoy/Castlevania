@@ -7,7 +7,7 @@ class Sprite():
     def __init__(self,images:List[pygame.Surface],hitbox:pygame.Rect):
         self._image_arr:List[pygame.Surface] = images
         self._hitbox: pygame.Rect = hitbox
-        self._screen:pygame.Surface = BackgroundEngine.get_current_image(hitbox)
+        self._screen:pygame.Rect = BackgroundEngine.get_current_image_frame(hitbox)
         
 
     @abstractmethod    
