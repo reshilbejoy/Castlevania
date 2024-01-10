@@ -20,6 +20,10 @@ class DynamicSprite(Sprite,ABC):
         self.speed = 0
         self.left = False
         self.right = False
+        self.current_velocity = 0 # y velocity
+        self.collision_detection = False
+        self.isJumping = False
+        self.gravity = -self.starting_velocity_y * 0.05
     
     
     @abstractmethod
@@ -51,12 +55,30 @@ class DynamicSprite(Sprite,ABC):
                 self._hitbox.left += self.speed
             else:
                 self._hitbox.left -= self.speed
-        
         if self.speed <= 0:
             self.left = False
             self.right = False
             self.net_force = 0
             self.speed = 0
+        
+        # vertical apply force
+            
+        self.collision_detection = False
+        self.canMove = True
+        for platform in all_platforms:
+            if self._hitbox.colliderect(platform._hitbox):
+                if (self._hitbox.bottom >= platform._hitbox.top and self._hitbox.bottom <= platform._hitbox.bottom) and (self.current_velocity > 0): # collides from top
+                    self.current_velocity = 0
+                    self.collision_detection = True
+                    self.isJumping = False
+                    self.character_pos_y = platform._hitbox.top - self._hitbox.height + 1
+                    break
+        if not self.collision_detection: # collision_detection is true if there is a normal force
+            #print(self.current_velocity, self.rect.top + self.rect.height)
+            self.current_velocity += self.gravity
+            self._hitbox.top += self.current_velocity
+            
+        
         
 
     

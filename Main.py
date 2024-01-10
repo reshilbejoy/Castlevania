@@ -13,7 +13,7 @@ class Game():
         #initialize all sprites in this array
         
         self._player:MainPlayer = MainPlayer(5, 5, [], pygame.Rect(100, 100, 100, 160), 5)
-        self._testingGround = Platform([pygame.transform.scale(pygame.image.load('Assets/Sprites/Platform/Platform1.png'), (length, (40)))], pygame.Rect(0, 0, length, (40)), PlatformType.NORMAL_PLATFORM)
+        self._testingGround = Platform([pygame.transform.scale(pygame.image.load('Assets/Sprites/Platform/Platform1.png'), (background_length, (40)))], pygame.Rect(0, height - 100, background_length, (40)), PlatformType.NORMAL_PLATFORM)
         self._active_sprites:List[Sprite] = []
         self._game_over = False
         self._all_sprites:List[Sprite] = [self._player, self._testingGround]
@@ -33,7 +33,7 @@ class Game():
                 self.handle_collisions()
                 self.handle_keystrokes(pressed)
                 #print(self._player.net_force)
-                self._player.apply_force(self._testingGround)
+                self._player.apply_force([self._testingGround])
                 
                 for i in self._all_sprites:
                     

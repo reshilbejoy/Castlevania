@@ -12,7 +12,6 @@ class MainPlayer(Player):
         self.walkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/2.png'), True, False), (hitbox.width, hitbox.height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/3.png'), True, False), (hitbox.width, hitbox.height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/4.png'), True, False), (hitbox.width, hitbox.height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/5.png'), True, False), (hitbox.width, hitbox.height))] 
         self.image = pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/1.png'), (hitbox.width, hitbox.height))
         self.verticalForce = 0
-        self.current_velocity = 0
         self.walkCount = 0
         
         
