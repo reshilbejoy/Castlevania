@@ -27,13 +27,9 @@ class Game():
             self.handle_pauses()
             if self._is_paused is False:
                 window = BackgroundEngine.get_window()
-<<<<<<< HEAD
                 rect, surface = BackgroundEngine.get_current_image(self._player.get_hitbox())
                 #window.blit(surface, (0,0))
-=======
-                window.blit(BackgroundEngine.get_current_image(self._player.get_hitbox()), (0,0))
                 pressed = pygame.key.get_pressed()
->>>>>>> adding movement
                 self.handle_collisions()
                 self.handle_keystrokes(pressed)
                 for i in self._all_sprites:

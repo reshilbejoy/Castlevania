@@ -15,12 +15,8 @@ length_ratio = 22
 window_size = (600,500)
 window = pygame.display.set_mode((length_ratio * size, height_ratio * size))
 pygame.display.set_caption("Castlevania")
-<<<<<<< HEAD
 background_length = 1200
 _normal_background = pygame.transform.scale(pygame.image.load('Assets/Background-easy.png'), (background_length, height_ratio * size))
-=======
-_normal_background = pygame.transform.scale(pygame.image.load('Assets/Background-easy.png'), (1200, height_ratio*size))
->>>>>>> adding movement
 _background_arr:List[pygame.Surface] = []
 _timer = pygame.time.Clock() 
 _draw_frame_size:Tuple[float,float] = (500,600)  #Width, Height

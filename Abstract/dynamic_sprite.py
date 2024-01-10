@@ -33,9 +33,6 @@ class DynamicSprite(Sprite,ABC):
         elif self.net_force < 0:
             self.speeding_up()
             self._global_coords[0] = self._global_coords[0] - self.speed
-        
-        else:
-            self.speed = 0
 
                 
         if  not self.speed <= 0:
