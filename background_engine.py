@@ -1,7 +1,7 @@
 import pygame
 from typing import List,Tuple
 from abc import ABC
-from Constants.window_constants import length, height
+from Constants.window_constants import length, height, background_length
 
 _background_arr:List[pygame.Surface] = []
 _timer = pygame.time.Clock() 
@@ -15,7 +15,7 @@ length_ratio = 22
 window_size = (600,500)
 window = pygame.display.set_mode((length_ratio * size, height_ratio * size))
 pygame.display.set_caption("Castlevania")
-background_length = 1200
+
 _normal_background = pygame.transform.scale(pygame.image.load('Assets/Background-easy.png'), (background_length, height_ratio * size))
 _background_arr:List[pygame.Surface] = []
 _timer = pygame.time.Clock() 
@@ -32,7 +32,7 @@ class BackgroundEngine(ABC):
         # a surface which is the same dimensions
         image_rect = BackgroundEngine.get_current_image_frame(player_global_hitbox)
         surface = pygame.Surface((image_rect.width, image_rect.height))
-        surface.blit(_normal_background, (0, 0))
+        surface.blit(_normal_background, (-image_rect.left, 0))
 
         return image_rect, surface
     
@@ -48,7 +48,7 @@ class BackgroundEngine(ABC):
         if (player_global_hitbox.left < (length / 2)):
             window_rect.left = 0
         elif player_global_hitbox.left > (background_length - (length / 2)):
-            window_rect.left = (background_length - (length / 2))
+            window_rect.left = (background_length - (length))
         else:
             window_rect.left = player_global_hitbox.left - (length / 2)
 

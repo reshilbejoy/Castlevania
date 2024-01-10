@@ -21,7 +21,7 @@ class Sprite():
 
     def draw(self, rect, surface):
         hitbox = self.get_hitbox()
-        surface.blit(self.return_current_image(), (self._global_coords[0] - rect.left, self._global_coords[1] - rect.top))
+        surface.blit(self.return_current_image(), (hitbox.left - rect.left, hitbox.top - rect.top))
         return surface
 
     def should_draw(self,player_hitbox:pygame.Rect) -> bool:

@@ -6,7 +6,7 @@ from Abstract.Sprite import Sprite
 from Abstract.dynamic_sprite import DynamicSprite
 from CompletedSprites.Players.main_player import MainPlayer
 from CompletedSprites.Platform import Platform, PlatformType
-from Constants.window_constants import size, length_ratio, height_ratio, height, length
+from Constants.window_constants import size, length_ratio, height_ratio, height, length, background_length
 class Game():
     
     def __init__(self):
@@ -32,8 +32,11 @@ class Game():
                 pressed = pygame.key.get_pressed()
                 self.handle_collisions()
                 self.handle_keystrokes(pressed)
+                #print(self._player.net_force)
+                self._player.apply_force(self._testingGround)
+                
                 for i in self._all_sprites:
-                    self._player.apply_force(self._testingGround)
+                    
                     if i.should_update(self._player.get_hitbox()):
                         i.update()
                     if i.should_draw(self._player.return_hitbox()):
@@ -54,18 +57,21 @@ class Game():
         pass
     
     def handle_keystrokes(self, pressed):
-                if pressed[pygame.K_SPACE]:
-                    pass # change y velocity here
-                if pressed[pygame.K_d]:
-                    self._player.change_force(0.4, 0)
-                if pressed[pygame.K_a]:
-                    self._player.change_force(-0.4, 0)
-                if pressed[pygame.K_s]:
-                    pass
-                if pressed[pygame.K_k]:
-                    pass
-                if pressed[pygame.K_w]:
-                    pass
+        left = self._player.get_hitbox().left
+        if pressed[pygame.K_SPACE]:
+            pass # change y velocity here
+        if pressed[pygame.K_d] and (left < background_length):
+            self._player.change_force(0.4, 0)
+        if pressed[pygame.K_a] and (left > 0):
+            self._player.change_force(-0.4, 0)
+        if not (pressed[pygame.K_d] or pressed[pygame.K_a]):
+            self._player.change_force(0, 0)
+        if pressed[pygame.K_s]:
+            pass
+        if pressed[pygame.K_k]:
+            pass
+        if pressed[pygame.K_w]:
+            pass
 
             
     # bad implementation to still allow toggle to be changed in a unpaused state, will probably need to make a smarter solution some other time 
