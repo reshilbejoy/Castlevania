@@ -68,13 +68,22 @@ class DynamicSprite(Sprite,ABC):
         self.canMove = True
         for platform in all_platforms:
             if self._hitbox.colliderect(platform._hitbox):
-                if (self._hitbox.bottom >= platform._hitbox.top and self._hitbox.bottom <= platform._hitbox.bottom) and (self.current_velocity > 0): # collides from top
+                if (self._hitbox.bottom >= platform._hitbox.top and self._hitbox.bottom <= platform._hitbox.bottom) and (self.current_velocity > 0):  # Collides from top
                     self.current_velocity = 0
                     self.collision_detection = True
-                    self._hitbox.top = platform._hitbox.top - self._hitbox.height
+                    self._hitbox.bottom = platform._hitbox.top
                     self.isJumping = False
                     self.isFalling = False
-                    break
+                elif (self._hitbox.top <= platform._hitbox.bottom and self._hitbox.top >= platform._hitbox.top) and (self.current_velocity < 0):  # Collides from bottom (need to test)
+                    self.current_velocity = 0
+                    self._hitbox.top = platform._hitbox.bottom
+                elif (self._hitbox.right >= platform._hitbox.left and self._hitbox.right <= platform._hitbox.right) and (self.current_horizontal_velocity > 0):  # Collides from right  (need to test)
+                    self.speed = 0
+                    self._hitbox.right = platform._hitbox.left
+                elif (self._hitbox.left <= platform._hitbox.right and self._hitbox.left >= platform._hitbox.left) and (self.current_horizontal_velocity < 0):  # Collides from left   (need to test)
+                    self.speed = 0
+                    self._hitbox.left = platform._hitbox.right
+
         if not self.collision_detection: # collision_detection is true if there is a normal force
             #print(self.current_velocity, self.rect.top + self.rect.height)
             self.current_velocity += self.gravity
@@ -82,10 +91,6 @@ class DynamicSprite(Sprite,ABC):
             if self.current_velocity > self.starting_velocity_y:
                 self.isFalling = True
             
-        
-        
-
-    
 
     def change_force(self, x_force, y_force):
         self._horizontal_force = x_force
