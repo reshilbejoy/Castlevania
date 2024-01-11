@@ -5,6 +5,7 @@ from CompletedSprites.Platform import Platform
 from Utils.signals import DamageMessage,InventoryMessage
 from typing import List
 import pygame
+from Constants.window_constants import background_length
 
 class DynamicSprite(Sprite,ABC):
     def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox:List[pygame.Rect], health:int, horizontal_force):
@@ -38,12 +39,13 @@ class DynamicSprite(Sprite,ABC):
 
     def apply_force(self,all_platforms:List[Platform])->None:
         #Use all platforms list to move the sprite hitbox according to x and y forces TODO
-        if self.net_force > 0 and self._horizontal_force > 0:
+        print(self._hitbox.left, background_length)
+        if self.net_force > 0 and self._horizontal_force > 0 and self._hitbox.left <= background_length - self._hitbox.width:
             self.speeding_up()
             self._hitbox.left += self.speed
             self.left = False
             self.right = True
-        elif self.net_force < 0 and self._horizontal_force < 0:
+        elif self.net_force < 0 and self._horizontal_force < 0 and self._hitbox.left >= 0:
             self.speeding_up()
             self._hitbox.left -= self.speed
             self.left = True
