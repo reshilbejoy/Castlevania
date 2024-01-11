@@ -37,6 +37,7 @@ class MainPlayer(Player):
         elif self.isJumping:
             return self.jump_animation_right
         
+        
         if self.walkCount + 1 >= 17:
              self.walkCount = 0    
         if self.left:  

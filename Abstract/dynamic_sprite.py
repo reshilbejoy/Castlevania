@@ -65,7 +65,7 @@ class DynamicSprite(Sprite,ABC):
             self.speed = 0
         
         # vertical apply force
-            
+        print(self.isJumping)
         self.collision_detection = False
         self.canMove = True
         for platform in all_platforms:
@@ -73,16 +73,16 @@ class DynamicSprite(Sprite,ABC):
                 if (self._hitbox.bottom >= platform._hitbox.top and self._hitbox.bottom <= platform._hitbox.bottom) and (self.current_velocity > 0):  # Collides from top
                     self.current_velocity = 0
                     self.collision_detection = True
-                    self._hitbox.bottom = platform._hitbox.top
+                    self._hitbox.bottom = platform._hitbox.top + 1
                     self.isJumping = False
                     self.isFalling = False
                 elif (self._hitbox.top <= platform._hitbox.bottom and self._hitbox.top >= platform._hitbox.top) and (self.current_velocity < 0):  # Collides from bottom (need to test)
                     self.current_velocity = 0
                     self._hitbox.top = platform._hitbox.bottom
-                elif (self._hitbox.right >= platform._hitbox.left and self._hitbox.right <= platform._hitbox.right) and (self.current_horizontal_velocity > 0):  # Collides from right  (need to test)
+                elif (self._hitbox.right >= platform._hitbox.left and self._hitbox.right <= platform._hitbox.right) and (self.right):  # Collides from right  (need to test)
                     self.speed = 0
                     self._hitbox.right = platform._hitbox.left
-                elif (self._hitbox.left <= platform._hitbox.right and self._hitbox.left >= platform._hitbox.left) and (self.current_horizontal_velocity < 0):  # Collides from left   (need to test)
+                elif (self._hitbox.left <= platform._hitbox.right and self._hitbox.left >= platform._hitbox.left) and (self.left):  # Collides from left   (need to test)
                     self.speed = 0
                     self._hitbox.left = platform._hitbox.right
 
