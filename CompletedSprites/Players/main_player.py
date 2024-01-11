@@ -26,7 +26,7 @@ class MainPlayer(Player):
         return super().attack()
     
     def return_current_image(self) -> pygame.Surface:
-        
+
         if self.isFalling and self.left:
             return self.fall_animation_left
         elif self.isFalling:
