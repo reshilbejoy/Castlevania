@@ -17,8 +17,7 @@ class MainPlayer(Player):
         self.fall_animation_left = pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_fall/1.png'),(hitbox.width, hitbox.height))
         self.verticalForce = 0
         self.walkCount = 0
-        self.isFalling = False
-        self.isJumping = False
+        
         
         
     
