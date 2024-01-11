@@ -55,6 +55,7 @@ class DynamicSprite(Sprite,ABC):
                 self._hitbox.left += self.speed
             else:
                 self._hitbox.left -= self.speed
+
         if self.speed <= 0:
             self.left = False
             self.right = False
@@ -70,13 +71,16 @@ class DynamicSprite(Sprite,ABC):
                 if (self._hitbox.bottom >= platform._hitbox.top and self._hitbox.bottom <= platform._hitbox.bottom) and (self.current_velocity > 0): # collides from top
                     self.current_velocity = 0
                     self.collision_detection = True
+                    self._hitbox.top = platform._hitbox.top - self._hitbox.height
                     self.isJumping = False
-                    self.character_pos_y = platform._hitbox.top - self._hitbox.height + 1
+                    self.isFalling = False
                     break
         if not self.collision_detection: # collision_detection is true if there is a normal force
             #print(self.current_velocity, self.rect.top + self.rect.height)
             self.current_velocity += self.gravity
             self._hitbox.top += self.current_velocity
+            if self.current_velocity > self.starting_velocity_y:
+                self.isFalling = True
             
         
         
@@ -99,5 +103,11 @@ class DynamicSprite(Sprite,ABC):
         if self.speed > 0:
             speed_val = self.speed - abs(self.frictionForce)
             self.speed = round(speed_val, 2)
+
+    def jump(self):
+        self.isJumping = True
+        self.current_velocity = self.starting_velocity_y
+        self._hitbox.top += self.current_velocity
+        
 
 

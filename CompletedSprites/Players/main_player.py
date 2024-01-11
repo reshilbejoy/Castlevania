@@ -10,9 +10,15 @@ class MainPlayer(Player):
         super().__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health, self.horizontalForce)
         self.walkLeft = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/2.png'),(hitbox.width, hitbox.height)), pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/3.png'),(hitbox.width, hitbox.height)), pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/4.png'),(hitbox.width, hitbox.height)), pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/5.png'),(hitbox.width, hitbox.height))]
         self.walkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/2.png'), True, False), (hitbox.width, hitbox.height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/3.png'), True, False), (hitbox.width, hitbox.height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/4.png'), True, False), (hitbox.width, hitbox.height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/5.png'), True, False), (hitbox.width, hitbox.height))] 
-        self.image = pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/1.png'), (hitbox.width, hitbox.height))
+        self.image = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/1.png'), True, False), (hitbox.width, hitbox.height))
+        self.jump_animation_right = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_jump/1.png'), True, False), (hitbox.width, hitbox.height))
+        self.jump_animation_left = pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_jump/1.png'),(hitbox.width, hitbox.height))
+        self.fall_animation_right = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_fall/1.png'), True, False), (hitbox.width, hitbox.height))
+        self.fall_animation_left = pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_fall/1.png'),(hitbox.width, hitbox.height))
         self.verticalForce = 0
         self.walkCount = 0
+        self.isFalling = False
+        self.isJumping = False
         
         
     
@@ -20,6 +26,17 @@ class MainPlayer(Player):
         return super().attack()
     
     def return_current_image(self) -> pygame.Surface:
+        
+        if self.isFalling and self.left:
+            return self.fall_animation_left
+        elif self.isFalling:
+            return self.fall_animation_right
+
+        if self.isJumping and self.left:
+            return self.jump_animation_left
+        elif self.isJumping:
+            return self.jump_animation_right
+        
         if self.walkCount + 1 >= 17:
              self.walkCount = 0    
         if self.left:  
