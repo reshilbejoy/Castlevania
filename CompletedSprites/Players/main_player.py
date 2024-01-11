@@ -30,13 +30,14 @@ class MainPlayer(Player):
         if self.isFalling and self.left:
             return self.fall_animation_left
         elif self.isFalling:
+            print("f")
             return self.fall_animation_right
+
 
         if self.isJumping and self.left:
             return self.jump_animation_left
         elif self.isJumping:
             return self.jump_animation_right
-        
         
         if self.walkCount + 1 >= 17:
              self.walkCount = 0    
@@ -48,4 +49,5 @@ class MainPlayer(Player):
             return self.walkRight[int(self.walkCount//4) - 1]
         else:
             self.walkCount = 0
+    
         return self.image

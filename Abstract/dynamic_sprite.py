@@ -66,7 +66,6 @@ class DynamicSprite(Sprite,ABC):
         
         # vertical apply force
         print(self.isJumping)
-        self.collision_detection = False
         self.canMove = True
         for platform in all_platforms:
             if self._hitbox.colliderect(platform._hitbox):
