@@ -41,6 +41,7 @@ class DynamicSprite(Sprite,ABC):
     def apply_force(self,all_platforms:List[Platform])->None:
         #Use all platforms list to move the sprite hitbox according to x and y forces TODO
         #print(self._hitbox.left)
+        #print(self._hitbox.left, self.speed)
         if self.net_force > 0 and self._horizontal_force > 0 and self._hitbox.left <= background_length - self._hitbox.width:
             self.speeding_up()
             self._hitbox.left += self.speed
@@ -79,14 +80,17 @@ class DynamicSprite(Sprite,ABC):
                     self.isJumping = False
                     self.isFalling = False
                 elif (self._hitbox.top <= platform._hitbox.bottom and self._hitbox.top >= platform._hitbox.top) and (self.current_velocity < 0):  # Collides from bottom (need to test)
+                    print("g")
                     self.current_velocity = 0
                     self._hitbox.top = platform._hitbox.bottom
-                elif (self._hitbox.right >= platform._hitbox.left and self._hitbox.right <= platform._hitbox.right) and (self.right):  # Collides from right  (need to test)
-                    self.speed = 0
-                    self._hitbox.right = platform._hitbox.left
-                elif (self._hitbox.left <= platform._hitbox.right and self._hitbox.left >= platform._hitbox.left) and (self.left):  # Collides from left   (need to test)
-                    self.speed = 0
-                    self._hitbox.left = platform._hitbox.right
+                #elif (self._hitbox.right >= platform._hitbox.left and self._hitbox.right <= platform._hitbox.right) and (self.right):  # Collides from right  (need to test)
+                    #print('f')
+                    #self.speed = 0
+                    #self._hitbox.right = platform._hitbox.left
+                #elif (self._hitbox.left <= platform._hitbox.right and self._hitbox.left >= platform._hitbox.left) and (self.left):  # Collides from left   (need to test)
+                    #print('l')
+                    #self.speed = 0
+                    #self._hitbox.left = platform._hitbox.right
 
             #print(self._hitbox.colliderect(platform._hitbox))
         if not self.collision_detection: # collision_detection is true if there is a normal force
