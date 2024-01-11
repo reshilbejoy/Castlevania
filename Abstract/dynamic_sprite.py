@@ -17,7 +17,6 @@ class DynamicSprite(Sprite,ABC):
         self._vertical_force = 0
         self.frictionForce = 0.2
         self.net_force = (abs(self.horizontalForce) - abs(self.frictionForce))
-        self.starting_velocity_y = -15
         self.speed = 0
         self.left = False
         self.right = False
@@ -25,7 +24,7 @@ class DynamicSprite(Sprite,ABC):
         self.collision_detection = False
         self.isJumping = False
         self.isFalling = False
-        self.gravity = -self.starting_velocity_y * 0.05
+        self.gravity = 0.05
     
     
     @abstractmethod
@@ -75,12 +74,12 @@ class DynamicSprite(Sprite,ABC):
                 
                 if (self._hitbox.bottom >= platform._hitbox.top and self._hitbox.bottom <= platform._hitbox.bottom) and (self.current_velocity > 0):  # Collides from top
                     self.current_velocity = 0
+                    print("f")
                     self.collision_detection = True
                     self._hitbox.bottom = platform._hitbox.top + 1
                     self.isJumping = False
                     self.isFalling = False
                 elif (self._hitbox.top <= platform._hitbox.bottom and self._hitbox.top >= platform._hitbox.top) and (self.current_velocity < 0):  # Collides from bottom (need to test)
-                    print("g")
                     self.current_velocity = 0
                     self._hitbox.top = platform._hitbox.bottom
                 #elif (self._hitbox.right >= platform._hitbox.left and self._hitbox.right <= platform._hitbox.right) and (self.right):  # Collides from right  (need to test)
@@ -93,10 +92,11 @@ class DynamicSprite(Sprite,ABC):
                     #self._hitbox.left = platform._hitbox.right
 
             #print(self._hitbox.colliderect(platform._hitbox))
+
         if not self.collision_detection: # collision_detection is true if there is a normal force
             self.current_velocity += self.gravity
             self._hitbox.top += self.current_velocity
-            if self.current_velocity > self.starting_velocity_y:
+            if self.current_velocity > 0:
                 self.isFalling = True
             
 
@@ -119,6 +119,7 @@ class DynamicSprite(Sprite,ABC):
 
     def jump(self):
         self.isJumping = True
+        self.collision_detection = False
         self.current_velocity = self.starting_velocity_y
         self._hitbox.top += self.current_velocity
         
