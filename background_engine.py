@@ -24,7 +24,6 @@ _update_frame_size:Tuple[float,float] = (700,800)  #Width, Height
 
 
 class BackgroundEngine(ABC):
-
     
     @staticmethod
     def get_current_image(player_global_hitbox:pygame.Rect): #-> pygame.Rect, pygame.Surface:
@@ -40,7 +39,6 @@ class BackgroundEngine(ABC):
     def get_window():
         return window
 
-
     @staticmethod
     def get_current_image_frame(player_global_hitbox:pygame.Rect)-> pygame.Rect:
         # the rectangle around the player
@@ -53,7 +51,6 @@ class BackgroundEngine(ABC):
             window_rect.left = player_global_hitbox.left - (length / 2)
 
         return window_rect
-
 
     @staticmethod
     def get_current_update_frame(player_hitbox:pygame.Rect)-> pygame.Rect:

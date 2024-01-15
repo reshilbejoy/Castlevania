@@ -17,6 +17,7 @@ class Enemy(DyanmicSprite,ABC):
         else:
             del self
 
+            
     @abstractmethod       
     def lifespan(self):
         pass
