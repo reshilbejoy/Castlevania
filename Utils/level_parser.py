@@ -10,7 +10,7 @@ class Parser:
         self.map_data = []
         self.path = os.path.dirname(os.path.realpath(__file__))
         self.curr_x = 0
-        self.curr_y = 400
+        self.curr_y = 0
         self.width = 100 
         self.height_s = 40
         self.built = []
@@ -74,16 +74,19 @@ class Parser:
             for y in x:
                 curr_list = [] 
                 if y != ' ':
-                    print("no!")
+         
                     image = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Platform/' + self.key[y]), (background_length - 800, (40)))]
                     rect = pygame.Rect(self.curr_x, self.curr_y, self.width, self.height_s)
                     platform_type = 1
-                    curr_list.extend([image, rect, platform_type])
+                    curr_list.append(image)
+                    curr_list.append(rect)
+                    curr_list.append(platform_type)
                     self.built.append(curr_list)
-
+                
+                curr_list = []
                 self.curr_x += 100
 
-            self.curr_y -= 60
+            self.curr_y += 60
             self.curr_x=0
         result_rects = [entry[1] for entry in self.built]
         print(result_rects)

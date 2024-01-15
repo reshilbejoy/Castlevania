@@ -20,10 +20,9 @@ class Game():
         p = Parser()
         p.load_tilemap()
         p.build_level()
-        p.build_level()
         platforms = [Platform(entry[0], entry[1], entry[2]) for entry in p.built]
         self._all_sprites: List[Sprite] = [self._player, self._testingGround] + platforms
-        
+        self._all_plat = [self._testingGround] + platforms
         self._is_paused = False
         
 
@@ -41,7 +40,7 @@ class Game():
                 self.handle_collisions()
                 self.handle_keystrokes(pressed)
                 #print(self._player.net_force)
-                self._player.apply_force([self._testingGround])
+                self._player.apply_force(self._all_plat)
                 
                 for i in self._all_sprites:
                     
