@@ -75,7 +75,7 @@ class Parser:
                 curr_list = [] 
                 if y != ' ':
          
-                    image = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Platform/' + self.key[y]), (background_length - 800, (40)))]
+                    image = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Platform/' + self.key[y]), (60, (40)))]
                     rect = pygame.Rect(self.curr_x, self.curr_y, self.width, self.height_s)
                     platform_type = 1
                     curr_list.append(image)
