@@ -3,6 +3,8 @@ from background_engine import BackgroundEngine
 import pygame
 from Utils.level_parser import Parser
 from Abstract.Player import Player
+from Abstract.Interaction import Interactable
+
 from Abstract.Sprite import Sprite
 from Abstract.dynamic_sprite import DynamicSprite
 from CompletedSprites.Players.main_player import MainPlayer
@@ -15,6 +17,7 @@ class Game():
         
         self._player:MainPlayer = MainPlayer(8, 5, [], pygame.Rect(100, 100, 50, 80), 5)
         self._active_sprites:List[Sprite] = []
+        self._all_interactables: List[Interactable] = []
         self._game_over = False
         p = Parser()
         p.load_tilemap()
@@ -24,7 +27,7 @@ class Game():
         #print(len(platforms))
         self._all_plat = platforms
         self._is_paused = False
-        
+    
 
 
     def game_loop(self):
@@ -62,7 +65,16 @@ class Game():
             else:
                 pass
 
-    
+    @staticmethod
+    def create_interatable(self, Interactable:Interactable):
+        self._all_sprites.append(Interactable)
+        self._all_interactables.append(Interactable)
+        
+    @staticmethod
+    def remove_interactable(self, Interactable:Interactable):
+        self._all_sprites.remove(Interactable)
+        self._all_interactables.remove(Interactable)
+
     def handle_collisions(self):
         #handle collisions between Interactable objects and active dynamic sprites TODO
         pass
