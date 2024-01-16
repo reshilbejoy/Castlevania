@@ -88,9 +88,9 @@ class Parser:
                     self.built.append(curr_list)
                 
                 curr_list = []
-                self.curr_x += 100
+                self.curr_x += 60
 
-            self.curr_y += 60
+            self.curr_y += 50
             self.curr_x=0
         result_rects = [entry[1] for entry in self.built]
         print(result_rects)

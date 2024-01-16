@@ -13,7 +13,7 @@ class Game():
     def __init__(self):
         #initialize all sprites in this array
         
-        self._player:MainPlayer = MainPlayer(8, 5, [], pygame.Rect(100, 100, 100, 160), 5)
+        self._player:MainPlayer = MainPlayer(8, 5, [], pygame.Rect(100, 100, 50, 80), 5)
         self._active_sprites:List[Sprite] = []
         self._game_over = False
         p = Parser()
@@ -21,6 +21,7 @@ class Game():
         p.build_level()
         platforms = [Platform(entry[0], entry[1], entry[2]) for entry in p.built]
         self._all_sprites: List[Sprite] = [self._player] + platforms
+        #print(len(platforms))
         self._all_plat = platforms
         self._is_paused = False
         
