@@ -55,7 +55,7 @@ class Game():
                     else:
                         ...
                         #self._active_sprites.remove(i)
-                window.blit(surface, (0, 0))
+                window.blit(surface, (0, 150))
                 BackgroundEngine.tick_timer()
 
             #would be nice to add a pause icon sprite to the screen and destroy it upon unpause but unneeded
