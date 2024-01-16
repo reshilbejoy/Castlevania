@@ -63,4 +63,4 @@ class BackgroundEngine(ABC):
     @staticmethod
     def tick_timer()-> float:
         pygame.display.update()
-        _timer.tick()
+        _timer.tick(30)
