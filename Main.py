@@ -12,8 +12,8 @@ class Game():
     def __init__(self):
         #initialize all sprites in this array
         
-        self._player:MainPlayer = MainPlayer(1, 5, [], pygame.Rect(100, 100, 100, 160), 5)
-        self._testingGround = Platform([pygame.transform.scale(pygame.image.load('Assets/Sprites/Platform/Platform1.png'), (background_length - 800, (40)))], pygame.Rect(0, height - 100, background_length, (40)), PlatformType.NORMAL_PLATFORM)
+        self._player:MainPlayer = MainPlayer(8, 5, [], pygame.Rect(100, 100, 100, 160), 5)
+        self._testingGround = Platform([pygame.transform.scale(pygame.image.load('Assets/Sprites/Platform/Platform1.png'), (background_length, (height - 100)))], pygame.Rect(0, height - 100, background_length, (height-100)), PlatformType.NORMAL_PLATFORM)
         self._active_sprites:List[Sprite] = []
         self._game_over = False
         self._all_sprites:List[Sprite] = [self._player, self._testingGround]
@@ -22,6 +22,7 @@ class Game():
     def game_loop(self):
         
         #Main game loop logic (this should be ready to go)
+        print(self._player.get_hitbox().left)
         pressed = pygame.key.get_pressed()
         if not self.exit_condition():
             self.handle_pauses()
@@ -74,7 +75,6 @@ class Game():
         if pressed[pygame.K_w]:
             pass
 
-            
     # bad implementation to still allow toggle to be changed in a unpaused state, will probably need to make a smarter solution some other time 
     def handle_pauses(self):
         for event in pygame.event.get():

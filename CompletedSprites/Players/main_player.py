@@ -43,10 +43,10 @@ class MainPlayer(Player):
         if self.walkCount + 1 >= 17:
              self.walkCount = 0    
         if self.left:  
-            self.walkCount += 0.05
+            self.walkCount += 0.5
             return self.walkLeft[int(self.walkCount//4) - 1]                
         elif self.right:
-            self.walkCount += 0.05
+            self.walkCount += 0.5
             return self.walkRight[int(self.walkCount//4) - 1]
         else:
             self.walkCount = 0

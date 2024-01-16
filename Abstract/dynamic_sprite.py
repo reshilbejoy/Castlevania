@@ -24,7 +24,7 @@ class DynamicSprite(Sprite,ABC):
         self.collision_detection = False
         self.isJumping = False
         self.isFalling = False
-        self.gravity = 0.05
+        self.gravity = 0.25
     
     
     @abstractmethod
@@ -42,22 +42,25 @@ class DynamicSprite(Sprite,ABC):
         #print(self._hitbox.left)
         #print(self._hitbox.left, self.speed)
         if self.net_force > 0 and self._horizontal_force > 0 and self._hitbox.left <= background_length - self._hitbox.width:
-            self.speeding_up()
-            self._hitbox.left += self.speed
-            self.left = False
-            self.right = True
+                self.speeding_up()
+                self._hitbox.left += self.speed
+                self.left = False
+                self.right = True
         elif self.net_force < 0 and self._horizontal_force < 0 and self._hitbox.left >= 0:
-            self.speeding_up()
-            self._hitbox.left -= self.speed
-            self.left = True
-            self.right = False
+                self.speeding_up()
+                self._hitbox.left -= self.speed
+                self.left = True
+                self.right = False
 
         if not self.speed <= 0 and self._horizontal_force == 0:
-            self.slowing_down()
-            if self.right:
-                self._hitbox.left += self.speed
+            if self._hitbox.left <= 0 or self._hitbox.left >= background_length - self._hitbox.width:
+                self.speed = 0
             else:
-                self._hitbox.left -= self.speed
+                self.slowing_down()
+                if self.right:
+                    self._hitbox.left += self.speed
+                else:
+                    self._hitbox.left -= self.speed
 
         if self.speed <= 0:
             self.left = False
@@ -101,11 +104,12 @@ class DynamicSprite(Sprite,ABC):
             
 
     def change_force(self, x_force, y_force):
-        self._horizontal_force = x_force
-        self._verticalForce = y_force
-        self.net_force = (abs(self._horizontal_force) - abs(self.frictionForce))
-        if self._horizontal_force < 0:
-            self.net_force *= -1            
+        if not (self.isJumping or self.isFalling) or x_force == 0:
+            self._horizontal_force = x_force
+            self._verticalForce = y_force
+            self.net_force = (abs(self._horizontal_force) - abs(self.frictionForce))
+            if self._horizontal_force < 0:
+                self.net_force *= -1            
 
     def speeding_up(self):
         if self.speed < self._terminal_vel_x:
