@@ -73,6 +73,7 @@ class DynamicSprite(Sprite,ABC):
        
         self.collision_detection = False
         self.canMove = True
+        print(self.collision_detection)
         for platform in all_platforms:
             if self._hitbox.colliderect(platform._hitbox):
                 #print("Collision")
