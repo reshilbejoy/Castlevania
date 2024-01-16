@@ -13,8 +13,7 @@ class Game():
     def __init__(self):
         #initialize all sprites in this array
         
-        self._player:MainPlayer = MainPlayer(8, 5, [], pygame.Rect(100, 100, 50, 80), 5)
-        #self._testingGround = Platform([pygame.transform.scale(pygame.image.load('Assets/Sprites/Platform/Platform1.png'), (background_length, (height - 100)))], pygame.Rect(0, height - 100, background_length, (height-100)), PlatformType.NORMAL_PLATFORM)
+        self._player:MainPlayer = MainPlayer(8, 5, [], pygame.Rect(100, 100, 100, 160), 5)
         self._active_sprites:List[Sprite] = []
         self._game_over = False
         p = Parser()
@@ -69,6 +68,8 @@ class Game():
     
     def handle_keystrokes(self, pressed):
         left = self._player.get_hitbox().left
+        if pressed[pygame.K_s] and not self._player.isJumping:
+            self._player.isCrouched = True
         if pressed[pygame.K_SPACE] and not self._player.isJumping:
             self._player.jump()
         if pressed[pygame.K_d] and (left < background_length):
@@ -78,8 +79,6 @@ class Game():
             self._player.change_force(-0.4, 0)
         if not (pressed[pygame.K_d] or pressed[pygame.K_a]):
             self._player.change_force(0, 0)
-        if pressed[pygame.K_s]:
-            pass
         if pressed[pygame.K_k]:
             pass
         if pressed[pygame.K_w]:

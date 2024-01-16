@@ -74,6 +74,8 @@ class Parser:
             for y in x:
                 curr_list = [] 
                 if y != ' ':
+         
+                    image = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Platform/' + self.key[y]), (60, (40)))]
                     #platform = pygame.image.load('Assets/Sprites/Platform/' + self.key[y])
                     #print(platform.wid)
                     image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Platform/' + self.key[y])), (60, (40)))]
