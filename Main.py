@@ -1,6 +1,7 @@
 from typing import List
 from background_engine import BackgroundEngine
 import pygame
+from Utils.level_parser import Parser
 from Abstract.Player import Player
 from Abstract.Sprite import Sprite
 from Abstract.dynamic_sprite import DynamicSprite
@@ -16,11 +17,17 @@ class Game():
         self._testingGround = Platform([pygame.transform.scale(pygame.image.load('Assets/Sprites/Platform/Platform1.png'), (background_length, (height - 100)))], pygame.Rect(0, height - 100, background_length, (height-100)), PlatformType.NORMAL_PLATFORM)
         self._active_sprites:List[Sprite] = []
         self._game_over = False
-        self._all_sprites:List[Sprite] = [self._player, self._testingGround]
+        p = Parser()
+        p.load_tilemap()
+        p.build_level()
+        platforms = [Platform(entry[0], entry[1], entry[2]) for entry in p.built]
+        self._all_sprites: List[Sprite] = [self._player, self._testingGround] + platforms
+        self._all_plat = [self._testingGround] + platforms
         self._is_paused = False
+        
+
 
     def game_loop(self):
-        
         #Main game loop logic (this should be ready to go)
         print(self._player.get_hitbox().left)
         pressed = pygame.key.get_pressed()
@@ -34,7 +41,7 @@ class Game():
                 self.handle_collisions()
                 self.handle_keystrokes(pressed)
                 #print(self._player.net_force)
-                self._player.apply_force([self._testingGround])
+                self._player.apply_force(self._all_plat)
                 
                 for i in self._all_sprites:
                     
@@ -42,12 +49,15 @@ class Game():
                         i.update()
                     if i.should_draw(self._player.return_hitbox()):
                         self._active_sprites.append(i)
+
                         surface = i.draw(rect, surface)
+                        
                     else:
                         ...
                         #self._active_sprites.remove(i)
                 window.blit(surface, (0, 0))
                 BackgroundEngine.tick_timer()
+
             #would be nice to add a pause icon sprite to the screen and destroy it upon unpause but unneeded
             else:
                 pass

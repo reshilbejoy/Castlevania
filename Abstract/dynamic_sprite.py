@@ -28,8 +28,9 @@ class DynamicSprite(Sprite,ABC):
     
     
     @abstractmethod
-    def handle_damage_interaction(interaction_msg:InventoryMessage)->None:
+    def handle_damage_interaction(interaction_msg:InventoryMessage)->bool:
         #handle damage
+        #while
         pass
 
     @abstractmethod

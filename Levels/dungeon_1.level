@@ -1,9 +1,9 @@
 Key:
 {
-    x;placeholder_path_ground,
+    x:Platform1.png,
     y:placeholder_path_unmoving_platform,
-     :null,
-    O->x
+    z:null,
+    O:Platform1.png
 }
 
 Meta:
@@ -16,13 +16,12 @@ Meta:
 
 Map:
 {
+  
+   
 
+  xxx
+  
 
-
-
-  yyyyy   yyyyy
-        
-
-Oxxxxxxxxxxxxxxxx
-xxxxxxxxxxxxxxxxx
+Oxxx
+xxxx
 }
