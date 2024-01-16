@@ -11,7 +11,7 @@ class Parser:
         self.path = os.path.dirname(os.path.realpath(__file__))
         self.curr_x = 0
         self.curr_y = 0
-        self.width = 100 
+        self.width = 60 
         self.height_s = 40
         self.built = []
 

@@ -12,8 +12,7 @@ pygame.init()
 size = 35
 height_ratio = 14
 length_ratio = 22
-window_size = (600,500)
-window = pygame.display.set_mode((length_ratio * size, height_ratio * size))
+window = pygame.display.set_mode((length_ratio * size, height_ratio * size + 150))
 pygame.display.set_caption("Castlevania")
 
 _normal_background = pygame.transform.scale(pygame.image.load('Assets/Background-easy.png'), (background_length, height_ratio * size))
