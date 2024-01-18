@@ -1,14 +1,15 @@
 from Abstract.dynamic_sprite import DynamicSprite
-from typing import List
+from typing import Callable, List
 from abc import ABC, abstractmethod 
 import pygame
+from Abstract.Interaction import Interactable
 
 from Utils.signals import DamageMessage, InventoryMessage
 
 class Player(DynamicSprite):
-    def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox: pygame.Rect, health:int, horizontal_force):
+    def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox: pygame.Rect, health:int, horizontal_force, create_interactable:[Callable[[Interactable],None]]):
 
-        super().__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health, horizontal_force)
+        super().__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health, horizontal_force,create_interactable)
     
     @abstractmethod
     def attack(self):
@@ -26,6 +27,7 @@ class Player(DynamicSprite):
     
     def handle_damage_interaction(interaction_msg: InventoryMessage) -> None:
         return super().handle_damage_interaction()
+    
     def handle_inventory_interaction(interaction_msg: DamageMessage) -> None:
         return super().handle_inventory_interaction()
             

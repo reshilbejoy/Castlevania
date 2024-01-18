@@ -1,29 +1,47 @@
-from Abstract.dynamic_sprite import DynamicSprite
-from typing import List
-from abc import ABC, abstractmethod 
+from typing import Callable, List
 import pygame
 from Abstract.Player import Player
+from Abstract.Interaction import Interactable
+from Utils.signals import DamageMessage, InventoryMessage, Item, TargetType
 
 class MainPlayer(Player):
-    def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox: pygame.Rect, health:int):
+    def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox: pygame.Rect,
+                  health:int,create_interactable:[Callable[[Interactable],None]]):
         self.horizontalForce = 0.2
         self.starting_velocity_y = -7
-        super().__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health, self.horizontalForce)
-        self.walkLeft = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/2.png'),(hitbox.width, hitbox.height)), pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/3.png'),(hitbox.width, hitbox.height)), pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/4.png'),(hitbox.width, hitbox.height)), pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/5.png'),(hitbox.width, hitbox.height))]
-        self.walkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/2.png'), True, False), (hitbox.width, hitbox.height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/3.png'), True, False), (hitbox.width, hitbox.height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/4.png'), True, False), (hitbox.width, hitbox.height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/5.png'), True, False), (hitbox.width, hitbox.height))] 
+        super().__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health, self.horizontalForce,create_interactable)
+        self.walkLeft = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/2.png'),(hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/3.png'),(hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/4.png'),(hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/5.png'),(hitbox.width, hitbox.height))]
+        
+        self.walkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/2.png'), True, False), (hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/3.png'), True, False), (hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/4.png'), True, False), (hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/5.png'), True, False), (hitbox.width, hitbox.height))] 
+        
         self.image = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/1.png'), True, False), (hitbox.width, hitbox.height))
         self.jump_animation_right = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_jump/1.png'), True, False), (hitbox.width, hitbox.height))
         self.jump_animation_left = pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_jump/1.png'),(hitbox.width, hitbox.height))
         self.fall_animation_right = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_fall/1.png'), True, False), (hitbox.width, hitbox.height))
         self.fall_animation_left = pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_crouch/1.png'),(hitbox.width, hitbox.height))
+        self.cur_weapon = Item.DAGGER
         self.verticalForce = 0
         self.walkCount = 0
         self.isFalling = False
         self.isJumping = False
         self.isCrouched = False
+        self.invince = False
         
-        
+    def handle_damage_interaction(self,interaction_msg: DamageMessage) -> None:
+        if interaction_msg.target == (TargetType.PLAYER or TargetType.ALL_SPRITES):
+            self._health -= interaction_msg.damage
+            print(self._health)
     
+    def handle_inventory_interaction(self,interaction_msg: InventoryMessage) -> None:
+        if interaction_msg.target == (TargetType.PLAYER or TargetType.ALL_SPRITES):
+            self.cur_weapon = interaction_msg.item
+
     def attack(self):
         return super().attack()
     
