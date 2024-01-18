@@ -6,6 +6,7 @@ from Utils.signals import DamageMessage,InventoryMessage
 from typing import List
 import pygame
 from Constants.window_constants import background_length
+import time
 
 class DynamicSprite(Sprite,ABC):
     def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox:List[pygame.Rect], health:int, horizontal_force):
@@ -18,13 +19,16 @@ class DynamicSprite(Sprite,ABC):
         self.frictionForce = 0.2
         self.net_force = (abs(self.horizontalForce) - abs(self.frictionForce))
         self.speed = 0
-        self.left = False
-        self.right = False
+        #self.left = False
+        #self.right = False
         self.current_velocity = 0 # y velocity
         self.collision_detection = False
         self.isJumping = False
         self.isFalling = False
         self.gravity = 0.25 
+        self.collision_left = False
+        self.collision_right = False
+        self.direction = 0 # 0 standing still, 1 right, -1 left
     
     
     @abstractmethod
@@ -40,80 +44,81 @@ class DynamicSprite(Sprite,ABC):
 
     def apply_force(self,all_platforms:List[Platform])->None:
         #Use all platforms list to move the sprite hitbox according to x and y forces TODO
-        #print(self._hitbox.left)
-        #print(self._hitbox.left, self.speed)
-        
-        if self.net_force > 0 and self._horizontal_force > 0 and self._hitbox.left <= background_length - self._hitbox.width:
-            self.speeding_up()
-            self._hitbox.left += self.speed
-            self.left = False
-            self.right = True
-        elif self.net_force < 0 and self._horizontal_force < 0 and self._hitbox.left >= 0:
-            self.speeding_up()
-            self._hitbox.left -= self.speed
-            self.left = True
-            self.right = False
 
-        if not self.speed <= 0 and self._horizontal_force == 0:
-            if self._hitbox.left <= 0 or self._hitbox.left >= background_length - self._hitbox.width:
-                self.speed = 0
-            else:
-                self.slowing_down()
-                if self.right:
-                    self._hitbox.left += self.speed
-                else:
-                    self._hitbox.left -= self.speed
+        # vertical apply force
+        self.collision_detection = False
+        self.collision_right = False
+        self.collision_left = False
+        self.canMove = True
 
-        if self.speed <= 0:
-            self.left = False
-            self.right = False
+        for platform in all_platforms:
+            self.platform_collision_detection(platform)
+
+        self.horizontal_movement()
+
+        if self.speed <= 0 and self._horizontal_force == 0:
+            self.direction = 0
             self.net_force = 0
             self.speed = 0
-        
-        # vertical apply force
-       
-        self.collision_detection = False
-        self.canMove = True
-        print(self.collision_detection)
-        for platform in all_platforms:
-            if self._hitbox.colliderect(platform._hitbox):
-                
-                if (self._hitbox.bottom >= platform._hitbox.top and self._hitbox.bottom <= platform._hitbox.bottom) and (self.current_velocity >= 0):  # Collides from top
-                    self.current_velocity = 0
-                    print("f")
-                    self.collision_detection = True
-                    self._hitbox.bottom = platform._hitbox.top + 1
-                    self.isJumping = False
-                    self.isFalling = False
-                elif (self._hitbox.top <= platform._hitbox.bottom and self._hitbox.top >= platform._hitbox.top) and (self.current_velocity < 0):  # Collides from bottom (need to test)
-                    print('g')
-                    self.current_velocity = 0
-                    self._hitbox.top = platform._hitbox.bottom
-                elif (self._hitbox.right >= platform._hitbox.left and self._hitbox.right <= platform._hitbox.right) and (self.right):  # Collides from right  (need to test)
-                    print('h')
-                    self.speed = 0
-                    self._hitbox.right = platform._hitbox.left
-                elif (self._hitbox.left <= platform._hitbox.right and self._hitbox.left >= platform._hitbox.left) and (self.left):  # Collides from left   (need to test)
-                    print('l')
-                    self.speed = 0
-                    self._hitbox.left = platform._hitbox.right
-
-            #print(self._hitbox.colliderect(platform._hitbox))
 
         if not self.collision_detection: # collision_detection is true if there is a normal force
             self.current_velocity += self.gravity
             self._hitbox.top += self.current_velocity
             if self.current_velocity > 0:
                 self.isFalling = True
-            
+    
+    def horizontal_movement(self):
+        if self.net_force > 0 and self._horizontal_force > 0 and self._hitbox.left <= background_length - self._hitbox.width: # and not self.collision_right:
+            if not self.collision_right:
+                self.speeding_up()
+                self._hitbox.left += self.speed
+            self.direction = 1
+        elif self.net_force < 0 and self._horizontal_force < 0 and self._hitbox.left >= 0: #and not self.collision_left:
+            if not self.collision_left:
+                self.speeding_up()
+                self._hitbox.left -= self.speed
+            self.direction = -1
 
+        if not self.speed <= 0 and self._horizontal_force == 0:
+            if self._hitbox.left <= 0 or self._hitbox.left >= background_length - self._hitbox.width:
+                self.speed = 0
+            else:
+                self.slowing_down()
+                if self.direction > 0:
+                    self._hitbox.left += self.speed
+                else:
+                    self._hitbox.left -= self.speed
+
+    def platform_collision_detection(self, platform):
+        # collision in the x direction
+        if platform._hitbox.colliderect(self._hitbox.left + (self._terminal_vel_x * self.direction), self._hitbox.top - 1, self._hitbox.width, self._hitbox.height):
+            self.speed = 0
+            if self.direction > 0:
+                self.collision_right = True
+                self._hitbox.right = platform._hitbox.left
+            elif self.direction < 0:
+                self.collision_left = True
+                self._hitbox.left = platform._hitbox.right
+        
+        # collision in the y direction
+        if platform._hitbox.colliderect(self._hitbox.left, self._hitbox.top + self.current_velocity, self._hitbox.width, self._hitbox.height):
+            if self.current_velocity < 0:
+                self.current_velocity = 0
+                self._hitbox.top = platform._hitbox.bottom + 1
+            elif self.current_velocity >= 0:
+                self.current_velocity = 0
+                self.isJumping = False
+                self.isFalling = False
+                self.collision_detection = True
+                self._hitbox.bottom = platform._hitbox.top + 1
+            
     def change_force(self, x_force, y_force):
         if not (self.isJumping or self.isFalling) or x_force == 0:
             self._horizontal_force = x_force
             self._verticalForce = y_force
             self.net_force = (abs(self._horizontal_force) - abs(self.frictionForce))
             if self._horizontal_force < 0:
-                self.net_force *= -1            
+                self.net_force *= -1    
 
     def speeding_up(self):
         if self.speed < self._terminal_vel_x:
@@ -128,7 +133,7 @@ class DynamicSprite(Sprite,ABC):
     def jump(self):
         self.isJumping = True
         self.collision_detection = False
-        self.current_velocity = self.starting_velocity_y
+        self.current_velocity = -self._terminal_vel_y
         self._hitbox.top += self.current_velocity
         
 

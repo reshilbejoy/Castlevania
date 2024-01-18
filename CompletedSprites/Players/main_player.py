@@ -29,23 +29,22 @@ class MainPlayer(Player):
     
     def return_current_image(self) -> pygame.Surface:
 
-        if self.isFalling and self.left:
+        if self.isFalling and self.direction < 0:
             return self.fall_animation_left
         elif self.isFalling:
             return self.fall_animation_right
 
-        if self.isJumping and self.left:
+        if self.isJumping and self.direction < 0:
             return self.jump_animation_left
         elif self.isJumping:
             return self.jump_animation_right
-        
 
         if self.walkCount + 1 >= 17:
              self.walkCount = 0    
-        if self.left:  
+        if self.direction < 0:  
             self.walkCount += 0.5
             return self.walkLeft[int(self.walkCount//4) - 1]                
-        elif self.right:
+        elif self.direction > 0:
             self.walkCount += 0.5
             return self.walkRight[int(self.walkCount//4) - 1]
         else:

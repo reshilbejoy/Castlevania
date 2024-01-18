@@ -15,7 +15,7 @@ class Game():
     def __init__(self):
         #initialize all sprites in this array
         
-        self._player:MainPlayer = MainPlayer(8, 5, [], pygame.Rect(100, 100, 50, 80), 5)
+        self._player:MainPlayer = MainPlayer(8, 7, [], pygame.Rect(100, 100, 50, 80), 5)
         self._active_sprites:List[Sprite] = []
         self._all_interactables: List[Interactable] = []
         self._game_over = False
@@ -88,7 +88,6 @@ class Game():
         if pressed[pygame.K_d] and (left < background_length):
             self._player.change_force(0.4, 0)
         if pressed[pygame.K_a] and (left > 0):
-            #print(self._player.get_hitbox().left, " RGRUGRUGs")
             self._player.change_force(-0.4, 0)
         if not (pressed[pygame.K_d] or pressed[pygame.K_a]):
             self._player.change_force(0, 0)
