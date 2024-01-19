@@ -1,9 +1,4 @@
 .DS_Store
-/Assets/__pycache__
-/CompletedSprites/__pycache__
-/Constants/__pycache__
-/Utils/__pycache__
-/Abstract/__pycache__
 .huskyrc.json
 out
 log.log
