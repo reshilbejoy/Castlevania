@@ -2,6 +2,7 @@ from typing import Dict, List, TypedDict
 from CompletedSprites.Interactables.testPotion import testPotion
 from background_engine import BackgroundEngine
 import pygame
+from Utils.UI import UI
 from Utils.level_parser import Parser
 from Abstract.Player import Player
 from Abstract.Interaction import Interactable
@@ -10,6 +11,7 @@ from Abstract.dynamic_sprite import DynamicSprite
 from CompletedSprites.Players.main_player import MainPlayer
 from CompletedSprites.Platforms.Platform import Platform, PlatformType
 from Constants.window_constants import size, length_ratio, height_ratio, height, length, background_length
+from CompletedSprites.UI.static import Static_UI
 
 
 DynamicSpriteTypes = {MainPlayer}
@@ -20,6 +22,7 @@ class SortedSprites(TypedDict):
     Dynamic : List[DynamicSprite]
     Interactable : List[Interactable]
     Platform : List[Sprite]
+
 class Game():
     
     def __init__(self):
@@ -33,10 +36,13 @@ class Game():
         p = Parser()
         p.load_tilemap()
         p.build_level()
+
+        self.ui = UI()
                 
         self._player:MainPlayer = MainPlayer(8, 12, [], pygame.Rect(100, 100, 50, 80), 5, self.create_interatable)
         platforms = [Platform(entry[0], entry[1], entry[2]) for entry in p.built]
         all_interactables: List[Interactable] = [testPotion([],pygame.Rect(50, 200, 50, 80))]
+        self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]
         self._all_sprites: List[Sprite] = [self._player] + platforms + all_interactables
 
         self._is_paused = False
@@ -74,6 +80,13 @@ class Game():
                             self._sprite_dict["Inactive"]["Interactable"].append(i)
                         elif type(i) in PlatformSpriteTypes:
                             self._sprite_dict["Inactive"]["Platform"].append(i)
+
+                for i in self.static_ui:
+                    window.blit(i.return_current_image(), i.get_hitbox())
+                num = self.ui.get_numbers()
+                for i in num:
+                    for j in i:
+                        window.blit(j[0], j[1])
 
                 self.handle_keystrokes(pressed)
                 self._player.apply_force(self._sprite_dict["Active"]["Platform"])

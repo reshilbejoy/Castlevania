@@ -35,7 +35,7 @@ class Sprite():
     
     def should_update(self,player_hitbox:pygame.Rect)->bool:
         # return wether or not to call update function based on player loc TODO
-        if (-50 < player_hitbox.left < background_length) and (-150 < player_hitbox.top < self._screen.height):
+        if (-50 < player_hitbox.left < background_length) and (player_hitbox.top < self._screen.height):
             return True
         return False
         
