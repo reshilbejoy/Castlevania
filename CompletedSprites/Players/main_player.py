@@ -3,6 +3,7 @@ import pygame
 from Abstract.Player import Player
 from Abstract.Interaction import Interactable
 from Utils.signals import DamageMessage, InventoryMessage, Item, TargetType
+from background_engine import BackgroundEngine
 
 class MainPlayer(Player):
     def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox: pygame.Rect,
@@ -32,11 +33,20 @@ class MainPlayer(Player):
         self.isJumping = False
         self.isCrouched = False
         self.invince = False
+        self.invince_time_ms = 500
+        self.last_invince_timstep = 0
         
     def handle_damage_interaction(self,interaction_msg: DamageMessage) -> None:
         if interaction_msg.target == (TargetType.PLAYER or TargetType.ALL_SPRITES):
-            self._health -= interaction_msg.damage
-            print(self._health)
+            if interaction_msg.damage > 0:
+                if((BackgroundEngine.get_current_time()-self.last_invince_timstep) > self.invince_time_ms):
+                    self.invince = True
+                    self.last_invince_timstep = BackgroundEngine.get_current_time()
+                    print(self._health)
+                    self._health -= interaction_msg.damage
+            else:
+                self._health -=interaction_msg.damage
+
     
     def handle_inventory_interaction(self,interaction_msg: InventoryMessage) -> None:
         if interaction_msg.target == (TargetType.PLAYER or TargetType.ALL_SPRITES):

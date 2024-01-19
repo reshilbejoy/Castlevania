@@ -125,7 +125,7 @@ class Game():
     def handle_pauses(self):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
-                if event.type == pygame.K_ESCAPE:
+                if event.type == pygame.K_EdSCAPE:
                     self._is_paused = not self.is_paused
 
 
