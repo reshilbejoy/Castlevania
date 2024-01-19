@@ -58,7 +58,7 @@ class BackgroundEngine(ABC):
 
     @staticmethod
     def get_current_time()-> float:
-        _timer.get_time()
+        return pygame.time.get_ticks()
 
     @staticmethod
     def tick_timer()-> float:
