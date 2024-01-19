@@ -39,7 +39,7 @@ class Game():
 
         self.ui = UI()
                 
-        self._player:MainPlayer = MainPlayer(8, 12, [], pygame.Rect(100, 100, 50, 80), 5, self.create_interatable)
+        self._player:MainPlayer = MainPlayer(8, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_interatable)
         platforms = [Platform(entry[0], entry[1], entry[2]) for entry in p.built]
         all_interactables: List[Interactable] = [testPotion([],pygame.Rect(50, 200, 50, 80))]
         self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]

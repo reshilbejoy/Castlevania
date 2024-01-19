@@ -21,13 +21,13 @@ class UI:
         enemy_hitbox = pygame.Rect(5, 100, 145, 35)
 
         heart_img = [pygame.transform.scale(pygame.image.load('Assets/Sprites/UI_text/heart.png'), (40, 30))]
-        heart_hitbox = pygame.Rect(500, 50, 5, 10)
+        heart_hitbox = pygame.Rect(650, 50, 5, 10)
 
         p_img = [pygame.transform.scale(pygame.image.load('Assets/Sprites/UI_text/p.png'), (40, 30))]
-        p_hitbox = pygame.Rect(500, 100, 5, 10)
+        p_hitbox = pygame.Rect(650, 100, 5, 10)
 
-        box_img = [pygame.transform.scale(pygame.image.load('Assets/Sprites/UI-other/inventory_box.png'), (70, 70))]
-        box_hitbox = pygame.Rect(300, 50, 70, 70)
+        box_img = [pygame.transform.scale(pygame.image.load('Assets/Sprites/UI-other/inventory_box.png'), (100, 80))]
+        box_hitbox = pygame.Rect(500, 50, 100, 100)
 
         self.all_ui = [ [score_img, score_hitbox],
                         [stage_img, stage_hitbox],
@@ -43,6 +43,8 @@ class UI:
         self.stage = "00"
         self.heart = "00"
         self.p = "00"
+        self.player_health = 16
+        self.enemy_health = 16
 
     def change_score(self, change):
         pass
@@ -65,4 +67,7 @@ class UI:
                 num.convert_time(self.time),
                 num.convert_stage(self.stage),
                 num.convert_heart(self.heart),
-                num.convert_p(self.p)]
+                num.convert_p(self.p),
+                num.convert_player_health(self.player_health),
+                num.convert_enemy_health(self.enemy_health)]
+
