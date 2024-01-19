@@ -15,7 +15,7 @@ class Game():
     def __init__(self):
         #initialize all sprites in this array
         
-        self._player:MainPlayer = MainPlayer(8, 7, [], pygame.Rect(100, 100, 50, 80), 5)
+        self._player:MainPlayer = MainPlayer(8, 10, [], pygame.Rect(100, 100, 50, 80), 5)
         self._active_sprites:List[Sprite] = []
         self._all_interactables: List[Interactable] = []
         self._game_over = False
@@ -83,7 +83,7 @@ class Game():
         left = self._player.get_hitbox().left
         if pressed[pygame.K_s] and not self._player.isJumping:
             self._player.isCrouched = True
-        if pressed[pygame.K_SPACE] and not self._player.isJumping:
+        if pressed[pygame.K_SPACE] and not self._player.isJumping and not self._player.isFalling:
             self._player.jump()
         if pressed[pygame.K_d] and (left < background_length):
             self._player.change_force(0.4, 0)

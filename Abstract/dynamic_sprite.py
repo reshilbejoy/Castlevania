@@ -25,7 +25,7 @@ class DynamicSprite(Sprite,ABC):
         self.collision_detection = False
         self.isJumping = False
         self.isFalling = False
-        self.gravity = 0.25 
+        self.gravity = 0.5
         self.collision_left = False
         self.collision_right = False
         self.direction = 0 # 0 standing still, 1 right, -1 left
