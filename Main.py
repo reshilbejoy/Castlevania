@@ -3,6 +3,7 @@ from CompletedSprites.Interactables.testPotion import testPotion
 from background_engine import BackgroundEngine
 import pygame
 from Utils.UI import UI
+from Utils.timer import Timer
 from Utils.level_parser import Parser
 from Abstract.Player import Player
 from Abstract.Interaction import Interactable
@@ -46,12 +47,15 @@ class Game():
         self._all_sprites: List[Sprite] = [self._player] + platforms + all_interactables
 
         self._is_paused = False
+
+        self.timer = Timer()
     
 
 
     def game_loop(self):
         #Main game loop logic (this should be ready to go)
         pressed = pygame.key.get_pressed()
+
         if not self.exit_condition():
             self.handle_pauses()
             if self._is_paused is False:
@@ -80,6 +84,9 @@ class Game():
                             self._sprite_dict["Inactive"]["Interactable"].append(i)
                         elif type(i) in PlatformSpriteTypes:
                             self._sprite_dict["Inactive"]["Platform"].append(i)
+
+                window.fill((0,0,0))
+                self.ui.change_time(self.timer.get_time(BackgroundEngine.get_current_time()//1000))
 
                 for i in self.static_ui:
                     window.blit(i.return_current_image(), i.get_hitbox())
@@ -151,6 +158,7 @@ class Game():
     
 if __name__ == "__main__":
     Castlevania = Game()
+    Castlevania.timer.start()
     while not Castlevania._game_over:
         Castlevania.game_loop()
     pygame.quit()

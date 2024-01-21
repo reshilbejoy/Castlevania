@@ -17,7 +17,7 @@ class NumberConversion:
             "8": pygame.transform.scale(pygame.image.load('Assets/Sprites/Numbers/8.png'), (20, 35)),
             "9": pygame.transform.scale(pygame.image.load('Assets/Sprites/Numbers/9.png'), (20, 35)),
             "ph": pygame.transform.scale(pygame.image.load('Assets/Sprites/UI-other/Healthbar_p.png'), (20, 35)),
-            "eh": pygame.transform.scale(pygame.image.load('Assets/Sprites/UI-other/Healthbar_p.png'), (20, 35))
+            "eh": pygame.transform.scale(pygame.image.load('Assets/Sprites/UI-other/Healthbar_e.png'), (20, 35))
         }
 
     def convert_score(self, score):
