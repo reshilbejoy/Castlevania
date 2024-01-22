@@ -126,7 +126,6 @@ class Game():
                 self.handle_keystrokes(pressed)
                 self._player.apply_force(self._sprite_dict["Active"]["Platform"])
                 self.handle_collisions()
-                print(self._player.lifespan())
 
                 window.blit(surface, (0, 150))
                 self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[]},
