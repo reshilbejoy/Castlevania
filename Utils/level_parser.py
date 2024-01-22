@@ -73,7 +73,7 @@ class Parser:
         for x in self.map_data:
             for y in x:
                 curr_list = [] 
-                if y != ' ':
+                if y == 'x':
          
                     image = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Platform/' + self.key[y]), (60, (40)))]
                     #platform = pygame.image.load('Assets/Sprites/Platform/' + self.key[y])
@@ -85,6 +85,13 @@ class Parser:
                     curr_list.append(image)
                     curr_list.append(rect)
                     curr_list.append(platform_type)
+                    self.built.append(curr_list)
+                if y == "o":
+                    image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Additional_sprites/Candle/1.png')), (60, (40)))]
+                    rect = pygame.Rect(self.curr_x, self.curr_y, self.width, self.height_s)
+                    curr_list.append(image)
+                    curr_list.append(rect)
+                    curr_list.append(1)
                     self.built.append(curr_list)
                 
                 curr_list = []
