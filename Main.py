@@ -50,6 +50,9 @@ class Game():
         self._all_sprites: List[Sprite] = [self._player] + platforms + all_interactables
 
         self._is_paused = False
+        self._font = pygame.font.SysFont("couriernew", 50)
+        fonts = pygame.font.get_fonts()
+
 
         self.timer = Timer()
 
@@ -62,6 +65,9 @@ class Game():
                 if event.key == pygame.K_1:
                     self._game_started = True
                     return
+        text = self._font.render("Press 1 to Start", 1, (255, 255, 255))
+        rect = text.get_rect(center=(300, 300))
+        window.blit(text, rect)
         BackgroundEngine.tick_timer()
         
     def ending_screen(self):
