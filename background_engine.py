@@ -15,7 +15,7 @@ length_ratio = 22
 window = pygame.display.set_mode((length_ratio * size, height_ratio * size + 150))
 pygame.display.set_caption("Castlevania")
 
-_normal_background = pygame.transform.scale(pygame.image.load('Assets/Background-easy.png'), (background_length, height_ratio * size))
+_normal_background = pygame.transform.scale(pygame.image.load('Assets//Background/Level_1/1.png'), (background_length, height_ratio * size))
 _background_arr:List[pygame.Surface] = []
 _timer = pygame.time.Clock() 
 _draw_frame_size:Tuple[float,float] = (500,600)  #Width, Height
