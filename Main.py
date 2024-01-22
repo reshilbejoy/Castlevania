@@ -13,11 +13,13 @@ from CompletedSprites.Players.main_player import MainPlayer
 from CompletedSprites.Platforms.Platform import Platform, PlatformType
 from Constants.window_constants import size, length_ratio, height_ratio, height, length, background_length
 from CompletedSprites.UI.static import Static_UI
+import time
 
 
 DynamicSpriteTypes = {MainPlayer}
 InteractableSpriteTypes = {testPotion}
 PlatformSpriteTypes = {Platform}
+
 
 class SortedSprites(TypedDict):
     Dynamic : List[DynamicSprite]
@@ -33,6 +35,7 @@ class Game():
         self._sprite_dict: Dict[str,SortedSprites] = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[]},
                              "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[]}}
         self._game_over = False
+        self._game_started = False
 
         p = Parser()
         p.load_tilemap()
@@ -49,7 +52,33 @@ class Game():
         self._is_paused = False
 
         self.timer = Timer()
-    
+
+    def starting_screen(self):
+        window = BackgroundEngine.get_window()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    self._game_started = True
+                    return
+        BackgroundEngine.tick_timer()
+        
+    def ending_screen(self):
+        window = BackgroundEngine.get_window()
+        window.fill((0, 0, 0))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    self._game_started = True
+                    self._game_over = False
+                    Castlevania.__init__()
+                    run_game()
+        BackgroundEngine.tick_timer()
+                    
+
 
 
     def game_loop(self):
@@ -62,7 +91,6 @@ class Game():
                 window = BackgroundEngine.get_window()
                 rect, surface = BackgroundEngine.get_current_image(self._player.get_hitbox())
                 pressed = pygame.key.get_pressed()
-                print(self._player.get_hitbox().left)
 
                 for i in self._all_sprites:
                     
@@ -98,6 +126,7 @@ class Game():
                 self.handle_keystrokes(pressed)
                 self._player.apply_force(self._sprite_dict["Active"]["Platform"])
                 self.handle_collisions()
+                print(self._player.lifespan())
 
                 window.blit(surface, (0, 150))
                 self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[]},
@@ -107,6 +136,9 @@ class Game():
             #would be nice to add a pause icon sprite to the screen and destroy it upon unpause but unneeded
             else:
                 pass
+        else:
+            self._game_started = False
+            self._game_over = True
 
     def create_interatable(self, Interactable:Interactable):
         self._all_sprites.append(Interactable)
@@ -145,7 +177,7 @@ class Game():
     def handle_pauses(self):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
-                if event.type == pygame.K_EdSCAPE:
+                if event.type == pygame.K_ESCAPE:
                     self._is_paused = not self.is_paused
 
 
@@ -153,12 +185,21 @@ class Game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self._game_over = True
-                return True
+                pygame.quit()
+        if not self._player.lifespan():
+            return True
         return False
-    
-if __name__ == "__main__":
-    Castlevania = Game()
+
+def run_game():
     Castlevania.timer.start()
     while not Castlevania._game_over:
         Castlevania.game_loop()
-    pygame.quit()
+    Castlevania.timer.reset(0)
+    while not Castlevania._game_started:
+        Castlevania.ending_screen()
+    
+if __name__ == "__main__":
+    Castlevania = Game()
+    while not Castlevania._game_started:
+        Castlevania.starting_screen()
+    run_game()
