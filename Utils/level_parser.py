@@ -11,8 +11,8 @@ class Parser:
         self.path = os.path.dirname(os.path.realpath(__file__))
         self.curr_x = 0
         self.curr_y = 0
-        self.width = 60 
-        self.height_s = 60
+        self.width = 100
+        self.height_s = 100
         self.built = []
 
     def load_tilemap(self):
@@ -95,9 +95,9 @@ class Parser:
                     self.built.append(curr_list)
                 
                 curr_list = []
-                self.curr_x += 60
+                self.curr_x += 100
 
-            self.curr_y += 60
+            self.curr_y += 100
             self.curr_x=0
         result_rects = [entry[1] for entry in self.built]
         print(result_rects)
