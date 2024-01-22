@@ -1,4 +1,5 @@
-from typing import Dict, List, TypedDict
+from typing import Dict, List
+from typing_extensions import TypedDict
 from CompletedSprites.Interactables.testPotion import testPotion
 from background_engine import BackgroundEngine
 import pygame
@@ -11,7 +12,7 @@ from Abstract.Sprite import Sprite
 from Abstract.dynamic_sprite import DynamicSprite
 from CompletedSprites.Players.main_player import MainPlayer
 from CompletedSprites.Platforms.Platform import Platform, PlatformType
-from Constants.window_constants import size, length_ratio, height_ratio, height, length, background_length
+from Constants.window_constants import *
 from CompletedSprites.UI.static import Static_UI
 import time
 
@@ -45,7 +46,7 @@ class Game():
                 
         self._player:MainPlayer = MainPlayer(8, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_interatable)
         platforms = [Platform(entry[0], entry[1], entry[2]) for entry in p.built]
-        all_interactables: List[Interactable] = [testPotion([],pygame.Rect(50, 200, 50, 80))]
+        all_interactables: List[Interactable] = [testPotion([],pygame.Rect(50, 700, 50, 80))]
         self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]
         self._all_sprites: List[Sprite] = [self._player] + platforms + all_interactables
 
@@ -55,6 +56,15 @@ class Game():
 
 
         self.timer = Timer()
+    
+    def fade_screen(self, window):
+        fade_out = pygame.Surface((length, height + score_box_height))
+        fade_out.fill((0, 0, 0))
+        for alpha in (range(0, 100)):
+            fade_out.set_alpha(alpha)
+            window.blit(fade_out, (0, 0))
+            BackgroundEngine.tick_timer()
+            time.sleep(0.005)
 
     def starting_screen(self):
         window = BackgroundEngine.get_window()
@@ -64,6 +74,7 @@ class Game():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     self._game_started = True
+                    self.fade_screen(window)
                     return
         text = self._font.render("Press 1 to Start", 1, (255, 255, 255))
         rect = text.get_rect(center=(300, 300))
@@ -90,11 +101,11 @@ class Game():
     def game_loop(self):
         #Main game loop logic (this should be ready to go)
         pressed = pygame.key.get_pressed()
-
+        window = BackgroundEngine.get_window()
         if not self.exit_condition():
             self.handle_pauses()
             if self._is_paused is False:
-                window = BackgroundEngine.get_window()
+                
                 rect, surface = BackgroundEngine.get_current_image(self._player.get_hitbox())
                 pressed = pygame.key.get_pressed()
 
@@ -136,12 +147,17 @@ class Game():
                 window.blit(surface, (0, 150))
                 self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[]},
                         "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[]}}
+
+
+
+
                 BackgroundEngine.tick_timer()
 
             #would be nice to add a pause icon sprite to the screen and destroy it upon unpause but unneeded
             else:
                 pass
         else:
+            self.fade_screen(window)
             self._game_started = False
             self._game_over = True
 
