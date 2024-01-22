@@ -12,7 +12,7 @@ class Parser:
         self.curr_x = 0
         self.curr_y = 0
         self.width = 60 
-        self.height_s = 40
+        self.height_s = 60
         self.built = []
 
     def load_tilemap(self):
@@ -97,7 +97,7 @@ class Parser:
                 curr_list = []
                 self.curr_x += 60
 
-            self.curr_y += 50
+            self.curr_y += 60
             self.curr_x=0
         result_rects = [entry[1] for entry in self.built]
         print(result_rects)
