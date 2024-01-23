@@ -53,6 +53,7 @@ class Game():
         self._is_paused = False
         self._font = pygame.font.SysFont("couriernew", 50)
         fonts = pygame.font.get_fonts()
+        self.current_map = p.get_current_map()
 
 
         self.timer = Timer()
@@ -76,6 +77,7 @@ class Game():
                     self._game_started = True
                     self.fade_screen(window)
                     return
+        window.blit(pygame.transform.scale(pygame.image.load('Assets/bg2.png'), (length, height + score_box_height)), (0, 0))
         text = self._font.render("Press 1 to Start", 1, (255, 255, 255))
         rect = text.get_rect(center=(300, 300))
         window.blit(text, rect)
@@ -193,6 +195,11 @@ class Game():
             pass
         if pressed[pygame.K_w]:
             pass
+        if pressed[pygame.K_q]:
+            if (self._player.inside_door()):
+                self.fade_screen()
+
+            
 
     # bad implementation to still allow toggle to be changed in a unpaused state, will probably need to make a smarter solution some other time 
     def handle_pauses(self):
