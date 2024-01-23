@@ -36,7 +36,7 @@ class BasicAttack(Interactable):
         new_hitbox:Rect = self.get_hitbox()
         dynSpritePose:[Rect,int] = self.pose_supplier()
         # Player facing right
-        if dynSpritePose[1] >0:
+        if dynSpritePose[1] >= 0:
             new_hitbox.midleft = dynSpritePose[0].midright
         # Player facing left
         else:
