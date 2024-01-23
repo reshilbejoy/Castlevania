@@ -13,7 +13,7 @@ from Abstract.Sprite import Sprite
 from Abstract.dynamic_sprite import DynamicSprite
 from CompletedSprites.Players.main_player import MainPlayer
 from CompletedSprites.Platforms.Platform import Platform, PlatformType
-from Constants.window_constants import size, length_ratio, height_ratio, height, length, background_length
+from Constants.window_constants import *
 from CompletedSprites.UI.static import Static_UI
 import time
 
@@ -54,9 +54,19 @@ class Game():
         self._is_paused = False
         self._font = pygame.font.SysFont("couriernew", 50)
         fonts = pygame.font.get_fonts()
+        self.current_map = p.get_current_map()
 
 
         self.timer = Timer()
+    
+    def fade_screen(self, window):
+        fade_out = pygame.Surface((length, height + score_box_height))
+        fade_out.fill((0, 0, 0))
+        for alpha in (range(0, 100)):
+            fade_out.set_alpha(alpha)
+            window.blit(fade_out, (0, 0))
+            BackgroundEngine.tick_timer()
+            time.sleep(0.005)
 
     def starting_screen(self):
         window = BackgroundEngine.get_window()
@@ -66,7 +76,9 @@ class Game():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     self._game_started = True
+                    self.fade_screen(window)
                     return
+        # window.blit(pygame.transform.scale(pygame.image.load('Assets/bg2.png'), (length, height + score_box_height)), (0, 0))
         text = self._font.render("Press 1 to Start", 1, (255, 255, 255))
         rect = text.get_rect(center=(300, 300))
         window.blit(text, rect)
@@ -92,11 +104,11 @@ class Game():
     def game_loop(self):
         #Main game loop logic (this should be ready to go)
         pressed = pygame.key.get_pressed()
-
+        window = BackgroundEngine.get_window()
         if not self.exit_condition():
             self.handle_pauses()
             if self._is_paused is False:
-                window = BackgroundEngine.get_window()
+                
                 rect, surface = BackgroundEngine.get_current_image(self._player.get_hitbox())
                 pressed = pygame.key.get_pressed()
 
@@ -138,12 +150,17 @@ class Game():
                 window.blit(surface, (0, 150))
                 self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[]},
                         "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[]}}
+
+
+
+
                 BackgroundEngine.tick_timer()
 
             #would be nice to add a pause icon sprite to the screen and destroy it upon unpause but unneeded
             else:
                 pass
         else:
+            self.fade_screen(window)
             self._game_started = False
             self._game_over = True
 
@@ -179,6 +196,11 @@ class Game():
             self._player.attack()
         if pressed[pygame.K_w]:
             pass
+        if pressed[pygame.K_q]:
+            if (self._player.inside_door()):
+                self.fade_screen()
+
+            
 
     # bad implementation to still allow toggle to be changed in a unpaused state, will probably need to make a smarter solution some other time 
     def handle_pauses(self):

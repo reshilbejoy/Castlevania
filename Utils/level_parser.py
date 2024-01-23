@@ -11,12 +11,20 @@ class Parser:
         self.path = os.path.dirname(os.path.realpath(__file__))
         self.curr_x = 0
         self.curr_y = 0
-        self.width = 60 
-        self.height_s = 60
+        self.width = 60
+        self.height_s = 40
         self.built = []
+        self.line_height = 0
+        self.current_map = 'dungeon_1.level'
+    
+    def get_current_map(self):
+        return self.current_map
+    
+    def change_map(self, next_map):
+        self.current_map = next_map
 
     def load_tilemap(self):
-        level_path = os.path.join(self.path, '..', 'Levels', 'dungeon_1.level')
+        level_path = os.path.join(self.path, '..', 'Levels', self.current_map)
 
         print(level_path)
         with open(level_path, 'r') as file:
@@ -59,6 +67,7 @@ class Parser:
         lines = [line for line in lines if not line.startswith('{') and not line.startswith('}')]
         print(lines)
         max_length = max(len(line) for line in lines)
+        self.line_height = len(lines)
 
         result = [[' ' for _ in range(max_length)] for _ in range(len(lines))]
         for i, line in enumerate(lines):
@@ -75,10 +84,9 @@ class Parser:
                 curr_list = [] 
                 if y == 'x':
          
-                    image = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Platform/' + self.key[y]), (60, (40)))]
                     #platform = pygame.image.load('Assets/Sprites/Platform/' + self.key[y])
                     #print(platform.wid)
-                    image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Platform/' + self.key[y])), (60, (40)))]
+                    image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Platform/' + self.key[y])), (50, (55)))]
                     
                     rect = pygame.Rect(self.curr_x, self.curr_y, self.width, self.height_s)
                     platform_type = 1
@@ -97,7 +105,7 @@ class Parser:
                 curr_list = []
                 self.curr_x += 60
 
-            self.curr_y += 60
+            self.curr_y += height / (self.line_height)
             self.curr_x=0
         result_rects = [entry[1] for entry in self.built]
         print(result_rects)

@@ -9,7 +9,7 @@ _draw_frame_size:Tuple[float,float] = (500,600)  #Width, Height
 _update_frame_size:Tuple[float,float] = (700,800)  #Width, Height
 
 pygame.init()
-window = pygame.display.set_mode((length, height + 150))
+window = pygame.display.set_mode((length, height + score_box_height))
 pygame.display.set_caption("Castlevania")
 
 _normal_background = pygame.transform.scale(pygame.image.load('Assets//Background/Level_1/1.png'), (background_length, height_ratio * size))
