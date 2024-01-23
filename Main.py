@@ -1,5 +1,7 @@
 from typing import Dict, List, TypedDict
+from CompletedSprites.Interactables.BasicAttack import BasicAttack
 from CompletedSprites.Interactables.testPotion import testPotion
+from Utils.signals import TargetType
 from background_engine import BackgroundEngine
 import pygame
 from Utils.UI import UI
@@ -17,7 +19,7 @@ import time
 
 
 DynamicSpriteTypes = {MainPlayer}
-InteractableSpriteTypes = {testPotion}
+InteractableSpriteTypes = {testPotion,BasicAttack}
 PlatformSpriteTypes = {Platform}
 
 
@@ -43,9 +45,9 @@ class Game():
 
         self.ui = UI()
                 
-        self._player:MainPlayer = MainPlayer(8, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_interatable)
+        self._player:MainPlayer = MainPlayer(8, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_object,self.remove_object)
         platforms = [Platform(entry[0], entry[1], entry[2]) for entry in p.built]
-        all_interactables: List[Interactable] = [testPotion([],pygame.Rect(50, 200, 50, 80))]
+        all_interactables: List[Interactable] = [BasicAttack(pygame.Rect(50, 200, 50, 80), self._player.get_pose_supplier(),TargetType.ENEMY,self.remove_object)]
         self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]
         self._all_sprites: List[Sprite] = [self._player] + platforms + all_interactables
 
@@ -145,11 +147,11 @@ class Game():
             self._game_started = False
             self._game_over = True
 
-    def create_interatable(self, Interactable:Interactable):
-        self._all_sprites.append(Interactable)
+    def create_object(self, obj):
+        self._all_sprites.append(obj)
         
-    def remove_interactable(self, Interactable:Interactable):
-        self._all_sprites.remove(Interactable)
+    def remove_object(self, obj):
+        self._all_sprites.remove(obj)
 
     def handle_collisions(self):
         for dynSprite in self._sprite_dict["Active"]["Dynamic"]:
@@ -174,7 +176,7 @@ class Game():
         if not (pressed[pygame.K_d] or pressed[pygame.K_a]):
             self._player.change_force(0, 0)
         if pressed[pygame.K_k]:
-            pass
+            self._player.attack()
         if pressed[pygame.K_w]:
             pass
 

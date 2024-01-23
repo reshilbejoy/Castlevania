@@ -1,19 +1,20 @@
-from typing import List
+from typing import Callable, List
 import pygame
 from abc import abstractmethod,ABC
 from Abstract.Sprite import Sprite
 
     
 class Interactable(Sprite,ABC):
-    def __init__(self, images: List[pygame.Surface], hitbox: List[pygame.Rect], damage: int):
+    def __init__(self, images: List[pygame.Surface], hitbox: List[pygame.Rect], damage: int,remove_obj:Callable):
         self.damage = damage
-
+        self.remove_obj = remove_obj
         super().__init__(images, hitbox)
     
     @abstractmethod
     def _movement(self):
         pass
-    
+
+    @abstractmethod
     def life_span(self):
         pass
 
@@ -28,4 +29,7 @@ class Interactable(Sprite,ABC):
         pass   
 
     def update(self):
-        return super().update()
+        if self.life_span():
+            self._movement()
+        else:
+            self.remove_obj(self)

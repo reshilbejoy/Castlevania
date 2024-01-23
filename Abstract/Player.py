@@ -7,9 +7,10 @@ from Abstract.Interaction import Interactable
 from Utils.signals import DamageMessage, InventoryMessage
 
 class Player(DynamicSprite):
-    def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox: pygame.Rect, health:int, horizontal_force, create_interactable:[Callable[[Interactable],None]]):
+    def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface],
+     hitbox: pygame.Rect, health:int, horizontal_force, create_obj:Callable,remove_obj:Callable):
 
-        super().__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health, horizontal_force,create_interactable)
+        super().__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health, horizontal_force,create_obj,remove_obj)
     
     @abstractmethod
     def attack(self):

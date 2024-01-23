@@ -2,15 +2,16 @@ from typing import Callable, List
 import pygame
 from Abstract.Player import Player
 from Abstract.Interaction import Interactable
+from CompletedSprites.Interactables.BasicAttack import BasicAttack
 from Utils.signals import DamageMessage, InventoryMessage, Item, TargetType
 from background_engine import BackgroundEngine
 
 class MainPlayer(Player):
     def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox: pygame.Rect,
-                  health:int,create_interactable:[Callable[[Interactable],None]]):
+                  health:int,create_obj:[Callable[[Interactable],None]],remove_obj:Callable):
         self.horizontalForce = 0.2
         self.starting_velocity_y = -7
-        super().__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health, self.horizontalForce,create_interactable)
+        super().__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health, self.horizontalForce,create_obj,remove_obj)
         self.walkLeft = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/2.png'),(hitbox.width, hitbox.height)),
                             pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/3.png'),(hitbox.width, hitbox.height)),
                             pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_walk/4.png'),(hitbox.width, hitbox.height)),
@@ -35,7 +36,8 @@ class MainPlayer(Player):
         self.invince = False
         self.invince_time_ms = 500
         self.last_invince_timstep = 0
-        
+        self.last_attack_timestep = 0
+
     def handle_damage_interaction(self,interaction_msg: DamageMessage) -> None:
         if interaction_msg.target == (TargetType.PLAYER or TargetType.ALL_SPRITES):
             if interaction_msg.damage > 0:
@@ -53,8 +55,10 @@ class MainPlayer(Player):
             self.cur_weapon = interaction_msg.item
 
     def attack(self):
-        return super().attack()
-    
+        if self.cur_weapon == Item.DAGGER:
+            if BackgroundEngine.get_current_time()-self.last_attack_timestep>BasicAttack.get_attack_span():
+                self.create_obj(BasicAttack(pygame.Rect(50, 200, 50, 80), self.get_pose_supplier(),TargetType.ENEMY,self.remove_obj))
+                self.last_attack_timestep = BackgroundEngine.get_current_time()
     def return_current_image(self) -> pygame.Surface:
 
         if self.isFalling and self.direction < 0:

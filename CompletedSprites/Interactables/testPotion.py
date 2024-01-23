@@ -22,5 +22,8 @@ class testPotion(Interactable):
     def update(self):
         pass
 
+    def life_span(self):
+        return True
+
     def _movement(self):
         return super()._movement()

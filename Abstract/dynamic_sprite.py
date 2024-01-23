@@ -11,8 +11,10 @@ import time
 
 class DynamicSprite(Sprite,ABC):
     def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox:List[pygame.Rect], 
-                 health:int, horizontal_force,create_interactable:[Callable[[Interactable],None]]):
+                 health:int, horizontal_force,create_obj:Callable,remove_obj:Callable):
         super().__init__(images,hitbox)
+        self.remove_obj:Callable = remove_obj
+        self.create_obj:Callable = create_obj
         self._terminal_vel_x = terminal_vel_x
         self._terminal_vel_y = terminal_vel_y
         self._health = health
@@ -31,7 +33,6 @@ class DynamicSprite(Sprite,ABC):
         self.collision_left = False
         self.collision_right = False
         self.direction = 0 # 0 standing still, 1 right, -1 left
-    
     
     @abstractmethod
     def handle_damage_interaction(interaction_msg:InventoryMessage)->bool:
@@ -137,6 +138,9 @@ class DynamicSprite(Sprite,ABC):
         self.collision_detection = False
         self.current_velocity = -self._terminal_vel_y
         self._hitbox.top += self.current_velocity
+
+    def get_pose_supplier(self):
+        return lambda : (self.get_hitbox(),self.direction)
         
 
 
