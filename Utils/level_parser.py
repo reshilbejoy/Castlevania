@@ -105,8 +105,8 @@ class Parser:
                     self.built['Candle'].append(curr_list)
 
                 if y == "O":
-                    image = [pygame.transform.scale((pygame.image.load('Assets/Interactables/BigCandle/1.png')), (60, (height / (self.line_height) + 1))), 
-                             pygame.transform.scale((pygame.image.load('Assets/Interactables/BigCandle/2.png')), (60, (height / (self.line_height) + 1)))]
+                    image = [pygame.transform.scale((pygame.image.load('Assets/Interactables/BigCandle/1.png')), (60, int(height / (self.line_height) + 1))), 
+                             pygame.transform.scale((pygame.image.load('Assets/Interactables/BigCandle/2.png')), (60, int(height / (self.line_height) + 1)))]
                     rect = pygame.Rect(self.curr_x, self.curr_y, self.width, self.height_s)
                     curr_list.append(image)
                     curr_list.append(rect)
@@ -114,27 +114,21 @@ class Parser:
                 
                 if y == 'D':
 
-                    image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Additional_sprites/Door/1.png')), (75, (4 * int(height / self.line_height))))]
-                    rect = pygame.Rect(self.curr_x, self.curr_y, 75, 4 * (height / self.line_height))
+                    image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Additional_sprites/Door/1.png')), (75, int(3 * int(height / self.line_height))))]
+                    rect = pygame.Rect(self.curr_x, self.curr_y, 75, 3 * (height / self.line_height))
                     curr_list.append(image)
                     curr_list.append(rect)
                     self.built['Door'].append(curr_list)
 
                 if y == 'G':
-
                     rect = pygame.Rect(self.curr_x, self.curr_y, 50, 80)
                     curr_list.append(rect)
                     self.built['Ghoul'].append(curr_list)
 
-
                 if y == "S":
-
                     rect = pygame.Rect(self.curr_x, self.curr_y, 50, 50)
                     curr_list.append(rect)
                     self.built['Ghost'].append(curr_list)
-  
-
-
                 
                 curr_list = []
                 self.curr_x += height / self.line_height + 6

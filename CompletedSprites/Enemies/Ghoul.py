@@ -24,6 +24,7 @@ class Ghoul(Enemy):
         self.invincible = False
         self.invince_time_ms = 200
         self.last_invince_timestep = 0
+        self.movement_time_ms = 1000
         self.sp = 0
         self.walkIndex = 0
 
@@ -70,9 +71,14 @@ class Ghoul(Enemy):
 
     def AI(self):
         if self.sp == 0:
-            self.change_force(-.25,0)
-           
+            self.change_force(-0.25, 0)
+            if (BackgroundEngine.get_current_time() - self.current_time) > self.movement_time_ms:
+                self.current_time = BackgroundEngine.get_current_time()
+                self.sp = 1  
         elif self.sp == 1:
-            self.change_force(.25,0)
+            self.change_force(0.25, 0)
+            if (BackgroundEngine.get_current_time() - self.current_time) > self.movement_time_ms: 
+                self.current_time = BackgroundEngine.get_current_time()
+                self.sp = 0 
            
         

@@ -58,7 +58,7 @@ class Player(DynamicSprite):
                 surface.blit(self.return_current_image(), (hitbox.left - rect.left, hitbox.top - rect.top + 50))
         else:
             surface.blit(self.return_current_image(), (hitbox.left - rect.left, hitbox.top - rect.top))
-        pygame.draw.rect(surface, (200, 90, 90), (hitbox.left - rect.left,hitbox.top - rect.top, hitbox.width, hitbox.height), 2)
+        #pygame.draw.rect(surface, (200, 90, 90), (hitbox.left - rect.left,hitbox.top - rect.top, hitbox.width, hitbox.height), 2)
         return surface
             
         

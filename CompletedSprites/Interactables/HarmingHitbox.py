@@ -33,7 +33,10 @@ class HarmingHitbox(Interactable):
         return attack_span_ms
 
     def life_span(self):
-        return self.pose_supplier()[2]
+        if not self.pose_supplier()[2]:
+            self.damage = 0
+            return False
+        return True
 
     def _movement(self):
         self._hitbox = self.pose_supplier()[0]

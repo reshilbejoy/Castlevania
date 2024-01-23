@@ -1,4 +1,5 @@
-from typing import Dict, List, TypedDict
+from typing import Dict, List
+from typing_extensions import TypedDict
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
 

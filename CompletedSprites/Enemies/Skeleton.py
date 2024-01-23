@@ -25,8 +25,10 @@ class Skeleton(Enemy):
         self.invincible = False
         self.invince_time_ms = 200
         self.last_invince_timestep = 0
+        self.movement_time_ms = 2000
         self.sp = 0
         self.walkIndex = 0
+        
 
     def init_obj(self):
         self.create_obj(HarmingHitbox (pygame.Rect(50, 200, 100, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj))
@@ -70,17 +72,15 @@ class Skeleton(Enemy):
         pass
 
     def AI(self):
-        
         if self.sp == 0:
             self.change_force(-0.25, 0)
-            if self._hitbox.left < 100: 
-                self.create_obj(CandyCane (pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,-1))
-
+            if (BackgroundEngine.get_current_time() - self.current_time) > self.movement_time_ms:
+                self.current_time = BackgroundEngine.get_current_time()
+                self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,1))
                 self.sp = 1  
         elif self.sp == 1:
-            
             self.change_force(0.25, 0)
-            if self._hitbox.right > 500: 
-                self.create_obj(CandyCane (pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,1))
-
+            if (BackgroundEngine.get_current_time() - self.current_time) > self.movement_time_ms: 
+                self.current_time = BackgroundEngine.get_current_time()
+                self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,-1))
                 self.sp = 0 
