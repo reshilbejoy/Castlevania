@@ -1,4 +1,5 @@
-from typing import Dict, List, TypedDict
+from typing import Dict, List
+from typing_extensions import TypedDict
 from CompletedSprites.Interactables.BasicAttack import BasicAttack
 from CompletedSprites.Interactables.testPotion import testPotion
 from Utils.signals import TargetType
@@ -55,6 +56,7 @@ class Game():
         self._font = pygame.font.SysFont("couriernew", 50)
         fonts = pygame.font.get_fonts()
         self.current_map = p.get_current_map()
+        self.starting_screen_position = height + score_box_height
 
 
         self.timer = Timer()
@@ -78,10 +80,12 @@ class Game():
                     self._game_started = True
                     self.fade_screen(window)
                     return
-        # window.blit(pygame.transform.scale(pygame.image.load('Assets/bg2.png'), (length, height + score_box_height)), (0, 0))
+        if self.starting_screen_position > 0:
+            self.starting_screen_position -= 2.5
+        window.blit(pygame.transform.scale(pygame.image.load('Assets/Background/CVBG.png'), (length, height + score_box_height)), (0, self.starting_screen_position))
         text = self._font.render("Press 1 to Start", 1, (255, 255, 255))
         rect = text.get_rect(center=(300, 300))
-        window.blit(text, rect)
+        #window.blit(text, rect)
         BackgroundEngine.tick_timer()
         
     def ending_screen(self):

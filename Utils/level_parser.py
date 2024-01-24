@@ -11,11 +11,12 @@ class Parser:
         self.path = os.path.dirname(os.path.realpath(__file__))
         self.curr_x = 0
         self.curr_y = 0
-        self.width = 60
-        self.height_s = 40
+        self.width = 50
+        self.height_s = 55
         self.built = []
         self.line_height = 0
         self.current_map = 'dungeon_1.level'
+        
     
     def get_current_map(self):
         return self.current_map
@@ -86,7 +87,7 @@ class Parser:
          
                     #platform = pygame.image.load('Assets/Sprites/Platform/' + self.key[y])
                     #print(platform.wid)
-                    image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Platform/' + self.key[y])), (50, (55)))]
+                    image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Platform/' + self.key[y])), (self.width, (self.height_s)))]
                     
                     rect = pygame.Rect(self.curr_x, self.curr_y, self.width, self.height_s)
                     platform_type = 1
@@ -101,9 +102,17 @@ class Parser:
                     curr_list.append(rect)
                     curr_list.append(1)
                     self.built.append(curr_list)
+                if y == 'D':
+
+                    image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Additional_sprites/Door/1.png')), (75, (4 * int(height / self.line_height))))]
+                    rect = pygame.Rect(self.curr_x, self.curr_y, 75, 4 * (height / self.line_height))
+                    curr_list.append(image)
+                    curr_list.append(rect)
+                    curr_list.append(1)
+                    self.built.append(curr_list)
                 
                 curr_list = []
-                self.curr_x += 60
+                self.curr_x += self.width
 
             self.curr_y += height / (self.line_height)
             self.curr_x=0

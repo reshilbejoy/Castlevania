@@ -1,4 +1,4 @@
-size = 58
+size = 35
 height_ratio = 13
 length_ratio = 22
 height = size * height_ratio
