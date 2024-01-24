@@ -56,7 +56,7 @@ class Game():
         self._font = pygame.font.SysFont("couriernew", 50)
         fonts = pygame.font.get_fonts()
         self.current_map = p.get_current_map()
-        self.starting_screen_position = height + score_box_height
+        self.starting_screen_position = height + score_box_height + 50
 
 
         self.timer = Timer()
@@ -81,7 +81,7 @@ class Game():
                     self.fade_screen(window)
                     return
         if self.starting_screen_position > 0:
-            self.starting_screen_position -= 2.5
+            self.starting_screen_position -= 1.25
         window.blit(pygame.transform.scale(pygame.image.load('Assets/Background/CVBG.png'), (length, height + score_box_height)), (0, self.starting_screen_position))
         text = self._font.render("Press 1 to Start", 1, (255, 255, 255))
         rect = text.get_rect(center=(300, 300))
