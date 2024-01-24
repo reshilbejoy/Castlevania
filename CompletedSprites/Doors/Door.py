@@ -16,5 +16,8 @@ class Door(Sprite):
     def return_current_image(self) -> pygame.Surface:
         #returns first image bec platforms do not have animations
         return self._image_arr[0]
+
+    def get_hitbox(self):
+        return self._hitbox
     
         

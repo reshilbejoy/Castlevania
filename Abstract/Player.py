@@ -25,6 +25,11 @@ class Player(DynamicSprite):
 
     def return_current_image(self) -> pygame.Surface:
         pass
+
+    def inside_door(self, door):
+        if (self._hitbox.colliderect(door.get_hitbox())):
+            return True
+        return False
     
     def handle_damage_interaction(interaction_msg: InventoryMessage) -> None:
         return super().handle_damage_interaction()

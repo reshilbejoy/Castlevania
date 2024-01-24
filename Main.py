@@ -17,17 +17,20 @@ from CompletedSprites.Platforms.Platform import Platform, PlatformType
 from Constants.window_constants import *
 from CompletedSprites.UI.static import Static_UI
 import time
+from CompletedSprites.Doors.Door import Door
 
 
 DynamicSpriteTypes = {MainPlayer}
 InteractableSpriteTypes = {testPotion,BasicAttack}
 PlatformSpriteTypes = {Platform}
+DoorSpriteTypes = {Door}
 
 
 class SortedSprites(TypedDict):
     Dynamic : List[DynamicSprite]
     Interactable : List[Interactable]
     Platform : List[Sprite]
+    Door : List[Door]
 
 class Game():
     
@@ -35,8 +38,8 @@ class Game():
         #initialize all sprites in this array
         
         
-        self._sprite_dict: Dict[str,SortedSprites] = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[]},
-                             "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[]}}
+        self._sprite_dict: Dict[str,SortedSprites] = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": []},
+                             "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": []}}
         self._game_over = False
         self._game_started = False
 
@@ -47,10 +50,12 @@ class Game():
         self.ui = UI()
                 
         self._player:MainPlayer = MainPlayer(8, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_object,self.remove_object)
-        platforms = [Platform(entry[0], entry[1], entry[2]) for entry in p.built]
+        terrain = p.built
+        platforms = [Platform(entry[0], entry[1], entry[2]) for entry in terrain['Platform']]
+        self.doors = [Door(entry[0], entry[1]) for entry in terrain['Door']]
         all_interactables: List[Interactable] = [BasicAttack(pygame.Rect(50, 200, 50, 80), self._player.get_pose_supplier(),TargetType.ENEMY,self.remove_object)]
         self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]
-        self._all_sprites: List[Sprite] = [self._player] + platforms + all_interactables
+        self._all_sprites: List[Sprite] = self.doors + [self._player] + platforms + all_interactables
 
         self._is_paused = False
         self._font = pygame.font.SysFont("couriernew", 50)
@@ -68,7 +73,7 @@ class Game():
             fade_out.set_alpha(alpha)
             window.blit(fade_out, (0, 0))
             BackgroundEngine.tick_timer()
-            time.sleep(0.005)
+            time.sleep(0.001)
 
     def starting_screen(self):
         window = BackgroundEngine.get_window()
@@ -127,6 +132,8 @@ class Game():
                                 self._sprite_dict["Active"]["Interactable"].append(i)
                             elif type(i) in PlatformSpriteTypes:
                                 self._sprite_dict["Active"]["Platform"].append(i)
+                            elif type(i) in DoorSpriteTypes:
+                                self._sprite_dict["Active"]["Door"].append(i)
 
                             surface = i.draw(rect, surface)
                     else:
@@ -136,6 +143,8 @@ class Game():
                             self._sprite_dict["Inactive"]["Interactable"].append(i)
                         elif type(i) in PlatformSpriteTypes:
                             self._sprite_dict["Inactive"]["Platform"].append(i)
+                        elif type(i) in DoorSpriteTypes:
+                            self._sprite_dict["Inactive"]["Door"].append(i)
 
                 window.fill((0,0,0))
                 self.ui.change_time(self.timer.get_time(BackgroundEngine.get_current_time()//1000))
@@ -152,8 +161,8 @@ class Game():
                 self.handle_collisions()
 
                 window.blit(surface, (0, 150))
-                self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[]},
-                        "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[]}}
+                self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": []},
+                        "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": []}}
 
 
 
@@ -186,6 +195,7 @@ class Game():
     
     def handle_keystrokes(self, pressed):
         left = self._player.get_hitbox().left
+        window = BackgroundEngine.get_window()
         if pressed[pygame.K_s] and not self._player.isJumping:
             self._player.isCrouched = True
         if pressed[pygame.K_SPACE] and not self._player.isJumping and not self._player.isFalling:
@@ -201,8 +211,8 @@ class Game():
         if pressed[pygame.K_w]:
             pass
         if pressed[pygame.K_q]:
-            if (self._player.inside_door()):
-                self.fade_screen()
+            if (self._player.inside_door(self.doors[0])):
+                self.fade_screen(window)
 
             
 

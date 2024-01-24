@@ -1,7 +1,7 @@
 import os
 import pygame
 from Constants.window_constants import size, length_ratio, height_ratio, height, length, background_length
-
+from collections import defaultdict
 #I should have ju;st used json: the script
 class Parser:
     def __init__(self):
@@ -13,9 +13,13 @@ class Parser:
         self.curr_y = 0
         self.width = 50
         self.height_s = 55
-        self.built = []
         self.line_height = 0
         self.current_map = 'dungeon_1.level'
+        self.built = {
+            'Platform': [],
+            'Candle': [],
+            'Door': []
+        }
         
     
     def get_current_map(self):
@@ -94,30 +98,27 @@ class Parser:
                     curr_list.append(image)
                     curr_list.append(rect)
                     curr_list.append(platform_type)
-                    self.built.append(curr_list)
+                    self.built['Platform'].append(curr_list)
                 if y == "o":
                     image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Additional_sprites/Candle/1.png')), (60, (40)))]
                     rect = pygame.Rect(self.curr_x, self.curr_y, self.width, self.height_s)
                     curr_list.append(image)
                     curr_list.append(rect)
-                    curr_list.append(1)
-                    self.built.append(curr_list)
+                    self.built['Candle'].append(curr_list)
                 if y == 'D':
 
                     image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Additional_sprites/Door/1.png')), (75, (4 * int(height / self.line_height))))]
                     rect = pygame.Rect(self.curr_x, self.curr_y, 75, 4 * (height / self.line_height))
                     curr_list.append(image)
                     curr_list.append(rect)
-                    curr_list.append(1)
-                    self.built.append(curr_list)
+                    self.built['Door'].append(curr_list)
                 
                 curr_list = []
                 self.curr_x += self.width
 
             self.curr_y += height / (self.line_height)
             self.curr_x=0
-        result_rects = [entry[1] for entry in self.built]
-        print(result_rects)
+        print(self.built)
         
 
     def test_map(self):
