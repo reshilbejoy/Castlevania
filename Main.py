@@ -34,7 +34,7 @@ class SortedSprites(TypedDict):
 
 class Game():
     
-    def __init__(self):
+    def __init__(self, level):
         #initialize all sprites in this array
         
         
@@ -42,8 +42,9 @@ class Game():
                              "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": []}}
         self._game_over = False
         self._game_started = False
+        self.level = level
 
-        p = Parser()
+        p = Parser(level)
         p.load_tilemap()
         p.build_level()
 
@@ -147,6 +148,7 @@ class Game():
                             self._sprite_dict["Inactive"]["Door"].append(i)
 
                 window.fill((0,0,0))
+                self.ui.change_stage(self.level)
                 self.ui.change_time(self.timer.get_time(BackgroundEngine.get_current_time()//1000))
 
                 for i in self.static_ui:
@@ -213,6 +215,8 @@ class Game():
         if pressed[pygame.K_q]:
             if (self._player.inside_door(self.doors[0])):
                 self.fade_screen(window)
+                run_game(Game(self.level + 1))
+                
 
             
 
@@ -233,16 +237,16 @@ class Game():
             return True
         return False
 
-def run_game():
-    Castlevania.timer.start()
-    while not Castlevania._game_over:
-        Castlevania.game_loop()
-    Castlevania.timer.reset(0)
-    while not Castlevania._game_started:
-        Castlevania.ending_screen()
+def run_game(game: Game):
+    game.timer.start()
+    while not game._game_over:
+        game.game_loop()
+    game.timer.reset(0)
+    while not game._game_started:
+        game.ending_screen()
     
 if __name__ == "__main__":
-    Castlevania = Game()
+    Castlevania = Game(1)
     while not Castlevania._game_started:
         Castlevania.starting_screen()
-    run_game()
+    run_game(Castlevania)

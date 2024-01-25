@@ -4,7 +4,7 @@ from Constants.window_constants import size, length_ratio, height_ratio, height,
 from collections import defaultdict
 #I should have ju;st used json: the script
 class Parser:
-    def __init__(self):
+    def __init__(self, level):
         self.key = {}
         self.meta = {}
         self.map_data = []
@@ -14,7 +14,7 @@ class Parser:
         self.width = 50
         self.height_s = 55
         self.line_height = 0
-        self.current_map = 'dungeon_1.level'
+        self.current_map = level
         self.built = {
             'Platform': [],
             'Candle': [],
@@ -29,7 +29,7 @@ class Parser:
         self.current_map = next_map
 
     def load_tilemap(self):
-        level_path = os.path.join(self.path, '..', 'Levels', self.current_map)
+        level_path = os.path.join(self.path, '..', 'Levels', 'dungeon_' + str(self.current_map) + '.level')
 
         print(level_path)
         with open(level_path, 'r') as file:
