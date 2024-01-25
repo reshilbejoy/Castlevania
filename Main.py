@@ -54,7 +54,7 @@ class Game():
         terrain = p.built
         platforms = [Platform(entry[0], entry[1], entry[2]) for entry in terrain['Platform']]
         self.doors = [Door(entry[0], entry[1]) for entry in terrain['Door']]
-        all_interactables: List[Interactable] = [BasicAttack(pygame.Rect(50, 200, 50, 80), self._player.get_pose_supplier(),TargetType.ENEMY,self.remove_object)]
+        all_interactables: List[Interactable] = []
         self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]
         self._all_sprites: List[Sprite] = self.doors + [self._player] + platforms + all_interactables
 
