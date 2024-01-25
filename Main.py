@@ -90,8 +90,9 @@ class Game():
                         self.fade_screen(window)
                         controls_done = True
             window.fill((0, 0, 0))
-            bg = pygame.transform.scale(pygame.image.load('Assets/Background/controls_bg.png'), (length, height))
+            bg = pygame.transform.scale(pygame.image.load('Assets/Background/picture_controls.png'), (length, height + score_box_height))
             window.blit(bg, (0, 0))
+            '''
             top_text = self._title_font.render("Controls", 1, (255, 255, 255))
             top_rect = top_text.get_rect(center=((length / 2), (height / 10)))
             bottom_text = self._title_font.render("Push 1 to Begin", 1, (255, 255, 255))
@@ -114,7 +115,7 @@ class Game():
                 left_rect = left_text.get_rect(center=((length / 3.5), ((index + 0.8) * (height / 3))))
                 right_rect = right_text.get_rect(center=((length / 1.35), ((index + 1.3) * (height / 3))))
                 window.blit(left_text, left_rect)
-                window.blit(right_text, right_rect)
+                window.blit(right_text, right_rect)'''
             BackgroundEngine.tick_timer()
 
 
