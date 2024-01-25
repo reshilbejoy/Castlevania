@@ -64,7 +64,6 @@ class Game():
         self.current_map = p.get_current_map()
         self.starting_screen_position = height + score_box_height + 50
 
-
         self.timer = Timer()
     
     def fade_screen(self, window):
@@ -75,6 +74,9 @@ class Game():
             window.blit(fade_out, (0, 0))
             BackgroundEngine.tick_timer()
             time.sleep(0.001)
+
+    def controls_screen(self):
+        pass
 
     def starting_screen(self):
         window = BackgroundEngine.get_window()
@@ -148,9 +150,9 @@ class Game():
                             self._sprite_dict["Inactive"]["Door"].append(i)
 
                 window.fill((0,0,0))
+                self.ui.player_health = self._player.get_health()
                 self.ui.change_stage(self.level)
                 self.ui.change_time(self.timer.get_time(BackgroundEngine.get_current_time()//1000))
-
                 for i in self.static_ui:
                     window.blit(i.return_current_image(), i.get_hitbox())
                 num = self.ui.get_numbers()
@@ -165,6 +167,7 @@ class Game():
                 window.blit(surface, (0, 150))
                 self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": []},
                         "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": []}}
+
 
 
 

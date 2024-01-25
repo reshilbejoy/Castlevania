@@ -45,6 +45,9 @@ class DynamicSprite(Sprite,ABC):
         #handle inventory
         pass
 
+    def get_health(self):
+        return self._health
+
     def apply_force(self,all_platforms:List[Platform])->None:
         #Use all platforms list to move the sprite hitbox according to x and y forces TODO
 
