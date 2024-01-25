@@ -1,4 +1,4 @@
-from typing import Callable, List
+from typing import Callable, List, TypedDict
 import pygame
 from Abstract.Player import Player
 from Abstract.Interaction import Interactable
@@ -22,21 +22,43 @@ class MainPlayer(Player):
                             pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/4.png'), True, False), (hitbox.width, hitbox.height)),
                             pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/5.png'), True, False), (hitbox.width, hitbox.height))] 
         
+        self.attackWalkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_attack_walk/1.png'), True, False), (hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_attack_walk/2.png'), True, False), (hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_attack_walk/3.png'), True, False), (hitbox.width, hitbox.height))]
+        
+        self.attackWalkLeft = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_attack_walk/1.png'),(hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_attack_walk/2.png'),(hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_attack_walk/3.png'),(hitbox.width, hitbox.height))]
+        
+        self.attackJumpRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_attack_jump/1.png'), True, False), (hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_attack_jump/2.png'), True, False), (hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_attack_jump/3.png'), True, False), (hitbox.width, hitbox.height))]
+        
+        self.attackJumpLeft = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_attack_jump/1.png'),(hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_attack_jump/2.png'),(hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_attack_jump/3.png'),(hitbox.width, hitbox.height))]
+    
+
         self.image = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/1.png'), True, False), (hitbox.width, hitbox.height))
         self.jump_animation_right = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_jump/1.png'), True, False), (hitbox.width, hitbox.height))
         self.jump_animation_left = pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_jump/1.png'),(hitbox.width, hitbox.height))
         self.fall_animation_right = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_fall/1.png'), True, False), (hitbox.width, hitbox.height))
         self.fall_animation_left = pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_crouch/1.png'),(hitbox.width, hitbox.height))
         self.cur_weapon = Item.DAGGER
+        self.state_dict = {}
         self.verticalForce = 0
         self.walkCount = 0
         self.isFalling = False
         self.isJumping = False
         self.isCrouched = False
         self.invince = False
+        self.isAttacking = False
         self.invince_time_ms = 500
         self.last_invince_timstep = 0
         self.last_attack_timestep = 0
+        self.player_jump_attack_count = 0
+        self.player_walk_attack_count = 0
+        self.last_attack_animation_timestep= 0
 
     def handle_damage_interaction(self,interaction_msg: DamageMessage) -> None:
         if interaction_msg.target == (TargetType.PLAYER or TargetType.ALL_SPRITES):
@@ -56,18 +78,63 @@ class MainPlayer(Player):
 
     def attack(self):
         if self.cur_weapon == Item.DAGGER:
-            if BackgroundEngine.get_current_time()-self.last_attack_timestep>BasicAttack.get_attack_span():
-                self.create_obj(BasicAttack(pygame.Rect(50, 200, 50, 80), self.get_pose_supplier(),TargetType.ENEMY,self.remove_obj))
+            if not self.isAttacking:
+                self.create_obj(BasicAttack(pygame.Rect(50, 200, 100, 30), self.get_pose_supplier(),TargetType.ENEMY,self.remove_obj))
                 self.last_attack_timestep = BackgroundEngine.get_current_time()
+                self.last_attack_animation_timestep = BackgroundEngine.get_current_time()
+
+
+
     def return_current_image(self) -> pygame.Surface:
 
+        #player is not attacking
+        self.isAttacking = not BackgroundEngine.get_current_time() - self.last_attack_timestep>BasicAttack.get_attack_span()
+        print(self.isAttacking)
         if self.isFalling and self.direction < 0:
             return self.fall_animation_left
         elif self.isFalling:
             return self.fall_animation_right
+        if self.isAttacking:
+            if(BackgroundEngine.get_current_time() - self.last_attack_animation_timestep < 0.1*BasicAttack.get_attack_span()):
+                if self.direction>=0:
+                    if self.isJumping:
+                        return self.attackJumpRight[0]
+                    else:
+                        return self.attackWalkRight[0]
+                else:
+                    if self.isJumping:
+                        return self.attackJumpLeft[0]
+                    else:
+                        return self.attackWalkLeft[0]
+                
+            if(BackgroundEngine.get_current_time() - self.last_attack_animation_timestep < 0.8*(BasicAttack.get_attack_span())):
+                if self.direction>=0:
+                    if self.isJumping:
+                        return self.attackJumpRight[1]
+                    else:
+                        return self.attackWalkRight[1]
+                else:
+                    if self.isJumping:
+                        return self.attackJumpLeft[1]
+                    else:
+                        return self.attackWalkLeft[1]
+                    
+            if(BackgroundEngine.get_current_time() - self.last_attack_animation_timestep < 1*(BasicAttack.get_attack_span())):
+                self.last_attack_animation_timestep = BackgroundEngine.get_current_time()
+                if self.direction>=0:
+                    if self.isJumping:
+                        return self.attackJumpRight[2]
+                    else:
+                        return self.attackWalkRight[2]
+                else:
+                    if self.isJumping:
+                        return self.attackJumpLeft[2]
+                    else:
+                        return self.attackWalkLeft[2]
 
         if self.isJumping and self.direction < 0:
             return self.jump_animation_left
+
         elif self.isJumping:
             return self.jump_animation_right
 
@@ -81,5 +148,6 @@ class MainPlayer(Player):
             return self.walkRight[int(self.walkCount//4) - 1]
         else:
             self.walkCount = 0
+        
     
         return self.image
