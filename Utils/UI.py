@@ -54,7 +54,7 @@ class UI:
         self.time = "0" * (4 - len(self.time)) + self.time
 
     def change_stage(self, change):
-        pass
+        self.stage = "0" + str(change)
 
     def change_p(self, change):
         pass
