@@ -60,6 +60,9 @@ class Game():
 
         self._is_paused = False
         self._font = pygame.font.SysFont("couriernew", 50)
+        self._intro_font = pygame.font.Font('Assets/Background/controls.ttf', 12)
+        self._controls_font = pygame.font.Font('Assets/Background/controls.ttf', 18)
+        self._title_font = pygame.font.Font('Assets/Background/controls.ttf', 20)
         fonts = pygame.font.get_fonts()
         self.current_map = p.get_current_map()
         self.starting_screen_position = height + score_box_height + 50
@@ -76,7 +79,47 @@ class Game():
             time.sleep(0.001)
 
     def controls_screen(self):
-        pass
+        window = BackgroundEngine.get_window()
+        controls_done = False
+        while not controls_done:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_1:
+                        self.fade_screen(window)
+                        controls_done = True
+            window.fill((0, 0, 0))
+            bg = pygame.transform.scale(pygame.image.load('Assets/Background/controls_bg.png'), (length, height))
+            window.blit(bg, (0, 0))
+            top_text = self._title_font.render("Controls", 1, (255, 255, 255))
+            top_rect = top_text.get_rect(center=((length / 2), (height / 10)))
+            bottom_text = self._title_font.render("Push 1 to Begin", 1, (255, 255, 255))
+            bottom_rect = bottom_text.get_rect(center=((length / 2), (height * 1.25)))
+            window.blit(top_text, top_rect)
+            window.blit(bottom_text, bottom_rect)
+            left_texts = [
+                self._controls_font.render("D - Move Right", 1, (7, 240, 201)),
+                self._controls_font.render("A - Move Left", 1, (38, 240, 122)),
+                self._controls_font.render("Q - Enter Doors", 1, (240, 247, 104)),
+            ]
+            right_texts = [
+                self._controls_font.render("SPACE - Jump", 1, (118, 164, 245)),
+                self._controls_font.render("S - Crouch", 1, (190, 127, 245)),
+                self._controls_font.render("K - Attack", 1, (245, 108, 199)),
+            ]
+            for index in range(0, len(left_texts)):
+                left_text = left_texts[index]
+                right_text = right_texts[index]
+                left_rect = left_text.get_rect(center=((length / 3.5), ((index + 0.8) * (height / 3))))
+                right_rect = right_text.get_rect(center=((length / 1.35), ((index + 1.3) * (height / 3))))
+                window.blit(left_text, left_rect)
+                window.blit(right_text, right_rect)
+            BackgroundEngine.tick_timer()
+
+
+
+            
 
     def starting_screen(self):
         window = BackgroundEngine.get_window()
@@ -89,11 +132,11 @@ class Game():
                     self.fade_screen(window)
                     return
         if self.starting_screen_position > 0:
-            self.starting_screen_position -= 1.25
+            self.starting_screen_position -= 5
         window.blit(pygame.transform.scale(pygame.image.load('Assets/Background/CVBG.png'), (length, height + score_box_height)), (0, self.starting_screen_position))
-        text = self._font.render("Press 1 to Start", 1, (255, 255, 255))
-        rect = text.get_rect(center=(300, 300))
-        #window.blit(text, rect)
+        text = self._intro_font.render("Press 1 to Start", 1, (255, 255, 255))
+        rect = text.get_rect(center=(length * 0.52, self.starting_screen_position + height * 0.7))
+        window.blit(text, rect)
         BackgroundEngine.tick_timer()
         
     def ending_screen(self):
@@ -252,4 +295,5 @@ if __name__ == "__main__":
     Castlevania = Game(1)
     while not Castlevania._game_started:
         Castlevania.starting_screen()
+    Castlevania.controls_screen()
     run_game(Castlevania)
