@@ -55,11 +55,9 @@ class Ghoul(Enemy):
 
     def AI(self):
         if self.sp == 0:
-            self.change_force(-3,0)
-            if abs(self._hitbox.midright[0] - BackgroundEngine.get_current_image_frame(self.get_player_pose()).midleft[0]) < 60:
-                self.sp = 1
+            self.change_force(-.25,0)
+           
         elif self.sp == 1:
-            self.change_force(3,0)
-            if abs(self._hitbox.midleft[0] - BackgroundEngine.get_current_image_frame(self.get_player_pose()).midright[0]) < 60:
-                self.sp = 0
+            self.change_force(.25,0)
+           
         
