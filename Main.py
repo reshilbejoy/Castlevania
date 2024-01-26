@@ -50,7 +50,7 @@ class Game():
 
         self.ui = UI()
                 
-        self._player:MainPlayer = MainPlayer(8, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_object,self.remove_object)
+        self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_object,self.remove_object)
         terrain = p.built
         platforms = [Platform(entry[0], entry[1], entry[2]) for entry in terrain['Platform']]
         self.doors = [Door(entry[0], entry[1]) for entry in terrain['Door']]
@@ -60,7 +60,7 @@ class Game():
 
         self._is_paused = False
         self._font = pygame.font.SysFont("couriernew", 50)
-        self._intro_font = pygame.font.Font('Assets/Background/controls.ttf', 12)
+        self._intro_font = pygame.font.Font('Assets/Background/controls.ttf', (9 + int(size / 8)))
         self._controls_font = pygame.font.Font('Assets/Background/controls.ttf', 18)
         self._title_font = pygame.font.Font('Assets/Background/controls.ttf', 20)
         fonts = pygame.font.get_fonts()
@@ -132,12 +132,13 @@ class Game():
                     self._game_started = True
                     self.fade_screen(window)
                     return
+        window.blit(pygame.transform.scale(pygame.image.load('Assets/Background/CVBG.png'), (length, height + score_box_height)), (0, self.starting_screen_position))
         if self.starting_screen_position > 0:
             self.starting_screen_position -= 5
-        window.blit(pygame.transform.scale(pygame.image.load('Assets/Background/CVBG.png'), (length, height + score_box_height)), (0, self.starting_screen_position))
-        text = self._intro_font.render("Press 1 to Start", 1, (255, 255, 255))
-        rect = text.get_rect(center=(length * 0.52, self.starting_screen_position + height * 0.7))
-        window.blit(text, rect)
+        else:
+            text = self._intro_font.render("Press 1 to Start", 1, (255, 255, 255))
+            rect = text.get_rect(center=(length * 0.52, self.starting_screen_position + height * 0.7))
+            window.blit(text, rect)
         BackgroundEngine.tick_timer()
         
     def ending_screen(self):

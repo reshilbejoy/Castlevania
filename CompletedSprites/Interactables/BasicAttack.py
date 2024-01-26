@@ -13,7 +13,7 @@ class BasicAttack(Interactable):
         super().__init__(images=[], hitbox = hitbox, damage = 1,remove_obj=remove_obj)
         self.damage_target = damage_target
         self.pose_supplier:Callable = pose_supplier
-        self.images = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Interactables/download.jpeg'), True, False), (hitbox.width, hitbox.height))
+        self.images = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Interactables/Whip_attack/3.png'), True, False), (hitbox.width, hitbox.height))
         self.creation_time:int = BackgroundEngine.get_current_time()
 
     def return_current_image(self) -> pygame.Surface:
