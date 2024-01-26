@@ -1,7 +1,10 @@
 from typing import Dict, List
 from typing_extensions import TypedDict
+from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Interactables.BasicAttack import BasicAttack
+from CompletedSprites.Interactables.HarmingHitbox import HarmingHitbox
 from CompletedSprites.Interactables.testPotion import testPotion
+from Abstract.Enemy import Enemy
 from Utils.signals import TargetType
 from background_engine import BackgroundEngine
 import pygame
@@ -20,8 +23,8 @@ import time
 from CompletedSprites.Doors.Door import Door
 
 
-DynamicSpriteTypes = {MainPlayer}
-InteractableSpriteTypes = {testPotion,BasicAttack}
+DynamicSpriteTypes = {MainPlayer,Ghoul}
+InteractableSpriteTypes = {testPotion,BasicAttack,HarmingHitbox}
 PlatformSpriteTypes = {Platform}
 DoorSpriteTypes = {Door}
 
@@ -51,12 +54,13 @@ class Game():
         self.ui = UI()
                 
         self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_object,self.remove_object)
+        self._enemies:Enemy = [Ghoul(5, 12, [], pygame.Rect(200, 100, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox)]
         terrain = p.built
         platforms = [Platform(entry[0], entry[1], entry[2]) for entry in terrain['Platform']]
         self.doors = [Door(entry[0], entry[1]) for entry in terrain['Door']]
         all_interactables: List[Interactable] = []
         self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]
-        self._all_sprites: List[Sprite] = self.doors + [self._player] + platforms + all_interactables
+        self._all_sprites: List[Sprite] = self.doors + [self._player] + platforms + all_interactables + self._enemies
 
         self._is_paused = False
         self._font = pygame.font.SysFont("couriernew", 50)
@@ -157,7 +161,6 @@ class Game():
                     
 
 
-
     def game_loop(self):
         #Main game loop logic (this should be ready to go)
         pressed = pygame.key.get_pressed()
@@ -206,16 +209,13 @@ class Game():
                         window.blit(j[0], j[1])
 
                 self.handle_keystrokes(pressed)
-                self._player.apply_force(self._sprite_dict["Active"]["Platform"])
+                for i in self._sprite_dict["Active"]["Dynamic"]:
+                    i.apply_force(self._sprite_dict["Active"]["Platform"])
                 self.handle_collisions()
 
                 window.blit(surface, (0, 150))
                 self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": []},
                         "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": []}}
-
-
-
-
 
                 BackgroundEngine.tick_timer()
 
@@ -284,6 +284,12 @@ class Game():
         if not self._player.lifespan():
             return True
         return False
+    
+    def init_sprites(self):
+        for i in self._all_sprites:
+            if type(i) in DynamicSpriteTypes:
+                i.init_obj()
+
 
 def run_game(game: Game):
     game.timer.start()
@@ -298,4 +304,5 @@ if __name__ == "__main__":
     while not Castlevania._game_started:
         Castlevania.starting_screen()
     Castlevania.controls_screen()
+    Castlevania.init_sprites()
     run_game(Castlevania)

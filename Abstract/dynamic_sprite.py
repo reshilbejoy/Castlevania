@@ -21,7 +21,7 @@ class DynamicSprite(Sprite,ABC):
         self._horizontal_force = horizontal_force
         self._vertical_force = 0
         self.frictionForce = 0.2
-        self.net_force = (abs(self.horizontalForce) - abs(self.frictionForce))
+        self.net_force = (abs(self._horizontal_force) - abs(self.frictionForce))
         self.speed = 0
         #self.left = False
         #self.right = False
@@ -43,6 +43,10 @@ class DynamicSprite(Sprite,ABC):
     @abstractmethod
     def handle_inventory_interaction(interaction_msg:DamageMessage)->None:
         #handle inventory
+        pass
+
+    @abstractmethod    
+    def init_obj()->None:
         pass
 
     def get_health(self):

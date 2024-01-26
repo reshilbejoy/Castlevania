@@ -16,9 +16,13 @@ class Player(DynamicSprite):
     def attack(self):
         pass
     
+    @abstractmethod
+    def init_obj(self) -> None:
+        pass
+
     def update(self):
         if not self.lifespan():
-            del self
+            self.remove_obj(self)
             
     def lifespan(self):
         return self._health>0

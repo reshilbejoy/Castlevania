@@ -36,7 +36,7 @@ class BackgroundEngine(ABC):
         return window
 
     @staticmethod
-    def get_current_image_frame(player_global_hitbox:pygame.Rect)-> pygame.Rect:
+    def get_current_image_frame(player_global_hitbox:pygame.Rect)-> pygame.rect:
         # the rectangle around the player
         window_rect = pygame.Rect(0, 0, length, height)
         if (player_global_hitbox.left < (length / 2)):

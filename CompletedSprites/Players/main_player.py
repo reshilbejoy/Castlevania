@@ -62,11 +62,12 @@ class MainPlayer(Player):
 
     def handle_damage_interaction(self,interaction_msg: DamageMessage) -> None:
         if interaction_msg.target == (TargetType.PLAYER or TargetType.ALL_SPRITES):
+            print("hit")
             if interaction_msg.damage > 0:
                 if((BackgroundEngine.get_current_time()-self.last_invince_timstep) > self.invince_time_ms):
                     self.invince = True
                     self.last_invince_timstep = BackgroundEngine.get_current_time()
-                    print(self._health)
+                    # print(self._health)
                     self._health -= interaction_msg.damage
             else:
                 self._health -=interaction_msg.damage
@@ -77,19 +78,21 @@ class MainPlayer(Player):
             self.cur_weapon = interaction_msg.item
 
     def attack(self):
+        
         if self.cur_weapon == Item.DAGGER:
             if not self.isAttacking:
                 self.create_obj(BasicAttack(pygame.Rect(50, 200, 100, 30), self.get_pose_supplier(),TargetType.ENEMY,self.remove_obj))
                 self.last_attack_timestep = BackgroundEngine.get_current_time()
                 self.last_attack_animation_timestep = BackgroundEngine.get_current_time()
 
-
+    def init_obj(self) -> None:
+        pass
 
     def return_current_image(self) -> pygame.Surface:
+        # print(self._health)
 
         #player is not attacking
         self.isAttacking = not BackgroundEngine.get_current_time() - self.last_attack_timestep>BasicAttack.get_attack_span()
-        print(self.isAttacking)
         if self.isFalling and self.direction < 0:
             return self.fall_animation_left
         elif self.isFalling:
@@ -97,24 +100,24 @@ class MainPlayer(Player):
         if self.isAttacking:
             if(BackgroundEngine.get_current_time() - self.last_attack_animation_timestep < 0.1*BasicAttack.get_attack_span()):
                 if self.direction>=0:
-                    if self.isJumping:
+                    if self.isJumping or self.isFalling:
                         return self.attackJumpRight[0]
                     else:
                         return self.attackWalkRight[0]
                 else:
-                    if self.isJumping:
+                    if self.isJumping or self.isFalling:
                         return self.attackJumpLeft[0]
                     else:
                         return self.attackWalkLeft[0]
                 
             if(BackgroundEngine.get_current_time() - self.last_attack_animation_timestep < 0.8*(BasicAttack.get_attack_span())):
                 if self.direction>=0:
-                    if self.isJumping:
+                    if self.isJumping or self.isFalling:
                         return self.attackJumpRight[1]
                     else:
                         return self.attackWalkRight[1]
                 else:
-                    if self.isJumping:
+                    if self.isJumping or self.isFalling:
                         return self.attackJumpLeft[1]
                     else:
                         return self.attackWalkLeft[1]
@@ -122,12 +125,12 @@ class MainPlayer(Player):
             if(BackgroundEngine.get_current_time() - self.last_attack_animation_timestep < 1*(BasicAttack.get_attack_span())):
                 self.last_attack_animation_timestep = BackgroundEngine.get_current_time()
                 if self.direction>=0:
-                    if self.isJumping:
+                    if self.isJumping or self.isFalling:
                         return self.attackJumpRight[2]
                     else:
                         return self.attackWalkRight[2]
                 else:
-                    if self.isJumping:
+                    if self.isJumping or self.isFalling:
                         return self.attackJumpLeft[2]
                     else:
                         return self.attackWalkLeft[2]
