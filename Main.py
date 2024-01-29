@@ -1,9 +1,12 @@
 from typing import Dict, List
 from typing_extensions import TypedDict
 from CompletedSprites.Enemies.Ghoul import Ghoul
+from CompletedSprites.Enemies.Skeleton import Skeleton
+
 from CompletedSprites.Interactables.BasicAttack import BasicAttack
 from CompletedSprites.Interactables.HarmingHitbox import HarmingHitbox
 from CompletedSprites.Interactables.testPotion import testPotion
+from CompletedSprites.Interactables.CandyCane import CandyCane
 from Abstract.Enemy import Enemy
 from Utils.signals import TargetType
 from background_engine import BackgroundEngine
@@ -23,8 +26,8 @@ import time
 from CompletedSprites.Doors.Door import Door
 
 
-DynamicSpriteTypes = {MainPlayer,Ghoul}
-InteractableSpriteTypes = {testPotion,BasicAttack,HarmingHitbox}
+DynamicSpriteTypes = {MainPlayer,Ghoul,Skeleton}
+InteractableSpriteTypes = {testPotion,BasicAttack,HarmingHitbox,CandyCane}
 PlatformSpriteTypes = {Platform}
 DoorSpriteTypes = {Door}
 
@@ -54,7 +57,9 @@ class Game():
         self.ui = UI()
                 
         self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_object,self.remove_object)
-        self._enemies:Enemy = [Ghoul(5, 12, [], pygame.Rect(200, 100, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox)]
+        #self._enemies:Enemy = [Ghoul(5, 12, [], pygame.Rect(200, 100, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox)]
+        self._enemies:Enemy = [Skeleton(5, 12, [], pygame.Rect(200, 100, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox)]
+
         terrain = p.built
         platforms = [Platform(entry[0], entry[1], entry[2]) for entry in terrain['Platform']]
         self.doors = [Door(entry[0], entry[1]) for entry in terrain['Door']]
@@ -236,7 +241,8 @@ class Game():
     def handle_collisions(self):
         for dynSprite in self._sprite_dict["Active"]["Dynamic"]:
             for interactable in self._sprite_dict['Active']["Interactable"]:
-                if interactable.return_hitbox().colliderect(dynSprite.return_hitbox()):
+                if interactable._hitbox.colliderect(dynSprite.return_hitbox()):
+                    print('ac')
                     dynSprite.handle_damage_interaction(interactable.get_damage_message())
                     dynSprite.handle_inventory_interaction(interactable.get_inventory_message())
 
@@ -261,7 +267,7 @@ class Game():
         if pressed[pygame.K_w]:
             pass
         if pressed[pygame.K_q]:
-            if (self._player.inside_door(self.doors[0])):
+            if (self._player.inside_door(self.doors[0])): 
                 self.fade_screen(window)
                 run_game(Game(self.level + 1))
                 
