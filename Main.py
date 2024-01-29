@@ -1,4 +1,5 @@
-from typing import Dict, List, TypedDict
+from typing import Dict, List
+from typing_extensions import TypedDict
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
 
@@ -60,7 +61,7 @@ class Game():
                 
         self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_object,self.remove_object)
         #self._enemies:Enemy = [Ghoul(5, 12, [], pygame.Rect(200, 100, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox)]
-        self._enemies:Enemy = []#[Skeleton(5, 12, [], pygame.Rect(200, 100, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox)]
+        self._enemies:Enemy = [Skeleton(5, 12, [], pygame.Rect(200, 100, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox)]
 
         terrain = p.built
         platforms = [Platform(entry[0], entry[1], entry[2]) for entry in terrain['Platform']]
@@ -295,9 +296,8 @@ class Game():
             if event.type == pygame.QUIT:
                 self._game_over = True
                 pygame.quit()
-        if ((not self._player.lifespan()) or (
-            not BackgroundEngine.get_current_image_frame(self._player.get_hitbox()).colliderect(self._player.get_hitbox())
-        )):
+        hitbox = self._player.get_hitbox()
+        if ((not self._player.lifespan()) or (hitbox.bottom > height)):
             return True
         return False
     
@@ -316,7 +316,7 @@ def run_game(game: Game):
         game.ending_screen()
     
 if __name__ == "__main__":
-    Castlevania = Game(2)
+    Castlevania = Game(3)
     while not Castlevania._game_started:
         Castlevania.starting_screen()
     Castlevania.controls_screen()

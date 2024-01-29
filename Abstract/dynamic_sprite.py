@@ -122,6 +122,12 @@ class DynamicSprite(Sprite,ABC):
                 self.isFalling = False
                 self.collision_detection = True
                 self._hitbox.bottom = platform._hitbox.top + 1
+        
+        if self._hitbox.top <= 0:
+            self.current_velocity = 0
+            self._hitbox.top = 1
+            self.isFalling = True
+            
             
     def change_force(self, x_force, y_force):
         if not (self.isJumping or self.isFalling) or x_force == 0:
