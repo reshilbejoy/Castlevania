@@ -34,11 +34,11 @@ class Ghoul(Enemy):
         pass
 
     def return_current_image(self) -> pygame.Surface:
-        self.walkIndex+=1
+        self.walkIndex+=0.05
         if self.sp == 1:
-            return self.walkRight[self.walkIndex % 2]
+            return self.walkRight[int(self.walkIndex) % 2]
         elif self.sp == 0:
-            return self.walkLeft[self.walkIndex % 2]
+            return self.walkLeft[int(self.walkIndex) % 2]
         
     def handle_damage_interaction(self,interaction_msg: DamageMessage) -> None:
             if interaction_msg.target == (TargetType.ENEMY or TargetType.ALL_SPRITES):

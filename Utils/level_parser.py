@@ -91,20 +91,29 @@ class Parser:
          
                     #platform = pygame.image.load('Assets/Sprites/Platform/' + self.key[y])
                     #print(platform.wid)
-                    image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Platform/' + self.key[y])), (self.width, (self.height_s)))]
+                    image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Platform/' + self.key[y])), (height / self.line_height + 6, (height / self.line_height + 2)))]
                     
-                    rect = pygame.Rect(self.curr_x, self.curr_y, self.width, self.height_s)
+                    rect = pygame.Rect(self.curr_x, self.curr_y, height / self.line_height + 6, height / self.line_height + 2)
                     platform_type = 1
                     curr_list.append(image)
                     curr_list.append(rect)
                     curr_list.append(platform_type)
                     self.built['Platform'].append(curr_list)
+                
                 if y == "o":
-                    image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Additional_sprites/Candle/1.png')), (60, (40)))]
+                    image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Additional_sprites/Candle/1.png')), (60, (40))), pygame.transform.scale((pygame.image.load('Assets/Sprites/Additional_sprites/Candle/2.png')), (60, (40)))]
                     rect = pygame.Rect(self.curr_x, self.curr_y, self.width, self.height_s)
                     curr_list.append(image)
                     curr_list.append(rect)
                     self.built['Candle'].append(curr_list)
+
+                if y == "O":
+                    image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Additional_sprites/BigCandle/1.png')), (60, (40))), pygame.transform.scale((pygame.image.load('Assets/Sprites/Additional_sprites/BigCandle/2.png')), (60, (40)))]
+                    rect = pygame.Rect(self.curr_x, self.curr_y, self.width, self.height_s)
+                    curr_list.append(image)
+                    curr_list.append(rect)
+                    self.built['Candle'].append(curr_list)
+                
                 if y == 'D':
 
                     image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Additional_sprites/Door/1.png')), (75, (4 * int(height / self.line_height))))]
@@ -114,9 +123,9 @@ class Parser:
                     self.built['Door'].append(curr_list)
                 
                 curr_list = []
-                self.curr_x += self.width
+                self.curr_x += height / self.line_height + 6
 
-            self.curr_y += height / (self.line_height)
+            self.curr_y += height / (self.line_height) + 1
             self.curr_x=0
         print(self.built)
         

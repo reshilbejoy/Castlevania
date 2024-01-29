@@ -12,8 +12,9 @@ pygame.init()
 window = pygame.display.set_mode((length, height + score_box_height))
 pygame.display.set_caption("Castlevania")
 
-_normal_background = pygame.transform.scale(pygame.image.load('Assets//Background/Level_1/1.png'), (background_length, height_ratio * size))
-_background_arr:List[pygame.Surface] = []
+_background_arr:List[pygame.Surface] = [pygame.transform.scale(pygame.image.load('Assets//Background/Level_1/1.png'), (background_length, height_ratio * size)),
+                                        pygame.transform.scale(pygame.image.load('Assets//Background/Level_1/2.png'), (background_length, height_ratio * size)),
+                                        pygame.transform.scale(pygame.image.load('Assets//Background/Level_1/3.png'), (background_length, height_ratio * size))]
 _timer = pygame.time.Clock() 
 _draw_frame_size:Tuple[float,float] = (500,600)  #Width, Height
 _update_frame_size:Tuple[float,float] = (700,800)  #Width, Height
@@ -22,12 +23,12 @@ _update_frame_size:Tuple[float,float] = (700,800)  #Width, Height
 class BackgroundEngine(ABC):
     
     @staticmethod
-    def get_current_image(player_global_hitbox:pygame.Rect): #-> pygame.Rect, pygame.Surface:
+    def get_current_image(player_global_hitbox:pygame.Rect, level): #-> pygame.Rect, pygame.Surface:
 
         # a surface which is the same dimensions
         image_rect = BackgroundEngine.get_current_image_frame(player_global_hitbox)
         surface = pygame.Surface((image_rect.width, image_rect.height))
-        surface.blit(_normal_background, (-image_rect.left, 0))
+        surface.blit(_background_arr[level], (-image_rect.left, 0))
 
         return image_rect, surface
     

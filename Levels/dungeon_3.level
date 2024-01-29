@@ -1,0 +1,31 @@
+Key:
+{
+    x:Platform1.png,
+    y:placeholder_path_unmoving_platform,
+    z:null,
+    O:Platform1.png,
+    0:1.png
+}
+
+Meta:
+{
+
+
+
+}
+
+
+Map:
+{
+
+                                                                                                                                         D
+xxxx                         xxxxxxxx                         xxxxxxx                         xxxxxxxx                            x   xxxxx
+       xx               xx              xx               xx              x               xxx             xx                x
+            x        x                       x       xx                      xx       xx                     xxx      xxx     xx
+                 x                               xx                               xx                               x
+
+
+
+
+
+}

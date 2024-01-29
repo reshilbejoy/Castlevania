@@ -2,13 +2,12 @@ from typing import List
 import pygame
 from abc import ABC, abstractmethod
 from background_engine import BackgroundEngine
-from Constants.window_constants import background_length
+from Constants.window_constants import background_length, height
 
 class Sprite():
     def __init__(self,images:List[pygame.Surface],hitbox:pygame.Rect):
         self._image_arr:List[pygame.Surface] = images
         self._hitbox: pygame.Rect = hitbox
-        self._screen:pygame.Rect = BackgroundEngine.get_current_image_frame(hitbox)
         self._global_coords = [self._hitbox.top, self._hitbox.left]
 
     @abstractmethod
@@ -35,7 +34,7 @@ class Sprite():
     
     def should_update(self,player_hitbox:pygame.Rect)->bool:
         # return wether or not to call update function based on player loc TODO
-        if (-50 < player_hitbox.left < background_length) and (player_hitbox.top < self._screen.height):
+        if (-50 < player_hitbox.left < background_length) and (player_hitbox.top < height):
             return True
         return False
         

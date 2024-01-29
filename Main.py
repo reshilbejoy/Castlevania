@@ -1,5 +1,4 @@
-from typing import Dict, List
-from typing_extensions import TypedDict
+from typing import Dict, List, TypedDict
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
 
@@ -24,12 +23,14 @@ from Constants.window_constants import *
 from CompletedSprites.UI.static import Static_UI
 import time
 from CompletedSprites.Doors.Door import Door
+from CompletedSprites.Candle.Candle import Candle
 
 
 DynamicSpriteTypes = {MainPlayer,Ghoul,Skeleton}
 InteractableSpriteTypes = {testPotion,BasicAttack,HarmingHitbox,CandyCane}
 PlatformSpriteTypes = {Platform}
 DoorSpriteTypes = {Door}
+CandleSpriteTypes = {Candle}
 
 
 class SortedSprites(TypedDict):
@@ -37,6 +38,7 @@ class SortedSprites(TypedDict):
     Interactable : List[Interactable]
     Platform : List[Sprite]
     Door : List[Door]
+    Candle: List[Candle]
 
 class Game():
     
@@ -44,8 +46,8 @@ class Game():
         #initialize all sprites in this array
         
         
-        self._sprite_dict: Dict[str,SortedSprites] = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": []},
-                             "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": []}}
+        self._sprite_dict: Dict[str,SortedSprites] = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle": []},
+                             "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle":[]}}
         self._game_over = False
         self._game_started = False
         self.level = level
@@ -63,9 +65,10 @@ class Game():
         terrain = p.built
         platforms = [Platform(entry[0], entry[1], entry[2]) for entry in terrain['Platform']]
         self.doors = [Door(entry[0], entry[1]) for entry in terrain['Door']]
+        self.candles = [Candle(entry[0], entry[1]) for entry in terrain["Candle"]]
         all_interactables: List[Interactable] = []
         self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]
-        self._all_sprites: List[Sprite] = self.doors + [self._player] + platforms + all_interactables + self._enemies
+        self._all_sprites: List[Sprite] = self.doors + [self._player] + platforms + all_interactables + self._enemies + self.candles
 
         self._is_paused = False
         self._font = pygame.font.SysFont("couriernew", 50)
@@ -158,7 +161,7 @@ class Game():
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
-                    self._game_started = True
+                    self._game_started = Truek
                     self._game_over = False
                     Castlevania.__init__()
                     run_game()
@@ -174,7 +177,7 @@ class Game():
             self.handle_pauses()
             if self._is_paused is False:
                 
-                rect, surface = BackgroundEngine.get_current_image(self._player.get_hitbox())
+                rect, surface = BackgroundEngine.get_current_image(self._player.get_hitbox(), self.level - 1)
                 pressed = pygame.key.get_pressed()
 
                 for i in self._all_sprites:
@@ -190,6 +193,8 @@ class Game():
                                 self._sprite_dict["Active"]["Platform"].append(i)
                             elif type(i) in DoorSpriteTypes:
                                 self._sprite_dict["Active"]["Door"].append(i)
+                            elif type(i) in CandleSpriteTypes:
+                                self._sprite_dict["Active"]["Candle"].append(i)
 
                             surface = i.draw(rect, surface)
                     else:
@@ -201,6 +206,8 @@ class Game():
                             self._sprite_dict["Inactive"]["Platform"].append(i)
                         elif type(i) in DoorSpriteTypes:
                             self._sprite_dict["Inactive"]["Door"].append(i)
+                        elif type(i) in CandleSpriteTypes:
+                                self._sprite_dict["Active"]["Candle"].append(i)
 
                 window.fill((0,0,0))
                 self.ui.player_health = self._player.get_health()
@@ -219,8 +226,8 @@ class Game():
                 self.handle_collisions()
 
                 window.blit(surface, (0, 150))
-                self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": []},
-                        "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": []}}
+                self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle":[]},
+                        "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle":[]}}
 
                 BackgroundEngine.tick_timer()
 

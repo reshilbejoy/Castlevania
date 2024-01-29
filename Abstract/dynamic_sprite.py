@@ -67,9 +67,9 @@ class DynamicSprite(Sprite,ABC):
         self.horizontal_movement()
 
         if self.speed <= 0 and self._horizontal_force == 0:
-            self.direction = 0
             self.net_force = 0
             self.speed = 0
+            self.isMoving = False
 
         if not self.collision_detection: # collision_detection is true if there is a normal force
             self.current_velocity += self.gravity
@@ -78,6 +78,7 @@ class DynamicSprite(Sprite,ABC):
                 self.isFalling = True
     
     def horizontal_movement(self):
+        self.isMoving = True
         if self.net_force > 0 and self._horizontal_force > 0 and self._hitbox.left <= background_length - self._hitbox.width: # and not self.collision_right:
             if not self.collision_right:
                 self.speeding_up()

@@ -39,7 +39,8 @@ class MainPlayer(Player):
                             pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_attack_jump/3.png'),(hitbox.width, hitbox.height))]
     
 
-        self.image = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/1.png'), True, False), (hitbox.width, hitbox.height))
+        self.image_right = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/1.png'), True, False), (hitbox.width, hitbox.height))
+        self.image_left = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/1.png'), False, False), (hitbox.width, hitbox.height))
         self.jump_animation_right = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_jump/1.png'), True, False), (hitbox.width, hitbox.height))
         self.jump_animation_left = pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_jump/1.png'),(hitbox.width, hitbox.height))
         self.fall_animation_right = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_fall/1.png'), True, False), (hitbox.width, hitbox.height))
@@ -51,6 +52,7 @@ class MainPlayer(Player):
         self.isFalling = False
         self.isJumping = False
         self.isCrouched = False
+        self.isMoving = False
         self.invince = False
         self.isAttacking = False
         self.invince_time_ms = 500
@@ -81,7 +83,7 @@ class MainPlayer(Player):
         
         if self.cur_weapon == Item.DAGGER:
             if not self.isAttacking:
-                self.create_obj(BasicAttack(pygame.Rect(50, 200, 100, 30), self.get_pose_supplier(),TargetType.ENEMY,self.remove_obj))
+                self.create_obj(BasicAttack(pygame.Rect(0, 0, 200, 100), self.get_pose_supplier(),TargetType.ENEMY,self.remove_obj))
                 self.last_attack_timestep = BackgroundEngine.get_current_time()
                 self.last_attack_animation_timestep = BackgroundEngine.get_current_time()
 
@@ -98,7 +100,7 @@ class MainPlayer(Player):
         elif self.isFalling:
             return self.fall_animation_right
         if self.isAttacking:
-            if(BackgroundEngine.get_current_time() - self.last_attack_animation_timestep < 0.1*BasicAttack.get_attack_span()):
+            if(BackgroundEngine.get_current_time() - self.last_attack_animation_timestep < 0.3*BasicAttack.get_attack_span()):
                 if self.direction>=0:
                     if self.isJumping or self.isFalling:
                         return self.attackJumpRight[0]
@@ -110,7 +112,7 @@ class MainPlayer(Player):
                     else:
                         return self.attackWalkLeft[0]
                 
-            if(BackgroundEngine.get_current_time() - self.last_attack_animation_timestep < 0.8*(BasicAttack.get_attack_span())):
+            if(BackgroundEngine.get_current_time() - self.last_attack_animation_timestep < 0.6*(BasicAttack.get_attack_span())):
                 if self.direction>=0:
                     if self.isJumping or self.isFalling:
                         return self.attackJumpRight[1]
@@ -122,8 +124,7 @@ class MainPlayer(Player):
                     else:
                         return self.attackWalkLeft[1]
                     
-            if(BackgroundEngine.get_current_time() - self.last_attack_animation_timestep < 1*(BasicAttack.get_attack_span())):
-                self.last_attack_animation_timestep = BackgroundEngine.get_current_time()
+            if(BackgroundEngine.get_current_time() - self.last_attack_animation_timestep <= (BasicAttack.get_attack_span())):
                 if self.direction>=0:
                     if self.isJumping or self.isFalling:
                         return self.attackJumpRight[2]
@@ -142,15 +143,19 @@ class MainPlayer(Player):
             return self.jump_animation_right
 
         if self.walkCount + 1 >= 17:
-             self.walkCount = 0    
-        if self.direction < 0:  
-            self.walkCount += 0.5
-            return self.walkLeft[int(self.walkCount//4) - 1]                
-        elif self.direction > 0:
-            self.walkCount += 0.5
-            return self.walkRight[int(self.walkCount//4) - 1]
+             self.walkCount = 0  
+        if self.isMoving:  
+            if self.direction < 0:  
+                self.walkCount += 0.5
+                return self.walkLeft[int(self.walkCount//4) - 1]                
+            elif self.direction > 0:
+                self.walkCount += 0.5
+                return self.walkRight[int(self.walkCount//4) - 1]
         else:
-            self.walkCount = 0
+            if self.direction < 0:  
+                return self.image_left           
+            elif self.direction > 0:
+                self.walkCount += 0.5
+                return self.image_right
         
-    
-        return self.image
+        return self.image_right
