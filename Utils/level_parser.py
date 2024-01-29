@@ -91,7 +91,7 @@ class Parser:
          
                     #platform = pygame.image.load('Assets/Sprites/Platform/' + self.key[y])
                     #print(platform.wid)
-                    image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Platform/' + self.key[y])), (height / self.line_height + 6, (height / self.line_height + 2)))]
+                    image = [pygame.transform.scale((pygame.image.load('Assets/Sprites/Platform/' + self.key[y])), (int(height / self.line_height + 6), int(height / self.line_height + 2)))]
                     
                     rect = pygame.Rect(self.curr_x, self.curr_y, height / self.line_height + 6, height / self.line_height + 2)
                     platform_type = 1

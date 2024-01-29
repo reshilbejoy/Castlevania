@@ -60,7 +60,7 @@ class Game():
                 
         self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_object,self.remove_object)
         #self._enemies:Enemy = [Ghoul(5, 12, [], pygame.Rect(200, 100, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox)]
-        self._enemies:Enemy = [Skeleton(5, 12, [], pygame.Rect(200, 100, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox)]
+        self._enemies:Enemy = []#[Skeleton(5, 12, [], pygame.Rect(200, 100, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox)]
 
         terrain = p.built
         platforms = [Platform(entry[0], entry[1], entry[2]) for entry in terrain['Platform']]
@@ -238,6 +238,7 @@ class Game():
             self.fade_screen(window)
             self._game_started = False
             self._game_over = True
+            run_game(Game(self.level))
 
     def create_object(self, obj):
         self._all_sprites.append(obj)
@@ -294,7 +295,9 @@ class Game():
             if event.type == pygame.QUIT:
                 self._game_over = True
                 pygame.quit()
-        if not self._player.lifespan():
+        if ((not self._player.lifespan()) or (
+            not BackgroundEngine.get_current_image_frame(self._player.get_hitbox()).colliderect(self._player.get_hitbox())
+        )):
             return True
         return False
     
@@ -313,7 +316,7 @@ def run_game(game: Game):
         game.ending_screen()
     
 if __name__ == "__main__":
-    Castlevania = Game(1)
+    Castlevania = Game(2)
     while not Castlevania._game_started:
         Castlevania.starting_screen()
     Castlevania.controls_screen()
