@@ -289,9 +289,7 @@ class Game():
     
     def handle_keystrokes(self, pressed):
         left = self._player.get_hitbox().left
-        window = BackgroundEngine.get_window()
-        if pressed[pygame.K_s] and not self._player.isJumping:
-            self._player.isCrouched = True
+        window = BackgroundEngine.get_window()  
         if pressed[pygame.K_SPACE] and not self._player.isJumping and not self._player.isFalling and not self._player._hit and not self._player.isCrouched:
             self._player.jump()
         if pressed[pygame.K_d] and (left < background_length) and not self._player._hit and not self._player.isCrouched:

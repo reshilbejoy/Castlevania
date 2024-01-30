@@ -23,33 +23,43 @@ class NumberConversion:
 
     def convert_score(self, score):
         list_ = []
+        i = 0
         for number in score:
-            list_.append([self.dict[number], (len(list_) * 20 + 160, 5)])
+            list_.append([self.dict[number], (len(list_) * 20 + 160 + i * 1, 5)])
+            i += 1
         return list_
 
 
     def convert_time(self, time):
         list_ = []
+        i = 0
         for number in time:
-            list_.append([self.dict[number], (len(list_) * 20 + 450, 5)])
+            list_.append([self.dict[number], (len(list_) * 20 + 460 + i * 1, 5)])
+            i += 1
         return list_
 
     def convert_stage(self, stage):
         list_ = []
+        i = 0
         for number in stage:
-            list_.append([self.dict[number], (len(list_) * 20 + 720, 5)])
+            list_.append([self.dict[number], (len(list_) * 20 + 720 + i * 1, 5)])
+            i += 1
         return list_
 
     def convert_p(self, p):
         list_ = []
+        i = 0
         for number in p:
-            list_.append([self.dict[number], (len(list_) * 20 + 700, 100)])
+            list_.append([self.dict[number], (len(list_) * 20 + 700 + i * 1, 100)])
+            i += 1
         return list_
 
     def convert_heart(self, heart):
         list_ = []
+        i = 0
         for number in heart:
-            list_.append([self.dict[number], (len(list_) * 20 + 700, 50)])
+            list_.append([self.dict[number], (len(list_) * 20 + 670 + i * 1, 72)])
+            i += 1
         return list_
 
     def convert_player_health(self, health):
@@ -65,8 +75,8 @@ class NumberConversion:
     def convert_enemy_health(self, health):
         list_ = []
         for number in range(health):
-            list_.append([self.dict["eh"], (len(list_) * 15 + 160, 100)])
+            list_.append([self.dict["eh"], (len(list_) * 15 + 180, 100)])
         for i in range(15 - health):
-            list_.append([self.dict["emh"], (len(list_) * 15 + 160, 100)])
+            list_.append([self.dict["emh"], (len(list_) * 15 + 180, 100)])
         return list_
 
