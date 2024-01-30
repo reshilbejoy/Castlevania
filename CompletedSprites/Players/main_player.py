@@ -23,12 +23,12 @@ class MainPlayer(Player):
                             pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_walk/5.png'), True, False), (hitbox.width, hitbox.height))] 
         
         self.attackWalkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_attack_walk/1.png'), True, False), (hitbox.width, hitbox.height)),
-                            pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_attack_walk/2.png'), True, False), (hitbox.width, hitbox.height)),
-                            pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_attack_walk/3.png'), True, False), (hitbox.width, hitbox.height))]
+                            pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_attack_walk/2.png'), True, False), (hitbox.width + 20, hitbox.height)),
+                            pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_attack_walk/3.png'), True, False), (hitbox.width + 20, hitbox.height))]
         
         self.attackWalkLeft = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_attack_walk/1.png'),(hitbox.width, hitbox.height)),
-                            pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_attack_walk/2.png'),(hitbox.width, hitbox.height)),
-                            pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_attack_walk/3.png'),(hitbox.width, hitbox.height))]
+                            pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_attack_walk/2.png'),(hitbox.width + 20, hitbox.height)),
+                            pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_attack_walk/3.png'),(hitbox.width + 20, hitbox.height))]
         
         self.attackJumpRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_attack_jump/1.png'), True, False), (hitbox.width, hitbox.height)),
                             pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Player_attack_jump/2.png'), True, False), (hitbox.width, hitbox.height)),
@@ -83,7 +83,7 @@ class MainPlayer(Player):
         
         if self.cur_weapon == Item.DAGGER:
             if not self.isAttacking:
-                self.create_obj(BasicAttack(pygame.Rect(0, 0, 200, 100), self.get_pose_supplier(),TargetType.ENEMY,self.remove_obj))
+                self.create_obj(BasicAttack(pygame.Rect(0, 0, 160, 100), self.get_pose_supplier(),TargetType.ENEMY,self.remove_obj))
                 self.last_attack_timestep = BackgroundEngine.get_current_time()
                 self.last_attack_animation_timestep = BackgroundEngine.get_current_time()
 

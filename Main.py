@@ -1,5 +1,4 @@
-from typing import Dict, List
-from typing_extensions import TypedDict
+from typing import Dict, List, TypedDict
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
 
@@ -7,6 +6,7 @@ from CompletedSprites.Interactables.BasicAttack import BasicAttack
 from CompletedSprites.Interactables.HarmingHitbox import HarmingHitbox
 from CompletedSprites.Interactables.testPotion import testPotion
 from CompletedSprites.Interactables.CandyCane import CandyCane
+from CompletedSprites.Interactables.Candle import Candle
 from Abstract.Enemy import Enemy
 from Utils.signals import TargetType
 from background_engine import BackgroundEngine
@@ -24,11 +24,11 @@ from Constants.window_constants import *
 from CompletedSprites.UI.static import Static_UI
 import time
 from CompletedSprites.Doors.Door import Door
-from CompletedSprites.Candle.Candle import Candle
+
 
 
 DynamicSpriteTypes = {MainPlayer,Ghoul,Skeleton}
-InteractableSpriteTypes = {testPotion,BasicAttack,HarmingHitbox,CandyCane}
+InteractableSpriteTypes = {testPotion,BasicAttack,HarmingHitbox,CandyCane,Candle}
 PlatformSpriteTypes = {Platform}
 DoorSpriteTypes = {Door}
 CandleSpriteTypes = {Candle}
@@ -49,7 +49,7 @@ class Game():
         
         
         self._sprite_dict: Dict[str,SortedSprites] = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle": []},
-                             "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle":[]}}
+                             "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle" : []}}
         self._game_over = False
         self._game_started = False
         self.level = level
@@ -62,15 +62,14 @@ class Game():
                 
         self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_object,self.remove_object)
         #self._enemies:Enemy = [Ghoul(5, 12, [], pygame.Rect(200, 100, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox)]
-        self._enemies:Enemy = [Skeleton(5, 12, [], pygame.Rect(1000, 100, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox)]
+        #self._enemies:Enemy = [Skeleton(5, 12, [], pygame.Rect(200, 100, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox)]
 
         terrain = p.built
         platforms = [Platform(entry[0], entry[1], entry[2]) for entry in terrain['Platform']]
         self.doors = [Door(entry[0], entry[1]) for entry in terrain['Door']]
-        self.candles = [Candle(entry[0], entry[1]) for entry in terrain["Candle"]]
-        all_interactables: List[Interactable] = []
+        all_interactables: List[Interactable] = [Candle(entry[0], entry[1], self.remove_object) for entry in terrain['Candle']]
         self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]
-        self._all_sprites: List[Sprite] = self.doors + platforms + all_interactables + self._enemies + self.candles + [self._player]
+        self._all_sprites: List[Sprite] = [self._player] + self.doors + platforms + all_interactables# + self._enemies
 
         self._is_paused = False
         self._font = pygame.font.SysFont("couriernew", 50)
@@ -189,13 +188,13 @@ class Game():
                             if type(i) in DynamicSpriteTypes:
                                 self._sprite_dict["Active"]["Dynamic"].append(i)
                             elif type(i) in InteractableSpriteTypes:
+                                if type(i) is Candle:
+                                    self._sprite_dict["Active"]["Candle"].append(i)
                                 self._sprite_dict["Active"]["Interactable"].append(i)
                             elif type(i) in PlatformSpriteTypes:
                                 self._sprite_dict["Active"]["Platform"].append(i)
                             elif type(i) in DoorSpriteTypes:
                                 self._sprite_dict["Active"]["Door"].append(i)
-                            elif type(i) in CandleSpriteTypes:
-                                self._sprite_dict["Active"]["Candle"].append(i)
 
                             surface = i.draw(rect, surface)
                     else:
@@ -203,12 +202,20 @@ class Game():
                             self._sprite_dict["Inactive"]["Dynamic"].append(i)
                         elif type(i) in InteractableSpriteTypes:
                             self._sprite_dict["Inactive"]["Interactable"].append(i)
+                            if type(i) is Candle:
+                                self._sprite_dict["Active"]["Candle"].append(i)
                         elif type(i) in PlatformSpriteTypes:
                             self._sprite_dict["Inactive"]["Platform"].append(i)
                         elif type(i) in DoorSpriteTypes:
                             self._sprite_dict["Inactive"]["Door"].append(i)
-                        elif type(i) in CandleSpriteTypes:
-                                self._sprite_dict["Active"]["Candle"].append(i)
+
+                if self._player in self._sprite_dict["Active"]["Dynamic"]:
+                    surface = self._player.draw(rect, surface)
+                
+                for i in self._sprite_dict["Active"]["Candle"]:
+                    if i.check_hit():
+                        surface = i.hit_animation(rect, surface)
+
 
                 window.fill((0,0,0))
                 window.blit(surface, (0, 150))
@@ -226,8 +233,15 @@ class Game():
                     for j in i:
                         window.blit(j[0], j[1])
 
-                self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle":[]},
-                        "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle":[]}}
+                self.handle_keystrokes(pressed)
+                for i in self._sprite_dict["Active"]["Dynamic"]:
+                    i.apply_force(self._sprite_dict["Active"]["Platform"])
+                self.handle_collisions()
+
+                window.blit(surface, (0, 150))
+                self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle" : []},
+                        "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle": []}}
+
                 BackgroundEngine.tick_timer()
                 
 
@@ -252,9 +266,14 @@ class Game():
         for dynSprite in self._sprite_dict["Active"]["Dynamic"]:
             for interactable in self._sprite_dict['Active']["Interactable"]:
                 if interactable._hitbox.colliderect(dynSprite.return_hitbox()):
-                    print('ac')
                     dynSprite.handle_damage_interaction(interactable.get_damage_message())
                     dynSprite.handle_inventory_interaction(interactable.get_inventory_message())
+        for candle in self._sprite_dict["Active"]["Candle"]:
+            for interactable in self._sprite_dict['Active']["Interactable"]:
+                if interactable._hitbox.colliderect(candle.return_hitbox()):
+                    candle.handle_damage_interaction(interactable.get_damage_message())
+                    candle.handle_inventory_interaction(interactable.get_inventory_message())
+
 
         #handle collisions between Interactable objects and active dynamic sprites TODO
         pass

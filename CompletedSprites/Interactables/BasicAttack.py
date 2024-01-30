@@ -15,7 +15,9 @@ class BasicAttack(Interactable):
         self.pose_supplier:Callable = pose_supplier
         self.images_right = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Interactables/Whip_attack/1.png'), False, False), (160, hitbox.height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Interactables/Whip_attack/2.png'), True, False), (200, hitbox.height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Interactables/Whip_attack/3.png'), True, False), (160, hitbox.height))] 
         self.images_left = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Interactables/Whip_attack/1.png'), False, False), (160, hitbox.height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Interactables/Whip_attack/2.png'), False, False), (200, hitbox.height)), pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Interactables/Whip_attack/3.png'), False, False), (160, hitbox.height))] 
+        self.images_hit = [pygame.transform.scale(pygame.image.load('Assets/Interactables/Whip_attack/Whip_hit/1.png'), (40, 40))]
         self.creation_time:int = BackgroundEngine.get_current_time()
+
 
     def return_current_image(self) -> pygame.Surface:
         dynSpritePose:[Rect,int] = self.pose_supplier()
@@ -38,8 +40,10 @@ class BasicAttack(Interactable):
                 return self.images_right[2]
             else:
                 return self.images_left[2]
+
     
     def get_damage_message(self):
+        self.hit = True
         return DamageMessage(self.damage,self.damage_target)
     
     def get_inventory_message(self):
@@ -62,10 +66,11 @@ class BasicAttack(Interactable):
                 new_hitbox.top += 3
                 new_hitbox.left -= 143
             elif(BackgroundEngine.get_current_time() - self.creation_time < 0.6*(BasicAttack.get_attack_span())):
-                new_hitbox.left -= 87
+                new_hitbox.left -= 67
                 new_hitbox.top -= 4
             else:
-                new_hitbox.top -= 1
+                new_hitbox.left += 20
+                new_hitbox.top += 2
         # Player facing left
         else:
             new_hitbox.midright = dynSpritePose[0].midleft
@@ -77,6 +82,6 @@ class BasicAttack(Interactable):
                 new_hitbox.top -= 4
             else:
                 new_hitbox.left += 40
-                new_hitbox.top -= 0
+                new_hitbox.top += 2
         
         self._hitbox = new_hitbox
