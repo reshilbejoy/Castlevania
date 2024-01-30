@@ -11,7 +11,7 @@ from Utils.signals import DamageMessage, InventoryMessage, Item, TargetType
 from typing import Callable
 
 class Candle(Interactable):
-    def __init__(self, images: List[Surface], hitbox: Rect, remove_obj):
+    def __init__(self, images: List[Surface], hitbox: Rect, remove_obj, create_obj):
         super().__init__(images, hitbox, 0, remove_obj)
         self.index = 0
         self._health = 1
@@ -25,6 +25,7 @@ class Candle(Interactable):
                        pygame.transform.scale(pygame.image.load('Assets/Enemies/Death/3.png'), (20, 30))]
         self._dead = False
         self.timestamp = 0
+        self.create_obj = create_obj
 
     
     def update(self):
@@ -80,6 +81,7 @@ class Candle(Interactable):
         if self.life_span():
             self._movement()
         else:
+            self.create_obj()
             self.remove_obj(self)
 
     def _movement(self):

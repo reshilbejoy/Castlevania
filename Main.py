@@ -66,7 +66,7 @@ class Game():
         terrain = p.built
         platforms = [Platform(entry[0], entry[1], entry[2]) for entry in terrain['Platform']]
         self.doors = [Door(entry[0], entry[1]) for entry in terrain['Door']]
-        all_interactables: List[Interactable] = [Candle(entry[0], entry[1], self.remove_object) for entry in terrain['Candle']]
+        all_interactables: List[Interactable] = [Candle(entry[0], entry[1], self.remove_object, self.create_object) for entry in terrain['Candle']]
         self._enemies = [Ghoul(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox) for entry in terrain['Ghoul']]
         self._enemies += [Skeleton(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox) for entry in terrain['Ghost']]
         self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]
