@@ -2,7 +2,7 @@ import pygame
 
 class Timer:
      def __init__(self) -> None:
-          self.time = 300
+          self.time = 75
           self.running = False
 
      def start(self):

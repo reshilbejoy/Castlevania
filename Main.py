@@ -82,6 +82,8 @@ class Game():
         self.starting_screen_position = height + score_box_height + 50
 
         self.timer = Timer()
+        if self.level == 3:
+            self.timer.time = 100
     
     def fade_screen(self, window):
         fade_out = pygame.Surface((length, height + score_box_height))
@@ -347,7 +349,7 @@ def run_game(game: Game):
         game.ending_screen()
     
 if __name__ == "__main__":
-    Castlevania = Game(1)
+    Castlevania = Game(3)
     while not Castlevania._game_started:
         Castlevania.starting_screen()
     Castlevania.controls_screen()
