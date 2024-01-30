@@ -51,6 +51,9 @@ class DynamicSprite(Sprite,ABC):
 
     def get_health(self):
         return self._health
+    
+    def alive(self):
+        return self._health > 0
 
     def apply_force(self,all_platforms:List[Platform])->None:
         #Use all platforms list to move the sprite hitbox according to x and y forces TODO
@@ -154,7 +157,7 @@ class DynamicSprite(Sprite,ABC):
         self._hitbox.top += self.current_velocity
 
     def get_pose_supplier(self):
-        return lambda : (self.get_hitbox(),self.direction)
+        return lambda : (self.get_hitbox(),self.direction, self.alive())
         
 
 

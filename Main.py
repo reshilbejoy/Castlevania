@@ -69,7 +69,7 @@ class Game():
         self.candles = [Candle(entry[0], entry[1]) for entry in terrain["Candle"]]
         all_interactables: List[Interactable] = []
         self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]
-        self._all_sprites: List[Sprite] = self.doors + [self._player] + platforms + all_interactables + self._enemies + self.candles
+        self._all_sprites: List[Sprite] = self.doors + platforms + all_interactables + self._enemies + self.candles + [self._player]
 
         self._is_paused = False
         self._font = pygame.font.SysFont("couriernew", 50)
@@ -211,6 +211,11 @@ class Game():
                                 self._sprite_dict["Active"]["Candle"].append(i)
 
                 window.fill((0,0,0))
+                window.blit(surface, (0, 150))
+                self.handle_keystrokes(pressed)
+                for i in self._sprite_dict["Active"]["Dynamic"]:
+                    i.apply_force(self._sprite_dict["Active"]["Platform"])
+                self.handle_collisions()
                 self.ui.player_health = self._player.get_health()
                 self.ui.change_stage(self.level)
                 self.ui.change_time(self.timer.get_time(BackgroundEngine.get_current_time()//1000))
@@ -221,12 +226,10 @@ class Game():
                     for j in i:
                         window.blit(j[0], j[1])
 
-                self.handle_keystrokes(pressed)
-                for i in self._sprite_dict["Active"]["Dynamic"]:
-                    i.apply_force(self._sprite_dict["Active"]["Platform"])
-                self.handle_collisions()
+                
+                
 
-                window.blit(surface, (0, 150))
+                
                 self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle":[]},
                         "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle":[]}}
 
@@ -236,6 +239,8 @@ class Game():
             else:
                 pass
         else:
+            BackgroundEngine.tick_timer()
+            time.sleep(0.5)
             self.fade_screen(window)
             self._game_started = False
             self._game_over = True
