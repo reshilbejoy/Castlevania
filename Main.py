@@ -32,6 +32,7 @@ InteractableSpriteTypes = {testPotion,BasicAttack,HarmingHitbox,CandyCane}
 PlatformSpriteTypes = {Platform}
 DoorSpriteTypes = {Door}
 CandleSpriteTypes = {Candle}
+max_level = 3 # set to the highest dungeon level
 
 
 class SortedSprites(TypedDict):
@@ -76,7 +77,7 @@ class Game():
         self._intro_font = pygame.font.Font('Assets/Background/controls.ttf', (9 + int(size / 8)))
         self._controls_font = pygame.font.Font('Assets/Background/controls.ttf', 18)
         self._title_font = pygame.font.Font('Assets/Background/controls.ttf', 20)
-        fonts = pygame.font.get_fonts()
+        self._victory_font = pygame.font.Font('Assets/Background/controls.ttf', 30)
         self.current_map = p.get_current_map()
         self.starting_screen_position = height + score_box_height + 50
 
@@ -157,16 +158,15 @@ class Game():
     def ending_screen(self):
         window = BackgroundEngine.get_window()
         window.fill((0, 0, 0))
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_1:
-                    self._game_started = True
-                    self._game_over = False
-                    Castlevania.__init__()
-                    run_game()
-        BackgroundEngine.tick_timer()
+        window.blit(pygame.transform.scale(pygame.image.load('Assets/Background/Victory_screen.PNG'), (length, height + score_box_height)), (0, 0))
+        text = self._victory_font.render("You Win.", 1, (255, 255, 255))
+        rect = text.get_rect(center=(length * 0.3, height / 5))
+        window.blit(text, rect)
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+            BackgroundEngine.tick_timer()
                     
 
 
@@ -226,14 +226,10 @@ class Game():
                     for j in i:
                         window.blit(j[0], j[1])
 
-                
-                
-
-                
                 self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle":[]},
                         "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle":[]}}
-
                 BackgroundEngine.tick_timer()
+                
 
             #would be nice to add a pause icon sprite to the screen and destroy it upon unpause but unneeded
             else:
@@ -283,7 +279,10 @@ class Game():
         if pressed[pygame.K_q]:
             if (self._player.inside_door(self.doors[0])): 
                 self.fade_screen(window)
-                run_game(Game(self.level + 1))
+                if (self.level == max_level):
+                    self.ending_screen()
+                else:
+                    run_game(Game(self.level + 1))
                 
 
             
@@ -302,7 +301,7 @@ class Game():
                 self._game_over = True
                 pygame.quit()
         hitbox = self._player.get_hitbox()
-        if ((not self._player.lifespan()) or (hitbox.bottom > height)):
+        if ((not self._player.lifespan()) or (hitbox.bottom > height)) or self.timer.get_time(BackgroundEngine.get_current_time() // 1000) < 1:
             return True
         return False
     
