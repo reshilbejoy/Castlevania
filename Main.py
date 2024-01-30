@@ -212,6 +212,7 @@ class Game():
 
                 if self._player in self._sprite_dict["Active"]["Dynamic"]:
                     surface = self._player.draw(rect, surface)
+                    self._player.isCrouched = False
                 
                 for i in self._sprite_dict["Active"]["Candle"]:
                     if i.check_hit():
@@ -289,19 +290,19 @@ class Game():
         window = BackgroundEngine.get_window()
         if pressed[pygame.K_s] and not self._player.isJumping:
             self._player.isCrouched = True
-        if pressed[pygame.K_SPACE] and not self._player.isJumping and not self._player.isFalling:
+        if pressed[pygame.K_SPACE] and not self._player.isJumping and not self._player.isFalling and not self._player._hit and not self._player.isCrouched:
             self._player.jump()
-        if pressed[pygame.K_d] and (left < background_length):
+        if pressed[pygame.K_d] and (left < background_length) and not self._player._hit and not self._player.isCrouched:
             self._player.change_force(0.4, 0)
-        if pressed[pygame.K_a] and (left > 0):
+        if pressed[pygame.K_a] and (left > 0) and not self._player._hit and not self._player.isCrouched:
             self._player.change_force(-0.4, 0)
-        if not (pressed[pygame.K_d] or pressed[pygame.K_a]):
+        if not (pressed[pygame.K_d] or pressed[pygame.K_a]) and not self._player.isCrouched:
             self._player.change_force(0, 0)
-        if pressed[pygame.K_k]:
+        if pressed[pygame.K_k] and not self._player._hit and not self._player.isCrouched:
             self._player.attack()
         if pressed[pygame.K_w]:
             pass
-        if pressed[pygame.K_q]:
+        if pressed[pygame.K_q] and not self._player._hit and not self._player.isCrouched:
             if (self._player.inside_door(self.doors[0])): 
                 self.fade_screen(window)
                 if (self.level == max_level):

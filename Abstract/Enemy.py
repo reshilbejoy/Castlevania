@@ -46,7 +46,7 @@ class Enemy(DynamicSprite):
     def check_hit(self):
         if self._hit:
             if BackgroundEngine.get_current_time()-self._hit_time >= 500:
-                self.hit = False
+                self._hit = False
         return self._hit
 
     def hit_animation(self, rect, surface):
