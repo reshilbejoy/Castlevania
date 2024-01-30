@@ -17,10 +17,10 @@ class Skeleton(Enemy):
 
         super().__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health, horizontal_force,create_interactable,remove_interctable) 
         self.alignment = 0
-        self.walkLeft = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Ghoul_walk/1.png'),(hitbox.width, hitbox.height)),
-                            pygame.transform.scale(pygame.image.load('Assets/Sprites/Ghoul_walk/2.png'),(hitbox.width, hitbox.height)),]
-        self.walkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Ghoul_walk/1.png'),True,False),(hitbox.width, hitbox.height)),
-                        pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Ghoul_walk/2.png'),True,False),(hitbox.width, hitbox.height)),]
+        self.walkLeft = [pygame.transform.scale(pygame.image.load('Assets/Enemies/Ghost_walk/1.png'),(hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.image.load('Assets/Enemies/Ghost_walk/2.png'),(hitbox.width, hitbox.height)),]
+        self.walkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Enemies/Ghost_walk/1.png'),True,False),(hitbox.width, hitbox.height)),
+                        pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Enemies/Ghost_walk/2.png'),True,False),(hitbox.width, hitbox.height)),]
         self.get_player_pose = get_player_pose
         self.invincible = False
         self.invince_time_ms = 200
@@ -74,13 +74,13 @@ class Skeleton(Enemy):
         if self.sp == 0:
             self.change_force(-0.25, 0)
             if self._hitbox.left < 100: 
-                self.create_obj(CandyCane (pygame.Rect(50, 200, 100, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,-1))
+                self.create_obj(CandyCane (pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,-1))
 
                 self.sp = 1  
         elif self.sp == 1:
             
             self.change_force(0.25, 0)
             if self._hitbox.right > 500: 
-                self.create_obj(CandyCane (pygame.Rect(50, 200, 100, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,1))
+                self.create_obj(CandyCane (pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,1))
 
                 self.sp = 0 

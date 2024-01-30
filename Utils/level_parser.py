@@ -19,7 +19,8 @@ class Parser:
             'Platform': [],
             'Candle': [],
             'Door': [],
-            'Ghoul': []
+            'Ghoul': [],
+            'Ghost': []
         }
         
     
@@ -124,7 +125,14 @@ class Parser:
                     rect = pygame.Rect(self.curr_x, self.curr_y, 50, 80)
                     curr_list.append(rect)
                     self.built['Ghoul'].append(curr_list)
-                    print("G")
+
+
+                if y == "S":
+
+                    rect = pygame.Rect(self.curr_x, self.curr_y, 50, 50)
+                    curr_list.append(rect)
+                    self.built['Ghost'].append(curr_list)
+  
 
 
                 
