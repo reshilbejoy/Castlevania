@@ -15,6 +15,7 @@ class Enemy(DynamicSprite):
                        pygame.transform.scale(pygame.image.load('Assets/Enemies/Death/3.png'), (20, 30))]
         self._dead = False
         self.timestamp = 0
+        self.got_score = False
         self.current_time = BackgroundEngine.get_current_time()
 
         super().__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health,horizontal_force,create_interactable,remove_obj)
@@ -56,4 +57,5 @@ class Enemy(DynamicSprite):
         return surface
 
     def get_score(self):
+        self.got_score = True
         return self._score

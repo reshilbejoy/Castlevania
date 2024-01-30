@@ -246,6 +246,8 @@ class Game():
                     i.apply_force(self._sprite_dict["Active"]["Platform"])
                 self.handle_collisions()
 
+                if self._player._health < 3:
+                    self.tintDamage(surface, 0.3)
                 window.blit(surface, (0, 150))
                 self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle" : []},
                         "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle": []}}
@@ -270,6 +272,10 @@ class Game():
     def remove_object(self, obj):
         self._all_sprites.remove(obj)
 
+    def tintDamage(self,surface, scale):
+        GB = min(255, max(0, round(255 * (1-scale))))
+        surface.fill((255, GB, GB), special_flags = pygame.BLEND_MULT)
+
     def handle_collisions(self):
         for dynSprite in self._sprite_dict["Active"]["Dynamic"]:
             for interactable in self._sprite_dict['Active']["Interactable"]:
@@ -277,7 +283,7 @@ class Game():
                     dynSprite.handle_damage_interaction(interactable.get_damage_message())
                     dynSprite.handle_inventory_interaction(interactable.get_inventory_message())
                     if type(interactable) is BasicAttack and (type(dynSprite) is Ghoul or type(dynSprite) is Skeleton):
-                        if dynSprite.get_health() <= 0:
+                        if dynSprite.get_health() <= 0 and not dynSprite.got_score:
                             self.ui.change_score(dynSprite.get_score())
         for candle in self._sprite_dict["Active"]["Candle"]:
             for interactable in self._sprite_dict['Active']["Interactable"]:

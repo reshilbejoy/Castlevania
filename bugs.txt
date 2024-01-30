@@ -1,11 +1,13 @@
 Things to fix
  ⁃ Jumping should be continuous                    - DONE
- ⁃ Fix the door 
- ⁃ Weird whip overlay
- ⁃ Adjust the Stats screen - locations
- ⁃ Adjust speed + hit boxes 
- ⁃ Add diff orientation for crouch and hit
- ⁃ Add score for enemies 
+ ⁃ Fix the door                                    - DONE
+ ⁃ Weird whip overlay                               - IP?
+ ⁃ Adjust the Stats screen - locations              - IP
+ ⁃ Adjust speed + hit boxes                         - IP
+ ⁃ Add diff orientation for crouch and hit          - DONE
+ ⁃ Add score for enemies                            - IP
  ⁃ Crouch issues                                   - DONE
- ⁃ Adding in score, more timer, more heart spawn
+ ⁃ Adding in score, more timer, more heart spawn    -  IP
  - Skeleton doesn’t spawn throwable                - DONE
+ - BOSS                                             - IP
+ 

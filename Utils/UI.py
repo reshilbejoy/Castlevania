@@ -1,5 +1,7 @@
 import pygame
 from Utils.number_conversion import NumberConversion
+from pygame import Surface,Rect
+from enum import Enum
 
 
 class UI:
@@ -39,6 +41,7 @@ class UI:
                         [box_img, box_hitbox]]
 
         self.score = "000000"
+        self.score_num = 0
         self.time = "0000"
         self.stage = "00"
         self.heart = "00"
@@ -47,8 +50,8 @@ class UI:
         self.enemy_health = 16
 
     def change_score(self, change):
-        self.score = str(int(self.score) + change)
-        self.score += "0" * (6 - len(self.score)) + self.score
+        self.score_num = self.score_num + change
+        self.score = "0" * (6 - len(str(self.score_num))) + str(self.score_num)
 
     def change_time(self, change):
         self.time = str(change)
