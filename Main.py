@@ -61,7 +61,7 @@ class Game():
                 
         self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_object,self.remove_object)
         #self._enemies:Enemy = [Ghoul(5, 12, [], pygame.Rect(200, 100, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox)]
-        self._enemies:Enemy = [Skeleton(5, 12, [], pygame.Rect(200, 100, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox)]
+        self._enemies:Enemy = [Skeleton(5, 12, [], pygame.Rect(1000, 100, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox)]
 
         terrain = p.built
         platforms = [Platform(entry[0], entry[1], entry[2]) for entry in terrain['Platform']]
@@ -162,7 +162,7 @@ class Game():
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
-                    self._game_started = Truek
+                    self._game_started = True
                     self._game_over = False
                     Castlevania.__init__()
                     run_game()
@@ -308,6 +308,7 @@ class Game():
 
 
 def run_game(game: Game):
+    game.init_sprites()
     game.timer.start()
     while not game._game_over:
         game.game_loop()
@@ -316,9 +317,8 @@ def run_game(game: Game):
         game.ending_screen()
     
 if __name__ == "__main__":
-    Castlevania = Game(3)
+    Castlevania = Game(1)
     while not Castlevania._game_started:
         Castlevania.starting_screen()
     Castlevania.controls_screen()
-    Castlevania.init_sprites()
     run_game(Castlevania)
