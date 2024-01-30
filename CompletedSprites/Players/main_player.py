@@ -146,16 +146,16 @@ class MainPlayer(Player):
              self.walkCount = 0  
         if self.isMoving:  
             if self.direction < 0:  
-                self.walkCount += 0.5
+                self.walkCount += 0.1
                 return self.walkLeft[int(self.walkCount//4) - 1]                
             elif self.direction > 0:
-                self.walkCount += 0.5
+                self.walkCount += 0.1
                 return self.walkRight[int(self.walkCount//4) - 1]
         else:
             if self.direction < 0:  
                 return self.image_left           
             elif self.direction > 0:
-                self.walkCount += 0.5
+                self.walkCount += 0.1
                 return self.image_right
         
         return self.image_right

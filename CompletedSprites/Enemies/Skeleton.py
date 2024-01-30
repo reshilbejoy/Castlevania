@@ -36,11 +36,20 @@ class Skeleton(Enemy):
           self.create_obj(HarmingHitbox(pygame.Rect(50, 200, 100, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj))
 
     def return_current_image(self) -> pygame.Surface:
-        self.walkIndex+=1
-        if self.sp == 1:
-            return self.walkRight[self.walkIndex % 2]
-        elif self.sp == 0:
-            return self.walkLeft[self.walkIndex % 2]
+        if self._health > 0:
+            self.walkIndex+=1
+            if self.sp == 1:
+                return self.walkRight[self.walkIndex % 2]
+            elif self.sp == 0:
+                return self.walkLeft[self.walkIndex % 2]
+        if BackgroundEngine.get_current_time() - self.timestamp <= 300:
+            return self._death[0]
+        elif BackgroundEngine.get_current_time() - self.timestamp <= 900:
+            return self._death[1]
+        else:
+            if BackgroundEngine.get_current_time() - self.timestamp > 1200:
+                self._dead = True
+            return self._death[2]
         
     def handle_damage_interaction(self,interaction_msg: DamageMessage) -> None:
             if interaction_msg.target == (TargetType.ENEMY or TargetType.ALL_SPRITES):
@@ -49,8 +58,13 @@ class Skeleton(Enemy):
                         self.invincible = True
                         self.last_invince_timestep = BackgroundEngine.get_current_time()
                         self._health -= interaction_msg.damage
+                        self._hit = True
                 else:
                     self._health -=interaction_msg.damage
+                    self._hit = True
+                self._hit_time = BackgroundEngine.get_current_time()
+            if self._health <= 0 and self.timestamp == 0:
+                self.timestamp = BackgroundEngine.get_current_time()
 
     def handle_inventory_interaction(self,interaction_msg: InventoryMessage) -> None:
         pass

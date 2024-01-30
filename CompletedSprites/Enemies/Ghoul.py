@@ -6,6 +6,7 @@ import pygame
 from Abstract.Interaction import Interactable
 from CompletedSprites.Interactables.HarmingHitbox import HarmingHitbox
 from background_engine import BackgroundEngine
+from CompletedSprites.Platforms.Platform import Platform
 
 
 from Utils.signals import DamageMessage, InventoryMessage, TargetType
@@ -15,10 +16,10 @@ class Ghoul(Enemy):
 
         super().__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health, horizontal_force,create_interactable,remove_interctable) 
         self.alignment = 0
-        self.walkLeft = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Ghoul_walk/1.png'),(hitbox.width, hitbox.height)),
-                            pygame.transform.scale(pygame.image.load('Assets/Sprites/Ghoul_walk/2.png'),(hitbox.width, hitbox.height)),]
-        self.walkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Ghoul_walk/1.png'),True,False),(hitbox.width, hitbox.height)),
-                        pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Sprites/Ghoul_walk/2.png'),True,False),(hitbox.width, hitbox.height)),]
+        self.walkLeft = [pygame.transform.scale(pygame.image.load('Assets/Enemies/Ghoul_walk/1.png'),(hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.image.load('Assets/Enemies/Ghoul_walk/2.png'),(hitbox.width, hitbox.height)),]
+        self.walkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Enemies/Ghoul_walk/1.png'),True,False),(hitbox.width, hitbox.height)),
+                        pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Enemies/Ghoul_walk/2.png'),True,False),(hitbox.width, hitbox.height)),]
         self.get_player_pose = get_player_pose
         self.invincible = False
         self.invince_time_ms = 200
@@ -34,11 +35,20 @@ class Ghoul(Enemy):
         pass
 
     def return_current_image(self) -> pygame.Surface:
-        self.walkIndex+=0.05
-        if self.sp == 1:
-            return self.walkRight[int(self.walkIndex) % 2]
-        elif self.sp == 0:
-            return self.walkLeft[int(self.walkIndex) % 2]
+        if self._health > 0:
+            self.walkIndex+=0.05
+            if self.sp == 1:
+                return self.walkRight[int(self.walkIndex) % 2]
+            elif self.sp == 0:
+                return self.walkLeft[int(self.walkIndex) % 2]
+        if BackgroundEngine.get_current_time() - self.timestamp <= 300:
+            return self._death[0]
+        elif BackgroundEngine.get_current_time() - self.timestamp <= 900:
+            return self._death[1]
+        else:
+            if BackgroundEngine.get_current_time() - self.timestamp > 1200:
+                self._dead = True
+            return self._death[2]
         
     def handle_damage_interaction(self,interaction_msg: DamageMessage) -> None:
             if interaction_msg.target == (TargetType.ENEMY or TargetType.ALL_SPRITES):
@@ -47,8 +57,13 @@ class Ghoul(Enemy):
                         self.invincible = True
                         self.last_invince_timestep = BackgroundEngine.get_current_time()
                         self._health -= interaction_msg.damage
+                        self._hit = True
                 else:
                     self._health -=interaction_msg.damage
+                    self._hit = True
+                self._hit_time = BackgroundEngine.get_current_time()
+            if self._health <= 0 and self.timestamp == 0:
+                self.timestamp = BackgroundEngine.get_current_time()
 
     def handle_inventory_interaction(self,interaction_msg: InventoryMessage) -> None:
         pass

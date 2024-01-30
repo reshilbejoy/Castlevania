@@ -23,7 +23,6 @@ class HarmingHitbox(Interactable):
         return self.image
     
     def get_damage_message(self):
-        print("damage request!")
         return DamageMessage(self.damage,self.damage_target)
     
     def get_inventory_message(self):

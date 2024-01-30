@@ -18,7 +18,8 @@ class Parser:
         self.built = {
             'Platform': [],
             'Candle': [],
-            'Door': []
+            'Door': [],
+            'Ghoul': []
         }
         
     
@@ -31,10 +32,8 @@ class Parser:
     def load_tilemap(self):
         level_path = os.path.join(self.path, '..', 'Levels', 'dungeon_' + str(self.current_map) + '.level')
 
-        print(level_path)
         with open(level_path, 'r') as file:
             content = file.read()
-            print(content)
 
         sections = content.split('Key:')
         if len(sections) < 2:
@@ -57,7 +56,6 @@ class Parser:
                 if value and value[0] == '{' and value[-1] == '}':
                     value = value[1:-1].strip() 
                 self.key[key] = value
-        print("dict " + str(self.key))
 
     def parse_meta_data(self, meta_section):
         # Implement parsing of meta data if needed
@@ -67,10 +65,8 @@ class Parser:
     def parse_map_section(self, input_str):
    
         lines = input_str.strip().split('\n')
-        print(lines)
 
         lines = [line for line in lines if not line.startswith('{') and not line.startswith('}')]
-        print(lines)
         max_length = max(len(line) for line in lines)
         self.line_height = len(lines)
 
@@ -83,7 +79,6 @@ class Parser:
 
 
     def build_level(self):
-        print(self.map_data)
         for x in self.map_data:
             for y in x:
                 curr_list = [] 
@@ -123,13 +118,21 @@ class Parser:
                     curr_list.append(image)
                     curr_list.append(rect)
                     self.built['Door'].append(curr_list)
+
+                if y == 'G':
+
+                    rect = pygame.Rect(self.curr_x, self.curr_y, 50, 80)
+                    curr_list.append(rect)
+                    self.built['Ghoul'].append(curr_list)
+                    print("G")
+
+
                 
                 curr_list = []
                 self.curr_x += height / self.line_height + 6
 
             self.curr_y += height / (self.line_height) + 1
             self.curr_x=0
-        print(self.built)
         
 
     def test_map(self):
