@@ -28,6 +28,7 @@ class Skeleton(Enemy):
         self.movement_time_ms = 2000
         self.sp = 0
         self.walkIndex = 0
+        self._score = 500
         
 
     def init_obj(self):

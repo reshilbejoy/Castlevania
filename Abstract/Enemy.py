@@ -54,3 +54,6 @@ class Enemy(DynamicSprite):
         hitbox = self.get_hitbox()
         surface.blit(self.images_hit[0], (hitbox.left - rect.left - 17, hitbox.top - rect.top - 7))
         return surface
+
+    def get_score(self):
+        return self._score

@@ -1,5 +1,4 @@
-from typing import Dict, List
-from typing_extensions import TypedDict
+from typing import Dict, List, TypedDict
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
 
@@ -277,6 +276,9 @@ class Game():
                 if interactable._hitbox.colliderect(dynSprite.return_hitbox()):
                     dynSprite.handle_damage_interaction(interactable.get_damage_message())
                     dynSprite.handle_inventory_interaction(interactable.get_inventory_message())
+                    if type(interactable) is BasicAttack and (type(dynSprite) is Ghoul or type(dynSprite) is Skeleton):
+                        if dynSprite.get_health() <= 0:
+                            self.ui.change_score(dynSprite.get_score())
         for candle in self._sprite_dict["Active"]["Candle"]:
             for interactable in self._sprite_dict['Active']["Interactable"]:
                 if interactable._hitbox.colliderect(candle.return_hitbox()):
@@ -347,7 +349,7 @@ def run_game(game: Game):
         game.ending_screen()
     
 if __name__ == "__main__":
-    Castlevania = Game(3)
+    Castlevania = Game(1)
     while not Castlevania._game_started:
         Castlevania.starting_screen()
     Castlevania.controls_screen()

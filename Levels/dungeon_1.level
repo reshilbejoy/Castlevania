@@ -18,10 +18,10 @@ Meta:
 Map:
 {
                       
-                 GO                  o             O                           o
-            o   xxx     xxx       o  xxx      o    x           o     O       
-              xx          o   G  xx             xx     xx          xx  xx         o       D                                     
-    o   OG xx      O        xx     O     G xxx         o   G   o       G   o   xxxxxO
+                 GO     G             o             O                           o
+            o   xxx     xxx       o  xxx      o  Gxxx           o   G  GO       
+            xx          o   G  xx             xx     xx          xx  xx         Go       D                                     
+    o   OG xx      O        xx     O     G xxx         o   G   o       G   o   xxxxxOG
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 }

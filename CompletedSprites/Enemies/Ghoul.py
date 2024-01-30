@@ -27,6 +27,7 @@ class Ghoul(Enemy):
         self.movement_time_ms = 1000
         self.sp = 0
         self.walkIndex = 0
+        self._score = 200
 
     def init_obj(self):
         self.create_obj(HarmingHitbox(pygame.Rect(50, 200, 100, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj))

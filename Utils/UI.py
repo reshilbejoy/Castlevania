@@ -47,7 +47,8 @@ class UI:
         self.enemy_health = 16
 
     def change_score(self, change):
-        pass
+        self.score = str(int(self.score) + change)
+        self.score += "0" * (6 - len(self.score)) + self.score
 
     def change_time(self, change):
         self.time = str(change)
