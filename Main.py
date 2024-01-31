@@ -134,7 +134,7 @@ class Game():
         controls_done = False
         while not controls_done:
             window.fill((0, 0, 0))
-            bg = pygame.transform.scale(pygame.image.load('Assets/Background/picture_controls.png'), (length, height + score_box_height))
+            bg = pygame.transform.scale(pygame.image.load('Assets/Background/picture_control_real.png'), (length, height + score_box_height))
             window.blit(bg, (0, 0))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
