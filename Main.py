@@ -8,9 +8,10 @@ from CompletedSprites.Interactables.testPotion import testPotion
 from CompletedSprites.Interactables.CandyCane import CandyCane
 from CompletedSprites.Interactables.Candle import Candle
 from Abstract.Enemy import Enemy
-from Utils.signals import TargetType
+from Utils.signals import TargetType, Item
 from background_engine import BackgroundEngine
 import pygame
+
 from Utils.UI import UI
 from Utils.timer import Timer
 from Utils.level_parser import Parser
@@ -234,9 +235,12 @@ class Game():
                 self.ui.player_health = self._player.get_health()
                 self.ui.change_stage(self.level)
                 self.ui.change_time(self.timer.get_time(BackgroundEngine.get_current_time()//1000))
+               
                 for i in self.static_ui:
                     window.blit(i.return_current_image(), i.get_hitbox())
                 num = self.ui.get_numbers()
+                weapon = self.ui.all_ui[6]
+                window.blit(weapon[0][0], weapon[1])
                 for i in num:
                     for j in i:
                         window.blit(j[0], j[1])
@@ -296,6 +300,7 @@ class Game():
         pass
     
     def handle_keystrokes(self, pressed):
+        
         left = self._player.get_hitbox().left
         window = BackgroundEngine.get_window()  
         if pressed[pygame.K_SPACE] and not self._player.isJumping and not self._player.isFalling and not self._player._hit and not self._player.isCrouched:
@@ -308,8 +313,14 @@ class Game():
             self._player.change_force(0, 0)
         if pressed[pygame.K_k] and not self._player._hit and not self._player.isCrouched:
             self._player.attack()
-        if pressed[pygame.K_w]:
-            pass
+        if pressed[pygame.K_2]:
+            self.ui.change_weapon(Item.WHIP)
+            self._player.cur_weapon = Item.WHIP
+        if pressed[pygame.K_3]:
+            self.ui.change_weapon(Item.DAGGER)
+            self._player.cur_weapon = Item.DAGGER
+        if pressed[pygame.K_4]:
+                pass
         if pressed[pygame.K_q] and not self._player._hit and not self._player.isCrouched:
             if (self._player.inside_door(self.doors[0])): 
                 self.fade_screen(window)
