@@ -335,7 +335,7 @@ class Game():
         pass
     
     def handle_keystrokes(self, pressed):
-        global player_score
+        global player_score, player_hearts
         left = self._player.get_hitbox().left
         window = BackgroundEngine.get_window()  
         if pressed[pygame.K_SPACE] and not self._player.isJumping and not self._player.isFalling and not self._player._hit and not self._player.isCrouched:
@@ -347,7 +347,7 @@ class Game():
         if not (pressed[pygame.K_d] or pressed[pygame.K_a]) and not self._player.isCrouched:
             self._player.change_force(0, 0)
         if pressed[pygame.K_k] and not self._player._hit and not self._player.isCrouched:
-            self._player.attack()
+            player_hearts = self._player.attack(player_hearts)
         if pressed[pygame.K_2]:
             self.ui.change_weapon(Item.WHIP)
             self._player.cur_weapon = Item.WHIP
