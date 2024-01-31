@@ -1,5 +1,4 @@
-from typing import Dict, List
-from typing_extensions import TypedDict
+from typing import Dict, List,TypedDict
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
 from CompletedSprites.Interactables.BasicAttack import BasicAttack
@@ -35,6 +34,7 @@ DoorSpriteTypes = {Door}
 CandleSpriteTypes = {Candle}
 max_level = 3 # set to the highest dungeon level
 player_hearts = 0
+player_score = 0
 
 
 class SortedSprites(TypedDict):
@@ -80,6 +80,7 @@ class Game():
         self._victory_font = pygame.font.Font('Assets/Background/controls.ttf', 30)
         self.current_map = p.get_current_map()
         self.starting_screen_position = height + score_box_height + 50
+        self.ui.score_num = player_score
 
         self.timer = Timer()
         if self.level == 3:
@@ -186,7 +187,7 @@ class Game():
 
     def game_loop(self):
         #Main game loop logic (this should be ready to go)
-        global player_hearts
+        global player_hearts, player_score
         pressed = pygame.key.get_pressed()
         window = BackgroundEngine.get_window()
         if not self.exit_condition():
@@ -324,6 +325,7 @@ class Game():
         pass
     
     def handle_keystrokes(self, pressed):
+        global player_score
         left = self._player.get_hitbox().left
         window = BackgroundEngine.get_window()  
         if pressed[pygame.K_SPACE] and not self._player.isJumping and not self._player.isFalling and not self._player._hit and not self._player.isCrouched:
@@ -340,6 +342,7 @@ class Game():
             pass
         if pressed[pygame.K_q] and not self._player._hit and not self._player.isCrouched:
             if (self._player.inside_door(self.doors[0])): 
+                player_score = self.ui.score_num
                 self.fade_screen(window)
                 if (self.level == max_level):
                     self.ending_screen()
@@ -385,7 +388,6 @@ def run_game(game: Game):
 if __name__ == "__main__":
     Castlevania = Game(1)
     while not Castlevania._game_started:
-        Castlevania.ending_screen()
         Castlevania.starting_screen()
     Castlevania.controls_screen()
     run_game(Castlevania)
