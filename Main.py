@@ -113,7 +113,7 @@ class Game():
         ]
         for num in range(0, len(texts)):
             render = self._intro_font.render(texts[num], 1, (255, 255, 255))
-            rect = render.get_rect(center=(int(length / 2), num * 150))
+            rect = render.get_rect(center=(int(length / 2), num * 130 + 40))
             window.blit(render, rect)
             time.sleep(1)
             BackgroundEngine.tick_timer()
@@ -133,6 +133,9 @@ class Game():
         window = BackgroundEngine.get_window()
         controls_done = False
         while not controls_done:
+            window.fill((0, 0, 0))
+            bg = pygame.transform.scale(pygame.image.load('Assets/Background/picture_controls.png'), (length, height + score_box_height))
+            window.blit(bg, (0, 0))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -141,9 +144,6 @@ class Game():
                         self.fade_screen(window)
                         window.fill((0, 0, 0))
                         controls_done = True
-            window.fill((0, 0, 0))
-            bg = pygame.transform.scale(pygame.image.load('Assets/Background/picture_controls.png'), (length, height + score_box_height))
-            window.blit(bg, (0, 0))
             '''
             top_text = self._title_font.render("Controls", 1, (255, 255, 255))
             top_rect = top_text.get_rect(center=((length / 2), (height / 10)))
