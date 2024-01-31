@@ -164,13 +164,16 @@ class Game():
         rect = text.get_rect(center=(length * 0.3, height / 5))
         window.blit(text, rect)
 
-        text_time = self._victory_font.render("Your time: " + str(self.ui.time), 1, (255, 255, 255))
-        rect_time = text.get_rect(center=(length * 0.3, 2 * height / 5))
+        text_time = self._victory_font.render("Time-" + str(BackgroundEngine.get_current_time() // 10000), 1, (255, 255, 255))
+        rect_time = text_time.get_rect(center=(length * 0.2 + 80, 2 * height / 5 - 30))
         window.blit(text_time, rect_time)
 
-        text_score = self._victory_font.render("Your score: " + str(self.ui.score), 1, (255, 255, 255))
-        rect_score = text.get_rect(center=(length * 0.3, 4 * height / 5))
+        text_score = self._victory_font.render("Score-", 1, (255, 255, 255))
+        text_score_num = self._victory_font.render(str(self.ui.score), 1,  (255, 255, 255))
+        rect_score = text_score.get_rect(center=(length * 0.3, 3 * height / 5 - 60))
+        rect_score_num = text_score_num.get_rect(center=(length * 0.3, 4 * height / 5 - 100))
         window.blit(text_score, rect_score)
+        window.blit(text_score_num, rect_score_num)
         
         while True:
             for event in pygame.event.get():
@@ -366,6 +369,7 @@ def run_game(game: Game):
 if __name__ == "__main__":
     Castlevania = Game(1)
     while not Castlevania._game_started:
+        Castlevania.ending_screen()
         Castlevania.starting_screen()
     Castlevania.controls_screen()
     run_game(Castlevania)
