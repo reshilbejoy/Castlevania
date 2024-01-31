@@ -13,11 +13,27 @@ When designing the game, we initially sought to make one large level that demons
 To run the game, you will need to run the **Main.py** file in the **main** branch. If the window is too big for your screen, you can adjust the variable **size** in Constants/window_constants.py. ***Do not change any other variable in this file!*** The window will have instructions on how to move through the game with a keyboard. At the end of the game, simply close the window and re-run the program if you want to play again. 
 
 ## Architecture
+Major modules and their interactions?
+What architectural choices did you make?
+Diagram
+APIs
 
 ## User Experience
 
 There is a good chance a first-time user is actually quite comfortable with the game. The platformer aspects of Castlevania, although not exactly the same, can be seen in popular games, like Geometry Dash. A first-time user will probably understand to move throughout the stage and interact with objects on the map. However, the user will have to discover certain interactions through the game, such as destroying candles to gain extra health. Information on how to use certain commands is given at the start, but the purpose of features like attacking and sliding is not explicitly stated. This is intended to preserve the exploratory feel of the original Castlevania. The goal of our game is for a first-time user to not feel overwhelmed by the game mechanics, but to have to figure out how to progress through difficult stages. 
 
-As said before, there is an element of mystery to the game. A more experienced player would understand how certain interactions work in order to progress through stages quicker. 
+As said before, there is an element of mystery to the game. A more experienced player would understand how certain interactions work in order to progress through stages quicker. In some ways, the player isn't really supposed to know what to do. Instead, they have to realize that in order to accrue the necessary score, and preserve their health, they need to move in a way where they can attack enemies and stay safe. Additionally, a new user will have to figure out through repeated gameplay that they need to run before jumping, or move while attacking. While they might seem confusing, these aspects allow a new player to feel like they are discovering game elements, and thus gain the feeling that they overcame the challenges of the game. 
+
+An experienced user will have a completely different experience. During our testing, we had friends try out the game to see how their skill improved. Many of them had trouble on their initial attempts in staying alive and not jumping off platforms. However, after they completed the first stage, they were much more comfortable with movement and attacking patterns. While the new enemies and terrain presented a challenge, it was easier for them to play because they understood the game mechanics. When a player wants to play the entire game again, they will meet the same maps (something true in the original Castlevania). As a result, the motive for an experienced player is to improve a high score or to finish the game in less time. This will allow an experienced player to focus on subtle ways to gain an advantage in the game. 
+
+Unfortunately, because we don't have the same amount of levels as the original Castlevania, the re-playability of our game is not as high. A player might want to come back to improve their high score or to finish the game faster. In many platformer games, the lure of "speed-running" or getting the highest score is what brings players back. That would be the case for our remake of Castlevania. 
 
 ## Retrospective
+How did you feel about the process of writing this app?
+
+The process of writing our game was challenging but very fun. We started by creating a **TestingFramework** branch to play around with ideas and figure out how certain game elements would work. Simultaneously, we worked on creating a Zero Feature Release to organize our classes and plan out the framework of the game. This was an extremely useful step, as it made development in the latter stages of the project really streamlined and efficient. We did encounter some problems because the way we had approached features in the testing branch didn't mesh with the ZFR, which meant we had to re-think some of our design. Overall, by planning and developing functions within the context of the ZFR, we were able to efficiently develop our game. 
+
+What was communication like? High points? Low points?
+
+Were there any major surprises you encountered?
+Is there anything you would do differently next time?

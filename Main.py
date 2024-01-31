@@ -1,7 +1,6 @@
-from typing import Dict, List, TypedDict
+from typing import Dict, List,TypedDict
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
-
 from CompletedSprites.Interactables.BasicAttack import BasicAttack
 from CompletedSprites.Interactables.HarmingHitbox import HarmingHitbox
 from CompletedSprites.Interactables.testPotion import testPotion
@@ -25,15 +24,19 @@ from Constants.window_constants import *
 from CompletedSprites.UI.static import Static_UI
 import time
 from CompletedSprites.Doors.Door import Door
+from CompletedSprites.Interactables.Heart import Heart
 
 
 
 DynamicSpriteTypes = {MainPlayer,Ghoul,Skeleton}
-InteractableSpriteTypes = {testPotion,BasicAttack,HarmingHitbox,CandyCane,Candle}
+InteractableSpriteTypes = {testPotion,BasicAttack,HarmingHitbox,CandyCane,Candle, Heart}
 PlatformSpriteTypes = {Platform}
 DoorSpriteTypes = {Door}
 CandleSpriteTypes = {Candle}
 max_level = 3 # set to the highest dungeon level
+player_hearts = 0
+player_score = 0
+level_requirments = {1: 1600, 2:3000, 3:6000}
 
 
 class SortedSprites(TypedDict):
@@ -49,8 +52,8 @@ class Game():
         #initialize all sprites in this array
         
         
-        self._sprite_dict: Dict[str,SortedSprites] = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle": []},
-                             "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle" : []}}
+        self._sprite_dict: Dict[str,SortedSprites] = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle": [], "Heart": []},
+                             "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle" : [], "Heart": []}}
         self._game_over = False
         self._game_started = False
         self.level = level
@@ -60,26 +63,28 @@ class Game():
         p.build_level()
 
         self.ui = UI()
+        self._intro_font = pygame.font.Font('Assets/Background/controls.ttf', (9 + int(size / 8)))
+        self._controls_font = pygame.font.Font('Assets/Background/controls.ttf', 18)
+        self._title_font = pygame.font.Font('Assets/Background/controls.ttf', 20)
+        self._victory_font = pygame.font.Font('Assets/Background/controls.ttf', 30)
                 
         self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_object,self.remove_object)
 
         terrain = p.built
-        platforms = [Platform(entry[0], entry[1], entry[2]) for entry in terrain['Platform']]
-        self.doors = [Door(entry[0], entry[1]) for entry in terrain['Door']]
+        platforms = [Platform(entry[0], entry[1], entry[2],) for entry in terrain['Platform']]
+        self.doors = [Door(entry[0], entry[1], level_requirments[self.level], self._controls_font) for entry in terrain['Door']]
         all_interactables: List[Interactable] = [Candle(entry[0], entry[1], self.remove_object, self.create_object) for entry in terrain['Candle']]
         self._enemies = [Ghoul(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox) for entry in terrain['Ghoul']]
         self._enemies += [Skeleton(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox) for entry in terrain['Ghost']]
         self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]
         self._all_sprites: List[Sprite] = [self._player] + self.doors + platforms + all_interactables + self._enemies
-
         self._is_paused = False
         self._font = pygame.font.SysFont("couriernew", 50)
-        self._intro_font = pygame.font.Font('Assets/Background/controls.ttf', (9 + int(size / 8)))
-        self._controls_font = pygame.font.Font('Assets/Background/controls.ttf', 18)
-        self._title_font = pygame.font.Font('Assets/Background/controls.ttf', 20)
-        self._victory_font = pygame.font.Font('Assets/Background/controls.ttf', 30)
         self.current_map = p.get_current_map()
         self.starting_screen_position = height + score_box_height + 50
+        self.ui.score_num = player_score
+        self.ui.change_score(player_score)
+        self.current_hearts = player_hearts
 
         self.timer = Timer()
         if self.level == 3:
@@ -164,6 +169,18 @@ class Game():
         text = self._victory_font.render("You Win.", 1, (255, 255, 255))
         rect = text.get_rect(center=(length * 0.3, height / 5))
         window.blit(text, rect)
+
+        text_time = self._victory_font.render("Time-" + str(BackgroundEngine.get_current_time() // 10000), 1, (255, 255, 255))
+        rect_time = text_time.get_rect(center=(length * 0.2 + 80, 2 * height / 5 - 30))
+        window.blit(text_time, rect_time)
+
+        text_score = self._victory_font.render("Score-", 1, (255, 255, 255))
+        text_score_num = self._victory_font.render(str(self.ui.score), 1,  (255, 255, 255))
+        rect_score = text_score.get_rect(center=(length * 0.3, 3 * height / 5 - 60))
+        rect_score_num = text_score_num.get_rect(center=(length * 0.3, 4 * height / 5 - 100))
+        window.blit(text_score, rect_score)
+        window.blit(text_score_num, rect_score_num)
+        
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -174,6 +191,7 @@ class Game():
 
     def game_loop(self):
         #Main game loop logic (this should be ready to go)
+        global player_hearts, player_score
         pressed = pygame.key.get_pressed()
         window = BackgroundEngine.get_window()
         if not self.exit_condition():
@@ -193,6 +211,8 @@ class Game():
                             elif type(i) in InteractableSpriteTypes:
                                 if type(i) is Candle:
                                     self._sprite_dict["Active"]["Candle"].append(i)
+                                if type(i) is Heart:
+                                    self._sprite_dict["Active"]["Heart"].append(i)
                                 self._sprite_dict["Active"]["Interactable"].append(i)
                             elif type(i) in PlatformSpriteTypes:
                                 self._sprite_dict["Active"]["Platform"].append(i)
@@ -206,7 +226,9 @@ class Game():
                         elif type(i) in InteractableSpriteTypes:
                             self._sprite_dict["Inactive"]["Interactable"].append(i)
                             if type(i) is Candle:
-                                self._sprite_dict["Active"]["Candle"].append(i)
+                                self._sprite_dict["Inactive"]["Candle"].append(i)
+                            if type(i) is Heart:
+                                self._sprite_dict["Inactive"]["Heart"].append(i)
                         elif type(i) in PlatformSpriteTypes:
                             self._sprite_dict["Inactive"]["Platform"].append(i)
                         elif type(i) in DoorSpriteTypes:
@@ -225,7 +247,6 @@ class Game():
                             surface = i.hit_animation(rect, surface)
 
 
-
                 window.fill((0,0,0))
                 window.blit(surface, (0, 150))
                 self.handle_keystrokes(pressed)
@@ -234,6 +255,7 @@ class Game():
                 self.handle_collisions()
                 self.ui.player_health = self._player.get_health()
                 self.ui.change_stage(self.level)
+                self.ui.change_heart(player_hearts)
                 self.ui.change_time(self.timer.get_time(BackgroundEngine.get_current_time()//1000))
                
                 for i in self.static_ui:
@@ -253,9 +275,8 @@ class Game():
                 if self._player._health < 3:
                     self.tintDamage(surface, 0.3)
                 window.blit(surface, (0, 150))
-                self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle" : []},
-                        "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle": []}}
-
+                self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle" : [], "Heart": []},
+                        "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle": [], "Heart": []}}
                 BackgroundEngine.tick_timer()
                 
 
@@ -263,11 +284,13 @@ class Game():
             else:
                 pass
         else:
+            self.ui.change_time(0)
             BackgroundEngine.tick_timer()
             time.sleep(0.5)
             self.fade_screen(window)
             self._game_started = False
             self._game_over = True
+            player_hearts = self.current_hearts
             run_game(Game(self.level))
 
     def create_object(self, obj):
@@ -281,6 +304,7 @@ class Game():
         surface.fill((255, GB, GB), special_flags = pygame.BLEND_MULT)
 
     def handle_collisions(self):
+        global player_hearts
         for dynSprite in self._sprite_dict["Active"]["Dynamic"]:
             for interactable in self._sprite_dict['Active']["Interactable"]:
                 if interactable._hitbox.colliderect(dynSprite.return_hitbox()):
@@ -288,19 +312,31 @@ class Game():
                     dynSprite.handle_inventory_interaction(interactable.get_inventory_message())
                     if type(interactable) is BasicAttack and (type(dynSprite) is Ghoul or type(dynSprite) is Skeleton):
                         if dynSprite.get_health() <= 0 and not dynSprite.got_score:
-                            self.ui.change_score(dynSprite.get_score())
+                            self.ui.change_score(dynSprite.get_score() + 500 * (self.level - 1))
         for candle in self._sprite_dict["Active"]["Candle"]:
             for interactable in self._sprite_dict['Active']["Interactable"]:
                 if interactable._hitbox.colliderect(candle.return_hitbox()):
                     candle.handle_damage_interaction(interactable.get_damage_message())
                     candle.handle_inventory_interaction(interactable.get_inventory_message())
+        for heart in self._sprite_dict["Active"]["Heart"]:
+            for interactable in self._sprite_dict['Active']["Interactable"]:
+                if interactable._hitbox.colliderect(heart.return_hitbox()):
+                    if (heart.handle_damage_interaction(interactable.get_damage_message())) and not heart._given_heart:
+                        player_hearts += 1
+                        heart._given_heart = True                     
+                    heart.handle_inventory_interaction(interactable.get_inventory_message())
+        
 
 
         #handle collisions between Interactable objects and active dynamic sprites TODO
         pass
     
     def handle_keystrokes(self, pressed):
+<<<<<<< HEAD
         
+=======
+        global player_score
+>>>>>>> cdebf6513fe017e6e15619ecffc8514faed42747
         left = self._player.get_hitbox().left
         window = BackgroundEngine.get_window()  
         if pressed[pygame.K_SPACE] and not self._player.isJumping and not self._player.isFalling and not self._player._hit and not self._player.isCrouched:
@@ -322,7 +358,8 @@ class Game():
         if pressed[pygame.K_4]:
                 pass
         if pressed[pygame.K_q] and not self._player._hit and not self._player.isCrouched:
-            if (self._player.inside_door(self.doors[0])): 
+            if (self._player.inside_door(self.doors[0]) and self.ui.score_num >= level_requirments[self.level]): 
+                player_score = self.ui.score_num
                 self.fade_screen(window)
                 if (self.level == max_level):
                     self.ending_screen()
@@ -346,7 +383,7 @@ class Game():
                 self._game_over = True
                 pygame.quit()
         hitbox = self._player.get_hitbox()
-        if ((not self._player.lifespan()) or (hitbox.bottom > height)) or self.timer.get_time(BackgroundEngine.get_current_time() // 1000) < 1:
+        if ((not self._player.lifespan()) or (hitbox.bottom > height)) or self.timer.get_time(BackgroundEngine.get_current_time() // 1000) == 1:
             return True
         return False
     

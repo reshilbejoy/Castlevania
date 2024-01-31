@@ -9,6 +9,7 @@ from background_engine import BackgroundEngine
 from Abstract.Interaction import Interactable 
 from Utils.signals import DamageMessage, InventoryMessage, Item, TargetType
 from typing import Callable
+from CompletedSprites.Interactables.Heart import Heart
 
 class Candle(Interactable):
     def __init__(self, images: List[Surface], hitbox: Rect, remove_obj, create_obj):
@@ -81,7 +82,7 @@ class Candle(Interactable):
         if self.life_span():
             self._movement()
         else:
-            self.create_obj()
+            self.create_obj(Heart(Rect(self._hitbox.left, self._hitbox.top, 35, 35), self.remove_obj))
             self.remove_obj(self)
 
     def _movement(self):
