@@ -1,5 +1,4 @@
-from typing import Callable, List
-from typing_extensions import TypedDict
+from typing import Callable, List, TypedDict
 import pygame
 from Abstract.Player import Player
 from Abstract.Interaction import Interactable
@@ -106,7 +105,7 @@ class MainPlayer(Player):
                 if self.direction >= 0:
                     di = 1
                 if (self.last_attack_timestep + 1000) <  BackgroundEngine.get_current_time():
-                    self.create_obj(Cookie(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.ENEMY,self.remove_obj,di))
+                    self.create_obj(Cookie(pygame.Rect(50, 200, 30, 30), self.get_pose_supplier(),TargetType.ENEMY,self.remove_obj,di))
                     self.last_attack_timestep = BackgroundEngine.get_current_time()
                     player_hearts -= 1
             return player_hearts

@@ -40,7 +40,7 @@ class UI:
                         [heart_img, heart_hitbox],
                         #[p_img, p_hitbox],
                         [box_img, box_hitbox]]
-        self.item_list = {Item.WHIP:"Assets/Interactables/Whip_attack/3.png",Item.DAGGER:"Assets/Interactables/Throwable/Fire/1.png"}
+        self.item_list = {Item.WHIP:"Assets/Interactables/Whip_attack/1.png",Item.DAGGER:"Assets/Interactables/Throwable/Cookie/1.png"}
         self.score = "000000"
         self.score_num = 0
         self.time = "0000"
@@ -66,8 +66,12 @@ class UI:
     def change_weapon(self, change):
         self.weapon = change
         print(self.weapon)
-        self.all_ui[6][0] = [pygame.transform.scale(pygame.image.load(self.item_list[self.weapon]), (65, 65))]
-        self.all_ui[6][1] = pygame.Rect(460, 60, 90, 90)
+        if self.weapon is Item.DAGGER:
+            self.all_ui[6][0] = [pygame.transform.scale(pygame.image.load(self.item_list[self.weapon]), (60, 60))]
+            self.all_ui[6][1] = pygame.Rect(470, 60, 90, 90)
+        else:
+            self.all_ui[6][0] = [pygame.transform.scale(pygame.image.load(self.item_list[self.weapon]), (80, 110))]
+            self.all_ui[6][1] = pygame.Rect(460, 60, 90, 90)
 
 
     def change_p(self, change):

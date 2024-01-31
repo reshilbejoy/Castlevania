@@ -30,7 +30,9 @@ class Cookie(Interactable):
         super().__init__(images=[], hitbox=hitbox, damage=self.damage, remove_obj=remove_obj)
 
     def return_current_image(self) -> pygame.Surface:
-        return self.images[0]
+        self.index += 0.25
+        #returns first image bec platforms do not have animations
+        return self._image_arr[int(self.index) % 4]
 
     def get_damage_message(self):
         return DamageMessage(self.damage, self.damage_target)
