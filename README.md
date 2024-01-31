@@ -30,6 +30,10 @@ Unfortunately, because we don't have the same amount of levels as the original C
 
 ## Retrospective
 How did you feel about the process of writing this app?
+
+The process of writing our game was challenging but very fun. We started by creating a **TestingFramework** branch to play around with ideas and figure out how certain game elements would work. Simultaneously, we worked on creating a Zero Feature Release to organize our classes and plan out the framework of the game. This was an extremely useful step, as it made development in the latter stages of the project really streamlined and efficient. We did encounter some problems because the way we had approached features in the testing branch didn't mesh with the ZFR, which meant we had to re-think some of our design. Overall, by planning and developing functions within the context of the ZFR, we were able to efficiently develop our game. 
+
 What was communication like? High points? Low points?
+
 Were there any major surprises you encountered?
 Is there anything you would do differently next time?
