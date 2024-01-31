@@ -1,5 +1,4 @@
-from typing import Dict, List
-from typing_extensions import TypedDict
+from typing import Dict, List,TypedDict
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
 from CompletedSprites.Interactables.BasicAttack import BasicAttack
@@ -26,18 +25,18 @@ from CompletedSprites.UI.static import Static_UI
 import time
 from CompletedSprites.Doors.Door import Door
 from CompletedSprites.Interactables.Heart import Heart
-
+from CompletedSprites.Interactables.Cookie import Cookie
 
 
 DynamicSpriteTypes = {MainPlayer,Ghoul,Skeleton}
-InteractableSpriteTypes = {testPotion,BasicAttack,HarmingHitbox,CandyCane,Candle, Heart}
+InteractableSpriteTypes = {testPotion,BasicAttack,HarmingHitbox,CandyCane,Candle, Heart, Cookie}
 PlatformSpriteTypes = {Platform}
 DoorSpriteTypes = {Door}
 CandleSpriteTypes = {Candle}
 max_level = 3 # set to the highest dungeon level
 player_hearts = 0
 player_score = 0
-level_requirments = {1: 1600, 2: 7000, 3: 12000}
+level_requirments = {1: 1600, 2:3000, 3:6000}
 
 
 class SortedSprites(TypedDict):
@@ -83,8 +82,8 @@ class Game():
         self._font = pygame.font.SysFont("couriernew", 50)
         self.current_map = p.get_current_map()
         self.starting_screen_position = height + score_box_height + 50
+        self.ui.score_num = player_score
         self.ui.change_score(player_score)
-        self.ui.change_weapon(Item.WHIP)
         self.current_hearts = player_hearts
 
         self.timer = Timer()
@@ -142,7 +141,7 @@ class Game():
                         window.fill((0, 0, 0))
                         controls_done = True
             window.fill((0, 0, 0))
-            bg = pygame.transform.scale(pygame.image.load('Assets/Background/picture_control_real.png'), (length, height + score_box_height))
+            bg = pygame.transform.scale(pygame.image.load('Assets/Background/picture_controls.png'), (length, height + score_box_height))
             window.blit(bg, (0, 0))
             '''
             top_text = self._title_font.render("Controls", 1, (255, 255, 255))
@@ -158,7 +157,7 @@ class Game():
             ]
             right_texts = [
                 self._controls_font.render("SPACE - Jump", 1, (118, 164, 245)),
-                self._controls_font.render("2 3 - Weapons", 1, (190, 127, 245)),
+                self._controls_font.render("S - Crouch", 1, (190, 127, 245)),
                 self._controls_font.render("K - Attack", 1, (245, 108, 199)),
             ]
             for index in range(0, len(left_texts)):
@@ -167,9 +166,7 @@ class Game():
                 left_rect = left_text.get_rect(center=((length / 3.5), ((index + 0.8) * (height / 3))))
                 right_rect = right_text.get_rect(center=((length / 1.35), ((index + 1.3) * (height / 3))))
                 window.blit(left_text, left_rect)
-                window.blit(right_text, right_rect)
-                '''
-
+                window.blit(right_text, right_rect)'''
             BackgroundEngine.tick_timer()
 
 
@@ -290,7 +287,7 @@ class Game():
                 self.ui.change_stage(self.level)
                 self.ui.change_heart(player_hearts)
                 self.ui.change_time(self.timer.get_time(BackgroundEngine.get_current_time()//1000))
-                print(player_score)
+               
                 for i in self.static_ui:
                     window.blit(i.return_current_image(), i.get_hitbox())
                 num = self.ui.get_numbers()

@@ -6,6 +6,7 @@ from Abstract.Interaction import Interactable
 from CompletedSprites.Interactables.BasicAttack import BasicAttack
 from Utils.signals import DamageMessage, InventoryMessage, Item, TargetType
 from CompletedSprites.Interactables.CandyCane import CandyCane
+from CompletedSprites.Interactables.Cookie import Cookie
 
 from background_engine import BackgroundEngine
 
@@ -105,7 +106,7 @@ class MainPlayer(Player):
                 if self.direction >= 0:
                     di = 1
                 if (self.last_attack_timestep + 1000) <  BackgroundEngine.get_current_time():
-                    self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.ENEMY,self.remove_obj,di))
+                    self.create_obj(Cookie(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.ENEMY,self.remove_obj,di))
                     self.last_attack_timestep = BackgroundEngine.get_current_time()
                     player_hearts -= 1
             return player_hearts
