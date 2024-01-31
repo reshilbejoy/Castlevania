@@ -100,6 +100,35 @@ class Game():
             BackgroundEngine.tick_timer()
             time.sleep(0.001)
 
+    def story_line(self):
+        window = BackgroundEngine.get_window()
+        story_line_done = False
+        window.fill((0, 0, 0))
+        texts = [
+            "Hansel and Gretel have", 
+            "been captured by the witch.",
+            "Hansel must find Gretel",
+            "in the castle and escape.",
+            "Push 1 to Start."
+        ]
+        for num in range(0, len(texts)):
+            render = self._intro_font.render(texts[num], 1, (255, 255, 255))
+            rect = render.get_rect(center=(int(length / 2), num * 150))
+            window.blit(render, rect)
+            time.sleep(1)
+            BackgroundEngine.tick_timer()
+        while not story_line_done:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_1:
+                        self.fade_screen(window)
+                        story_line_done = True
+            
+            
+
+
     def controls_screen(self):
         window = BackgroundEngine.get_window()
         controls_done = False
@@ -110,6 +139,7 @@ class Game():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_1:
                         self.fade_screen(window)
+                        window.fill((0, 0, 0))
                         controls_done = True
             window.fill((0, 0, 0))
             bg = pygame.transform.scale(pygame.image.load('Assets/Background/picture_control_real.png'), (length, height + score_box_height))
@@ -406,4 +436,5 @@ if __name__ == "__main__":
     while not Castlevania._game_started:
         Castlevania.starting_screen()
     Castlevania.controls_screen()
+    Castlevania.story_line()
     run_game(Castlevania)
