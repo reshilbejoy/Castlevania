@@ -64,7 +64,10 @@ class UI:
         pass
 
     def change_heart(self, change):
-        pass
+        self.heart = str(change)
+        if change < 10:
+            self.heart = "0" + self.heart
+            
 
     def get_numbers(self):
         num = NumberConversion()

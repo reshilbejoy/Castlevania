@@ -1,7 +1,7 @@
-from typing import Dict, List, TypedDict
+from typing import Dict, List
+from typing_extensions import TypedDict
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
-
 from CompletedSprites.Interactables.BasicAttack import BasicAttack
 from CompletedSprites.Interactables.HarmingHitbox import HarmingHitbox
 from CompletedSprites.Interactables.testPotion import testPotion
@@ -24,15 +24,17 @@ from Constants.window_constants import *
 from CompletedSprites.UI.static import Static_UI
 import time
 from CompletedSprites.Doors.Door import Door
+from CompletedSprites.Interactables.Heart import Heart
 
 
 
 DynamicSpriteTypes = {MainPlayer,Ghoul,Skeleton}
-InteractableSpriteTypes = {testPotion,BasicAttack,HarmingHitbox,CandyCane,Candle}
+InteractableSpriteTypes = {testPotion,BasicAttack,HarmingHitbox,CandyCane,Candle, Heart}
 PlatformSpriteTypes = {Platform}
 DoorSpriteTypes = {Door}
 CandleSpriteTypes = {Candle}
 max_level = 3 # set to the highest dungeon level
+player_hearts = 0
 
 
 class SortedSprites(TypedDict):
@@ -48,8 +50,8 @@ class Game():
         #initialize all sprites in this array
         
         
-        self._sprite_dict: Dict[str,SortedSprites] = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle": []},
-                             "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle" : []}}
+        self._sprite_dict: Dict[str,SortedSprites] = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle": [], "Heart": []},
+                             "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle" : [], "Heart": []}}
         self._game_over = False
         self._game_started = False
         self.level = level
@@ -70,7 +72,6 @@ class Game():
         self._enemies += [Skeleton(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox) for entry in terrain['Ghost']]
         self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]
         self._all_sprites: List[Sprite] = [self._player] + self.doors + platforms + all_interactables + self._enemies
-
         self._is_paused = False
         self._font = pygame.font.SysFont("couriernew", 50)
         self._intro_font = pygame.font.Font('Assets/Background/controls.ttf', (9 + int(size / 8)))
@@ -173,6 +174,7 @@ class Game():
 
     def game_loop(self):
         #Main game loop logic (this should be ready to go)
+        global player_hearts
         pressed = pygame.key.get_pressed()
         window = BackgroundEngine.get_window()
         if not self.exit_condition():
@@ -192,6 +194,8 @@ class Game():
                             elif type(i) in InteractableSpriteTypes:
                                 if type(i) is Candle:
                                     self._sprite_dict["Active"]["Candle"].append(i)
+                                if type(i) is Heart:
+                                    self._sprite_dict["Active"]["Heart"].append(i)
                                 self._sprite_dict["Active"]["Interactable"].append(i)
                             elif type(i) in PlatformSpriteTypes:
                                 self._sprite_dict["Active"]["Platform"].append(i)
@@ -205,7 +209,9 @@ class Game():
                         elif type(i) in InteractableSpriteTypes:
                             self._sprite_dict["Inactive"]["Interactable"].append(i)
                             if type(i) is Candle:
-                                self._sprite_dict["Active"]["Candle"].append(i)
+                                self._sprite_dict["Inactive"]["Candle"].append(i)
+                            if type(i) is Heart:
+                                self._sprite_dict["Inactive"]["Heart"].append(i)
                         elif type(i) in PlatformSpriteTypes:
                             self._sprite_dict["Inactive"]["Platform"].append(i)
                         elif type(i) in DoorSpriteTypes:
@@ -233,6 +239,7 @@ class Game():
                 self.handle_collisions()
                 self.ui.player_health = self._player.get_health()
                 self.ui.change_stage(self.level)
+                self.ui.change_heart(player_hearts)
                 self.ui.change_time(self.timer.get_time(BackgroundEngine.get_current_time()//1000))
                 for i in self.static_ui:
                     window.blit(i.return_current_image(), i.get_hitbox())
@@ -249,9 +256,8 @@ class Game():
                 if self._player._health < 3:
                     self.tintDamage(surface, 0.3)
                 window.blit(surface, (0, 150))
-                self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle" : []},
-                        "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle": []}}
-
+                self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle" : [], "Heart": []},
+                        "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle": [], "Heart": []}}
                 BackgroundEngine.tick_timer()
                 
 
@@ -259,6 +265,7 @@ class Game():
             else:
                 pass
         else:
+            self.ui.change_time(0)
             BackgroundEngine.tick_timer()
             time.sleep(0.5)
             self.fade_screen(window)
@@ -277,6 +284,7 @@ class Game():
         surface.fill((255, GB, GB), special_flags = pygame.BLEND_MULT)
 
     def handle_collisions(self):
+        global player_hearts
         for dynSprite in self._sprite_dict["Active"]["Dynamic"]:
             for interactable in self._sprite_dict['Active']["Interactable"]:
                 if interactable._hitbox.colliderect(dynSprite.return_hitbox()):
@@ -290,6 +298,14 @@ class Game():
                 if interactable._hitbox.colliderect(candle.return_hitbox()):
                     candle.handle_damage_interaction(interactable.get_damage_message())
                     candle.handle_inventory_interaction(interactable.get_inventory_message())
+        for heart in self._sprite_dict["Active"]["Heart"]:
+            for interactable in self._sprite_dict['Active']["Interactable"]:
+                if interactable._hitbox.colliderect(heart.return_hitbox()):
+                    if (heart.handle_damage_interaction(interactable.get_damage_message())) and not heart._given_heart:
+                        player_hearts += 1
+                        heart._given_heart = True                     
+                    heart.handle_inventory_interaction(interactable.get_inventory_message())
+        
 
 
         #handle collisions between Interactable objects and active dynamic sprites TODO
@@ -335,7 +351,7 @@ class Game():
                 self._game_over = True
                 pygame.quit()
         hitbox = self._player.get_hitbox()
-        if ((not self._player.lifespan()) or (hitbox.bottom > height)) or self.timer.get_time(BackgroundEngine.get_current_time() // 1000) < 1:
+        if ((not self._player.lifespan()) or (hitbox.bottom > height)) or self.timer.get_time(BackgroundEngine.get_current_time() // 1000) == 1:
             return True
         return False
     
