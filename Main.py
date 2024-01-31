@@ -163,6 +163,15 @@ class Game():
         text = self._victory_font.render("You Win.", 1, (255, 255, 255))
         rect = text.get_rect(center=(length * 0.3, height / 5))
         window.blit(text, rect)
+
+        text_time = self._victory_font.render("Your time: " + str(self.ui.time), 1, (255, 255, 255))
+        rect_time = text.get_rect(center=(length * 0.3, 2 * height / 5))
+        window.blit(text_time, rect_time)
+
+        text_score = self._victory_font.render("Your score: " + str(self.ui.score), 1, (255, 255, 255))
+        rect_score = text.get_rect(center=(length * 0.3, 4 * height / 5))
+        window.blit(text_score, rect_score)
+        
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
