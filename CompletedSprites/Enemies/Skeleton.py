@@ -13,7 +13,7 @@ from background_engine import BackgroundEngine
 from Utils.signals import DamageMessage, InventoryMessage, TargetType
 
 class Skeleton(Enemy):
-    def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox: pygame.Rect, health:int, horizontal_force, create_interactable:[Callable[[Interactable],None]], remove_interctable: Callable, get_player_pose: Callable):
+    def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox: pygame.Rect, health:int, horizontal_force, create_interactable:[Callable[[Interactable],None]], remove_interctable: Callable, get_player_pose: Callable, level):
 
         super().__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health, horizontal_force,create_interactable,remove_interctable) 
         self.alignment = 0
@@ -26,9 +26,12 @@ class Skeleton(Enemy):
         self.invince_time_ms = 200
         self.last_invince_timestep = 0
         self.movement_time_ms = 2000
+        if level == 3:
+            self.movement_time_ms = 500
         self.sp = 0
         self.walkIndex = 0
         self._score = 500
+        self.flag = False
         
 
     def init_obj(self):
@@ -77,11 +80,16 @@ class Skeleton(Enemy):
             self.change_force(-0.25, 0)
             if (BackgroundEngine.get_current_time() - self.current_time) > self.movement_time_ms:
                 self.current_time = BackgroundEngine.get_current_time()
-                self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,1))
                 self.sp = 1  
         elif self.sp == 1:
             self.change_force(0.25, 0)
             if (BackgroundEngine.get_current_time() - self.current_time) > self.movement_time_ms: 
                 self.current_time = BackgroundEngine.get_current_time()
-                self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,-1))
                 self.sp = 0 
+        if (BackgroundEngine.get_current_time() // 2500) % 2 == 0:
+            if not self.flag:
+                self.flag = True
+                self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,-1))
+                self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,1))
+        else:
+            self.flag = False

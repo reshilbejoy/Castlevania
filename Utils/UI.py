@@ -2,6 +2,7 @@ import pygame
 from Utils.number_conversion import NumberConversion
 from pygame import Surface,Rect
 from enum import Enum
+from Utils.signals import Item
 
 
 class UI:
@@ -39,13 +40,14 @@ class UI:
                         [heart_img, heart_hitbox],
                         #[p_img, p_hitbox],
                         [box_img, box_hitbox]]
-
+        self.item_list = {Item.WHIP:"Assets/Interactables/Whip_attack/3.png",Item.DAGGER:"Assets/Interactables/Throwable/Fire/1.png"}
         self.score = "000000"
         self.score_num = 0
         self.time = "0000"
         self.stage = "00"
         self.heart = "00"
         self.p = "00"
+        self.weapon = Item.WHIP
         self.player_health = 16
         self.enemy_health = 16
 
@@ -60,11 +62,22 @@ class UI:
     def change_stage(self, change):
         self.stage = "0" + str(change)
 
+
+    def change_weapon(self, change):
+        self.weapon = change
+        print(self.weapon)
+        self.all_ui[6][0] = [pygame.transform.scale(pygame.image.load(self.item_list[self.weapon]), (65, 65))]
+        self.all_ui[6][1] = pygame.Rect(460, 60, 90, 90)
+
+
     def change_p(self, change):
         pass
 
     def change_heart(self, change):
-        pass
+        self.heart = str(change)
+        if change < 10:
+            self.heart = "0" + self.heart
+            
 
     def get_numbers(self):
         num = NumberConversion()

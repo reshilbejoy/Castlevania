@@ -27,7 +27,7 @@ class Sprite():
         # return wether or not to draw sprite based on player loc TODO
         if BackgroundEngine.get_current_image_frame(player_hitbox).colliderect(self._hitbox):
             return True
-        return False
+        return True
     
     def get_hitbox(self):
         return self._hitbox

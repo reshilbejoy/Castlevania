@@ -96,7 +96,7 @@ class Parser:
                     curr_list.append(platform_type)
                     self.built['Platform'].append(curr_list)
                 
-                if y == "q":
+                if y == "o":
                     image = [pygame.transform.scale((pygame.image.load('Assets/Interactables/Candle/1.png')), (35, (50))), 
                              pygame.transform.scale((pygame.image.load('Assets/Interactables/Candle/2.png')), (35, (50)))]
                     rect = pygame.Rect(self.curr_x, self.curr_y, self.width, self.height_s)
@@ -104,7 +104,7 @@ class Parser:
                     curr_list.append(rect)
                     self.built['Candle'].append(curr_list)
 
-                if y == "q":
+                if y == "O":
                     image = [pygame.transform.scale((pygame.image.load('Assets/Interactables/BigCandle/1.png')), (60, int(height / (self.line_height) + 1))), 
                              pygame.transform.scale((pygame.image.load('Assets/Interactables/BigCandle/2.png')), (60, int(height / (self.line_height) + 1)))]
                     rect = pygame.Rect(self.curr_x, self.curr_y, self.width, self.height_s)
