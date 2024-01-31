@@ -29,6 +29,7 @@ class Skeleton(Enemy):
         self.sp = 0
         self.walkIndex = 0
         self._score = 500
+        self.flag = False
         
 
     def init_obj(self):
@@ -77,11 +78,16 @@ class Skeleton(Enemy):
             self.change_force(-0.25, 0)
             if (BackgroundEngine.get_current_time() - self.current_time) > self.movement_time_ms:
                 self.current_time = BackgroundEngine.get_current_time()
-                self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,-1))
                 self.sp = 1  
         elif self.sp == 1:
             self.change_force(0.25, 0)
             if (BackgroundEngine.get_current_time() - self.current_time) > self.movement_time_ms: 
                 self.current_time = BackgroundEngine.get_current_time()
-                self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,1))
                 self.sp = 0 
+        if (BackgroundEngine.get_current_time() // 5000) % 2 == 0:
+            if not self.flag:
+                self.flag = True
+                self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,-1))
+                self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,1))
+        else:
+            self.flag = False

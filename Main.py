@@ -399,7 +399,7 @@ def run_game(game: Game):
         game.ending_screen()
     
 if __name__ == "__main__":
-    Castlevania = Game(1)
+    Castlevania = Game(2)
     while not Castlevania._game_started:
         Castlevania.starting_screen()
     Castlevania.controls_screen()

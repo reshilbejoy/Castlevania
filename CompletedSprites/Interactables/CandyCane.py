@@ -5,7 +5,7 @@ from Abstract.Interaction import Interactable
 from Utils.signals import DamageMessage, InventoryMessage, Item, TargetType
 from background_engine import BackgroundEngine
 
-attack_span_ms = 1000
+attack_span_ms = 30000
 movement_speed = 5  
 
 class CandyCane(Interactable):
