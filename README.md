@@ -13,11 +13,11 @@ When designing the game, we initially sought to make one large level that demons
 To run the game, you will need to run the **Main.py** file in the **main** branch. If the window is too big for your screen, you can adjust the variable **size** in Constants/window_constants.py. ***Do not change any other variable in this file!*** The window will have instructions on how to move through the game with a keyboard. At the end of the game, simply close the window and re-run the program if you want to play again. 
 
 ## Architecture
-Major modules and their interactions?
-What architectural choices did you make?
-Diagram
-APIs
 
+![Screenshot](Architecture.png)
+
+
+Powered by Pygame (ofc)
 ## User Experience
 
 There is a good chance a first-time user is actually quite comfortable with the game. The platformer aspects of Castlevania, although not exactly the same, can be seen in popular games, like Geometry Dash. A first-time user will probably understand to move throughout the stage and interact with objects on the map. However, the user will have to discover certain interactions through the game, such as destroying candles to gain extra health. Information on how to use certain commands is given at the start, but the purpose of features like attacking and sliding is not explicitly stated. This is intended to preserve the exploratory feel of the original Castlevania. The goal of our game is for a first-time user to not feel overwhelmed by the game mechanics, but to have to figure out how to progress through difficult stages. 
