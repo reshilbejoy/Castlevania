@@ -1,4 +1,4 @@
-from typing import Dict, List,TypedDict
+from typing import Dict, List, TypedDict
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
 from CompletedSprites.Interactables.BasicAttack import BasicAttack
@@ -81,6 +81,7 @@ class Game():
         self.current_map = p.get_current_map()
         self.starting_screen_position = height + score_box_height + 50
         self.ui.score_num = player_score
+        self.ui.change_score(player_score)
 
         self.timer = Timer()
         if self.level == 3:
