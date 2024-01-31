@@ -12,7 +12,7 @@ from CompletedSprites.Platforms.Platform import Platform
 from Utils.signals import DamageMessage, InventoryMessage, TargetType
 
 class Ghoul(Enemy):
-    def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox: pygame.Rect, health:int, horizontal_force, create_interactable:[Callable[[Interactable],None]], remove_interctable: Callable, get_player_pose: Callable):
+    def __init__(self,terminal_vel_x:float, terminal_vel_y:float, images:List[pygame.Surface], hitbox: pygame.Rect, health:int, horizontal_force, create_interactable:[Callable[[Interactable],None]], remove_interctable: Callable, get_player_pose: Callable, level):
 
         super().__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health, horizontal_force,create_interactable,remove_interctable) 
         self.alignment = 0
@@ -25,6 +25,8 @@ class Ghoul(Enemy):
         self.invince_time_ms = 200
         self.last_invince_timestep = 0
         self.movement_time_ms = 1000
+        if level == 3:
+            self.movement_time_ms = 250
         self.sp = 0
         self.walkIndex = 0
         self._score = 200

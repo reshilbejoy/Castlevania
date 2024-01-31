@@ -5,8 +5,8 @@ from Abstract.Interaction import Interactable
 from Utils.signals import DamageMessage, InventoryMessage, Item, TargetType
 from background_engine import BackgroundEngine
 
-attack_span_ms = 30000
-movement_speed = 5  
+attack_span_ms = 1500
+movement_speed = 10 
 
 class CandyCane(Interactable):
     def __init__(self, hitbox, pose_supplier: Callable, damage_target: TargetType, remove_obj: Callable,di:int):

@@ -66,7 +66,8 @@ class UI:
     def change_weapon(self, change):
         self.weapon = change
         print(self.weapon)
-        self.all_ui[6][0] = [pygame.transform.scale(pygame.image.load(self.item_list[self.weapon]), (100, 80))]
+        self.all_ui[6][0] = [pygame.transform.scale(pygame.image.load(self.item_list[self.weapon]), (65, 65))]
+        self.all_ui[6][1] = pygame.Rect(460, 60, 90, 90)
 
 
     def change_p(self, change):
