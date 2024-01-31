@@ -6,7 +6,9 @@ from pygame import Surface,Rect
 from enum import Enum
 
 class Door(Sprite):
-    def __init__(self, images: List[Surface], hitbox: Rect):
+    def __init__(self, images: List[Surface], hitbox: Rect, req: int, font):
+        self.req = req
+        self.font = pygame.font.Font('Assets/Background/controls.ttf', 10)
         super().__init__(images, hitbox)
     
     def update(self):
@@ -19,5 +21,14 @@ class Door(Sprite):
 
     def get_hitbox(self):
         return self._hitbox
+
+    def draw(self, rect, surface):
+        hitbox = self.get_hitbox()
+        text = self.font.render(str(self.req), 1, (255, 255, 255))
+        rect = text.get_rect(center=(self.get_hitbox().width, self.get_hitbox().height))
+        surface.blit(self.return_current_image(), (hitbox.left - rect.left, hitbox.top - rect.top))
+        surface.blit(text, rect)
+        return surface
+
     
         

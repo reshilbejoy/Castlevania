@@ -1,5 +1,4 @@
-from typing import Dict, List
-from typing_extensions import TypedDict
+from typing import Dict, List,TypedDict
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
 from CompletedSprites.Interactables.BasicAttack import BasicAttack
@@ -63,12 +62,16 @@ class Game():
         p.build_level()
 
         self.ui = UI()
+        self._intro_font = pygame.font.Font('Assets/Background/controls.ttf', (9 + int(size / 8)))
+        self._controls_font = pygame.font.Font('Assets/Background/controls.ttf', 18)
+        self._title_font = pygame.font.Font('Assets/Background/controls.ttf', 20)
+        self._victory_font = pygame.font.Font('Assets/Background/controls.ttf', 30)
                 
         self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_object,self.remove_object)
 
         terrain = p.built
-        platforms = [Platform(entry[0], entry[1], entry[2]) for entry in terrain['Platform']]
-        self.doors = [Door(entry[0], entry[1]) for entry in terrain['Door']]
+        platforms = [Platform(entry[0], entry[1], entry[2],) for entry in terrain['Platform']]
+        self.doors = [Door(entry[0], entry[1], level_requirments[self.level], self._controls_font) for entry in terrain['Door']]
         all_interactables: List[Interactable] = [Candle(entry[0], entry[1], self.remove_object, self.create_object) for entry in terrain['Candle']]
         self._enemies = [Ghoul(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox) for entry in terrain['Ghoul']]
         self._enemies += [Skeleton(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox) for entry in terrain['Ghost']]
@@ -76,10 +79,6 @@ class Game():
         self._all_sprites: List[Sprite] = [self._player] + self.doors + platforms + all_interactables + self._enemies
         self._is_paused = False
         self._font = pygame.font.SysFont("couriernew", 50)
-        self._intro_font = pygame.font.Font('Assets/Background/controls.ttf', (9 + int(size / 8)))
-        self._controls_font = pygame.font.Font('Assets/Background/controls.ttf', 18)
-        self._title_font = pygame.font.Font('Assets/Background/controls.ttf', 20)
-        self._victory_font = pygame.font.Font('Assets/Background/controls.ttf', 30)
         self.current_map = p.get_current_map()
         self.starting_screen_position = height + score_box_height + 50
         self.ui.score_num = player_score
@@ -245,7 +244,6 @@ class Game():
                     if type(i) is Ghoul or type(i) is Skeleton:
                         if i.check_hit():
                             surface = i.hit_animation(rect, surface)
-
 
 
                 window.fill((0,0,0))
