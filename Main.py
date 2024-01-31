@@ -1,4 +1,5 @@
-from typing import Dict, List, TypedDict
+from typing import Dict, List
+from typing_extensions import TypedDict
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
 from CompletedSprites.Interactables.BasicAttack import BasicAttack
@@ -83,6 +84,7 @@ class Game():
         self.starting_screen_position = height + score_box_height + 50
         self.ui.score_num = player_score
         self.ui.change_score(player_score)
+        self.current_hearts = player_hearts
 
         self.timer = Timer()
         if self.level == 3:
@@ -286,6 +288,7 @@ class Game():
             self.fade_screen(window)
             self._game_started = False
             self._game_over = True
+            player_hearts = self.current_hearts
             run_game(Game(self.level))
 
     def create_object(self, obj):
