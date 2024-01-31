@@ -40,7 +40,7 @@ class UI:
                         [heart_img, heart_hitbox],
                         #[p_img, p_hitbox],
                         [box_img, box_hitbox]]
-        self.item_list = {Item.WHIP:"Assets/Interactables/Whip_attack/3.png",Item.DAGGER:"Assets/Sprites/Equipment/knife.png"}
+        self.item_list = {Item.WHIP:"Assets/Interactables/Whip_attack/3.png",Item.DAGGER:"Assets/Interactables/Throwable/Fire/1.png"}
         self.score = "000000"
         self.score_num = 0
         self.time = "0000"

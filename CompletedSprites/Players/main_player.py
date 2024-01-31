@@ -102,7 +102,9 @@ class MainPlayer(Player):
                 di = -1
                 if self.direction >= 0:
                     di = 1
-                self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.ENEMY,self.remove_obj,di))
+                if (self.last_attack_timestep + 1000) <  BackgroundEngine.get_current_time():
+                    self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.ENEMY,self.remove_obj,di))
+                    self.last_attack_timestep = BackgroundEngine.get_current_time()
 
     def init_obj(self) -> None:
         pass

@@ -45,11 +45,11 @@ class CandyCane(Interactable):
         if self.initial_spawn:
         
             new_hitbox.midleft = dynSpritePose[0].midright
+            new_hitbox.y = dynSpritePose[0].y  
             new_hitbox.x += 5 
             self.initial_spawn = False
         else:
         
             new_hitbox.x += self.direction * self.velocity
-            new_hitbox.y = dynSpritePose[0].y  
-
+            new_hitbox.y = new_hitbox.y
         self._hitbox = new_hitbox
