@@ -13,6 +13,10 @@ When designing the game, we initially sought to make one large level that demons
 To run the game, you will need to run the **Main.py** file in the **main** branch. If the window is too big for your screen, you can adjust the variable **size** in Constants/window_constants.py. ***Do not change any other variable in this file!*** The window will have instructions on how to move through the game with a keyboard. At the end of the game, simply close the window and re-run the program if you want to play again. 
 
 ## Architecture
+Major modules and their interactions?
+What architectural choices did you make?
+Diagram
+APIs
 
 ## User Experience
 
