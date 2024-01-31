@@ -35,6 +35,7 @@ CandleSpriteTypes = {Candle}
 max_level = 3 # set to the highest dungeon level
 player_hearts = 0
 player_score = 0
+level_requirments = {1: 2000, 2:4000, 3:6000}
 
 
 class SortedSprites(TypedDict):
@@ -305,7 +306,7 @@ class Game():
                     dynSprite.handle_inventory_interaction(interactable.get_inventory_message())
                     if type(interactable) is BasicAttack and (type(dynSprite) is Ghoul or type(dynSprite) is Skeleton):
                         if dynSprite.get_health() <= 0 and not dynSprite.got_score:
-                            self.ui.change_score(dynSprite.get_score())
+                            self.ui.change_score(dynSprite.get_score() + 500 * (self.level - 1))
         for candle in self._sprite_dict["Active"]["Candle"]:
             for interactable in self._sprite_dict['Active']["Interactable"]:
                 if interactable._hitbox.colliderect(candle.return_hitbox()):
@@ -341,7 +342,7 @@ class Game():
         if pressed[pygame.K_w]:
             pass
         if pressed[pygame.K_q] and not self._player._hit and not self._player.isCrouched:
-            if (self._player.inside_door(self.doors[0])): 
+            if (self._player.inside_door(self.doors[0]) and self.ui.score_num >= level_requirments[self.level]): 
                 player_score = self.ui.score_num
                 self.fade_screen(window)
                 if (self.level == max_level):
