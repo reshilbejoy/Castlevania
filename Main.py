@@ -37,7 +37,7 @@ CandleSpriteTypes = {Candle}
 max_level = 3 # set to the highest dungeon level
 player_hearts = 0
 player_score = 0
-level_requirments = {1: 1600, 2:5000, 3:7000}
+level_requirments = {1: 1600, 2: 7000, 3: 12000}
 
 
 class SortedSprites(TypedDict):

@@ -5,21 +5,28 @@ from Abstract.Interaction import Interactable
 from Utils.signals import DamageMessage, InventoryMessage, Item, TargetType
 from background_engine import BackgroundEngine
 
-attack_span_ms = 1500
-movement_speed = 10 
-
 class CandyCane(Interactable):
     def __init__(self, hitbox, pose_supplier: Callable, damage_target: TargetType, remove_obj: Callable,di:int):
-        super().__init__(images=[], hitbox=hitbox, damage=1, remove_obj=remove_obj)
+        self.attack_span_ms = 2000
+        self.movement_speed = 12
         self.damage_target = damage_target
         self.pose_supplier: Callable = pose_supplier
         self.images = pygame.transform.scale(
             pygame.transform.flip(pygame.image.load('Assets/Interactables/Throwable/Fire/1.png'), True, False),
             (hitbox.width, hitbox.height))
         self.creation_time: int = BackgroundEngine.get_current_time()
-        self.velocity = movement_speed  
+        self.velocity = self.movement_speed  
         self.direction = di  
         self.initial_spawn = True
+        self.damage = 3
+        
+
+        if (self.damage_target == TargetType.ENEMY):
+            self.damage = 2
+            self.attack_span_ms = 1500
+            self.movement_speed = 8
+
+        super().__init__(images=[], hitbox=hitbox, damage=self.damage, remove_obj=remove_obj)
 
     def return_current_image(self) -> pygame.Surface:
         return self.images
@@ -32,10 +39,10 @@ class CandyCane(Interactable):
 
     @staticmethod
     def get_attack_span():
-        return attack_span_ms
+        return self.attack_span_ms
 
     def life_span(self):
-        return BackgroundEngine.get_current_time() - self.creation_time < attack_span_ms
+        return BackgroundEngine.get_current_time() - self.creation_time < self.attack_span_ms
 
     def _movement(self):
         new_hitbox: Rect = self.get_hitbox()
