@@ -21,3 +21,7 @@ There is a good chance a first-time user is actually quite comfortable with the 
 As said before, there is an element of mystery to the game. A more experienced player would understand how certain interactions work in order to progress through stages quicker. 
 
 ## Retrospective
+How did you feel about the process of writing this app?
+What was communication like? High points? Low points?
+Were there any major surprises you encountered?
+Is there anything you would do differently next time?
