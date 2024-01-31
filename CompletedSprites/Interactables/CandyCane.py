@@ -11,9 +11,9 @@ class CandyCane(Interactable):
         self.movement_speed = 12
         self.damage_target = damage_target
         self.pose_supplier: Callable = pose_supplier
-        self.images = [pygame.transform.scale(
+        self.images = pygame.transform.scale(
             pygame.transform.flip(pygame.image.load('Assets/Interactables/Throwable/Fire/1.png'), True, False),
-            (hitbox.width, hitbox.height))]
+            (hitbox.width, hitbox.height))
         self.creation_time: int = BackgroundEngine.get_current_time()
         self.velocity = self.movement_speed  
         self.direction = di  
