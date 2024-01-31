@@ -25,9 +25,9 @@ class Door(Sprite):
     def draw(self, rect, surface):
         hitbox = self.get_hitbox()
         text = self.font.render(str(self.req), 1, (255, 255, 255))
-        rect = text.get_rect(center=(self.get_hitbox().width, self.get_hitbox().height))
+        text_rect = text.get_rect(center=(hitbox.left - rect.left + int(hitbox.width / 2), hitbox.top - rect.top + (int(hitbox.height / 2))))
         surface.blit(self.return_current_image(), (hitbox.left - rect.left, hitbox.top - rect.top))
-        surface.blit(text, rect)
+        surface.blit(text, text_rect)
         return surface
 
     
