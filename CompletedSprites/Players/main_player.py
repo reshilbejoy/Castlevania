@@ -120,8 +120,6 @@ class MainPlayer(Player):
         if self._health > 0:
             if self.check_hit():
                 return self.images_hit[0]
-            if self.isCrouched:
-                return self.crouch_animation_right
             self.isAttacking = not BackgroundEngine.get_current_time() - self.last_attack_timestep>BasicAttack.get_attack_span()
             if self.isFalling and self.direction < 0:
                 return self.fall_animation_left

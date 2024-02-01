@@ -55,7 +55,7 @@ class Cookie(Interactable):
         if self.initial_spawn:
         
             new_hitbox.midleft = dynSpritePose[0].midright
-            new_hitbox.y = dynSpritePose[0].y  
+            new_hitbox.y = dynSpritePose[0].y + 25
             new_hitbox.x += 5 
             self.initial_spawn = False
         else:
