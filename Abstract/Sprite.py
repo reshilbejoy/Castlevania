@@ -19,6 +19,9 @@ class Sprite():
 
     def draw(self, rect, surface):
         hitbox = self.get_hitbox()
+        image = self.return_current_image()
+        if image == None:
+            print(type(self))
         surface.blit(self.return_current_image(), (hitbox.left - rect.left, hitbox.top - rect.top))
         #pygame.draw.rect(surface, (200, 90, 90), (hitbox.left - rect.left,hitbox.top - rect.top, hitbox.width, hitbox.height), 2)
         return surface

@@ -29,7 +29,7 @@ class CandyCane(Interactable):
         super().__init__(images=[], hitbox=hitbox, damage=self.damage, remove_obj=remove_obj)
 
     def return_current_image(self) -> pygame.Surface:
-        return self.images[0]
+        return self.images
 
     def get_damage_message(self):
         return DamageMessage(self.damage, self.damage_target)
