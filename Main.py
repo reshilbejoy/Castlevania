@@ -200,7 +200,7 @@ class Game():
         rect = text.get_rect(center=(length * 0.3, height / 5))
         window.blit(text, rect)
 
-        text_time = self._victory_font.render("Time-" + str(BackgroundEngine.get_current_time() // 10000), 1, (255, 255, 255))
+        text_time = self._victory_font.render("Time-" + str(BackgroundEngine.get_current_time() // 1000), 1, (255, 255, 255))
         rect_time = text_time.get_rect(center=(length * 0.2 + 80, 2 * height / 5 - 30))
         window.blit(text_time, rect_time)
 
@@ -429,6 +429,8 @@ def run_game(game: Game):
         game.ending_screen()
     
 if __name__ == "__main__":
+    pygame.mixer.music.load('Assets/Music/music_test.wav')
+    pygame.mixer.music.play(-1)
     Castlevania = Game(1)
     while not Castlevania._game_started:
         Castlevania.starting_screen()

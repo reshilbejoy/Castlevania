@@ -7,7 +7,7 @@ Things to fix
  ⁃ Add diff orientation for crouch and hit          - DONE
  ⁃ Add score for enemies                            - DONE
  ⁃ Crouch issues                                   - DONE
- ⁃ Adding in more timer, more heart spawn           -  IP
+ ⁃ Adding in more timer, more heart spawn           - DONE
  - Skeleton doesn’t spawn throwable                - DONE
  - BOSS                                             - IP
  
