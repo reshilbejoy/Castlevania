@@ -82,7 +82,6 @@ class Game():
         self._font = pygame.font.SysFont("couriernew", 50)
         self.current_map = p.get_current_map()
         self.starting_screen_position = height + score_box_height + 50
-        self.ui.score_num = player_score
         self.ui.change_score(player_score)
         self.ui.change_weapon(Item.WHIP)
         self.current_hearts = player_hearts

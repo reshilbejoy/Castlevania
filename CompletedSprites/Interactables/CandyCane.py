@@ -29,7 +29,7 @@ class CandyCane(Interactable):
         super().__init__(images=[], hitbox=hitbox, damage=self.damage, remove_obj=remove_obj)
 
     def return_current_image(self) -> pygame.Surface:
-        return self.images
+        return self.images[0]
 
     def get_damage_message(self):
         return DamageMessage(self.damage, self.damage_target)
@@ -37,8 +37,8 @@ class CandyCane(Interactable):
     def get_inventory_message(self):
         return InventoryMessage(Item.NONE, TargetType.NONE)
 
-    @staticmethod
-    def get_attack_span():
+    
+    def get_attack_span(self):
         return self.attack_span_ms
 
     def life_span(self):

@@ -20,6 +20,7 @@ class Cookie(Interactable):
         self.direction = di  
         self.initial_spawn = True
         self.damage = 3
+        self.index = 0
         
 
         if (self.damage_target == TargetType.ENEMY):
@@ -32,7 +33,7 @@ class Cookie(Interactable):
     def return_current_image(self) -> pygame.Surface:
         self.index += 0.25
         #returns first image bec platforms do not have animations
-        return self._image_arr[int(self.index) % 4]
+        return self.images[int(self.index) % 4]
 
     def get_damage_message(self):
         return DamageMessage(self.damage, self.damage_target)
@@ -40,8 +41,7 @@ class Cookie(Interactable):
     def get_inventory_message(self):
         return InventoryMessage(Item.NONE, TargetType.NONE)
 
-    @staticmethod
-    def get_attack_span():
+    def get_attack_span(self):
         return self.attack_span_ms
 
     def life_span(self):
