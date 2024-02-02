@@ -19,7 +19,7 @@ class Cookie(Interactable):
         self.velocity = self.movement_speed  
         self.direction = di  
         self.initial_spawn = True
-        self.damage = 3
+        self.damage = 5
         self.index = 0
         
 
