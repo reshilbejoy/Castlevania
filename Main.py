@@ -96,9 +96,15 @@ class Game():
         self.current_hearts = player_hearts
         self.previous_update_frame = 0
 
+
+        #whip_sound = pygame.mixer.Sound()
+        #damage_sound = pygame.mixer.Sound()
+        #progressing_sound = pygame.mixer.Sound()
+        #heart_sound = pygame.mixer.Sound()
+
         self.timer = Timer()
-        if self.level == 3:
-            self.timer.time = 100
+        #if self.level == 3:
+            #self.timer.time = 100
     
     def fade_screen(self, window):
         fade_out = pygame.Surface((length, height + score_box_height))
@@ -438,6 +444,7 @@ class Game():
         return False
     
     def init_sprites(self):
+        self.flag = True
         for i in self._all_sprites:
             if type(i) in DynamicSpriteTypes:
                 i.init_obj()
@@ -454,9 +461,9 @@ def run_game(game: Game):
         game.ending_screen()
     
 if __name__ == "__main__":
-    # pygame.mixer.music.load('Assets/Music/music_test.wav')
-    # pygame.mixer.music.play(-1)
-    Castlevania = Game(4)
+    #pygame.mixer.music.load('Assets/Music/music_test.wav')
+    #pygame.mixer.music.play(-1)
+    Castlevania = Game(1)
     while not Castlevania._game_started:
         Castlevania.starting_screen()
     # Castlevania.controls_screen()

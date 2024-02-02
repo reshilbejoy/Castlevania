@@ -7,7 +7,7 @@ from background_engine import BackgroundEngine
 
 class CandyCane(Interactable):
     def __init__(self, hitbox, pose_supplier: Callable, damage_target: TargetType, remove_obj: Callable,di:int):
-        self.attack_span_ms = 1250
+        self.attack_span_ms = 1500
         self.movement_speed = 12
         self.damage_target = damage_target
         self.pose_supplier: Callable = pose_supplier
@@ -18,13 +18,13 @@ class CandyCane(Interactable):
         self.velocity = self.movement_speed  
         self.direction = di  
         self.initial_spawn = True
-        self.damage = 3
+        self.damage = 4
         
 
         if (self.damage_target == TargetType.ENEMY):
             self.damage = 2
-            self.attack_span_ms = 1500
-            self.movement_speed = 8
+            self.attack_span_ms = 1250
+            self.movement_speed = 6
 
         super().__init__(images=[], hitbox=hitbox, damage=self.damage, remove_obj=remove_obj)
 
