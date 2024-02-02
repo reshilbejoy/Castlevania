@@ -44,5 +44,3 @@ One of the major surprises we encountered was how little time we actually had to
 Is there anything you would do differently next time?
 
 Next time, we would have a lot more understanding of how this type of Game Functions, and what specific parts are the most important ones to get done at the start. We would probably streamline the process more and learn from out current mistakes, and re-do some of the architecture so it is more refined and has unecessary repetitions. We would also add more replayability (aka more levels, enemies and weapons), as well as some things from the original Castlevania that we did not have enough time to implement now (like Stairs). Most importantly, we would spend more time Play Testing the game, and ironing out all the bugs.
-
-## Retrospective
