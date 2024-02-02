@@ -37,7 +37,7 @@ CandleSpriteTypes = {Candle}
 max_level = 3 # set to the highest dungeon level
 player_hearts = 0
 player_score = 0
-level_requirments = {1: 1600, 2: 5500, 3: 12000}
+level_requirments = {1: 1600, 2: 5500, 3: 12000,4:9999}
 
 
 class SortedSprites(TypedDict):
@@ -423,6 +423,9 @@ class Game():
                     self.ending_screen() 
                 else:
                     run_game(Game(self.level + 1))
+        if pressed[pygame.K_ESCAPE]:
+            self._is_paused = not self._is_paused
+            print(self._is_paused)
                 
 
             

@@ -273,10 +273,10 @@ class Boss(Enemy):
 
 
     def update(self):
-        if self.lifespan():
-            self.AI()
-        else:
-             self.remove_obj(self)
-    
+        if BackgroundEngine.get_current_time() >=  self.time + 10000:
 
-            
+            if self.lifespan():
+                self.AI()
+            else:
+                 self.remove_obj(self)
+    
