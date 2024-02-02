@@ -69,9 +69,10 @@ class Boss(Enemy):
         self.movement_pid_controller = PIDController(0.001,0.0001)
         self.current_player_pose = 0
         self.path_replanning_thresh_ms = 200
+        self.time =BackgroundEngine.get_current_time()
 
 
-    def init_obj(self):
+    def init_obj(self):        
         self.create_obj(HarmingHitbox(pygame.Rect(50, 200, 100, 100), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj))
 
     def attack(self):
@@ -265,10 +266,12 @@ class Boss(Enemy):
 
 
     def update(self):
-        if self.lifespan():
-            self.AI()
-        else:
-             self.remove_obj(self)
+        if BackgroundEngine.get_current_time() >=  self.time + 10000:
+
+            if self.lifespan():
+                self.AI()
+            else:
+                 self.remove_obj(self)
     
 
             
