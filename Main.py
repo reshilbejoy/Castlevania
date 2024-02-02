@@ -1,4 +1,5 @@
-from typing import Dict, List,TypedDict
+from typing import Dict, List
+from typing_extensions import TypedDict
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
 from CompletedSprites.Interactables.BasicAttack import BasicAttack
@@ -87,8 +88,8 @@ class Game():
         self.current_hearts = player_hearts
 
         self.timer = Timer()
-        if self.level == 3:
-            self.timer.time = 100
+        #if self.level == 3:
+            #self.timer.time = 100
     
     def fade_screen(self, window):
         fade_out = pygame.Surface((length, height + score_box_height))
@@ -429,8 +430,8 @@ def run_game(game: Game):
         game.ending_screen()
     
 if __name__ == "__main__":
-    pygame.mixer.music.load('Assets/Music/music_test.wav')
-    pygame.mixer.music.play(-1)
+    #pygame.mixer.music.load('Assets/Music/music_test.wav')
+    #pygame.mixer.music.play(-1)
     Castlevania = Game(1)
     while not Castlevania._game_started:
         Castlevania.starting_screen()
