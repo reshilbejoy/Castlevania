@@ -66,12 +66,13 @@ class Boss(Enemy):
         self._score = 200
         self.a_star_nodes = []
         self.last_astar_exec = []
-        self.movement_pid_controller = PIDController(0.001,0.0001)
+        self.movement_pid_controller = PIDController(0.001,0)
         self.current_player_pose = 0
-        self.path_replanning_thresh_ms = 200
+        self.path_replanning_thresh_ms = 1000
 
 
     def init_obj(self):
+
         self.create_obj(HarmingHitbox(pygame.Rect(50, 200, 100, 100), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,5))
 
     def attack(self):
@@ -80,10 +81,10 @@ class Boss(Enemy):
     def populate_node_map(self,allPlats:[Platform]):
         self.a_star_nodes = []
         for plat in [i.get_hitbox() for i in allPlats]:
-            print("__________________________________________________")
+            # print("__________________________________________________")
             for x in np.arange(plat.midleft[0]+2,plat.midright[0],10):
                 # print(f"astar plat center {plat.centery}")
-                print(f"astar plat top {[x,plat.top]}")
+                # print(f"astar plat top {[x,plat.top]}")
 
                 self.a_star_nodes.append([x,plat.top])
                 # print(f"a star node{(x,plat.top)}")
@@ -124,11 +125,11 @@ class Boss(Enemy):
 
         astar_out = self.astar(closest_node_to_enemy,closest_node_to_player)
         self.last_astar_exec = [astar_out,0,BackgroundEngine.get_current_time()]
-        print(f"Last astar exec: {astar_out}")
-        for i in astar_out:
-            print(f"Last astar exec: {astar_out}")
-            # self.create_obj(Candle([pygame.transform.scale((pygame.image.load('Assets/Interactables/BigCandle/1.png')), (60, 20)), 
-            #         pygame.transform.scale((pygame.image.load('Assets/Interactables/BigCandle/2.png')), (60, 20))],pygame.Rect(i[0],i[1],50,50),self.create_obj,self.remove_obj))
+        # print(f"Last astar exec: {astar_out}")
+        # for i in astar_out:
+        #     print(f"Last astar exec: {astar_out}")
+        #     self.create_obj(Candle([pygame.transform.scale((pygame.image.load('Assets/Interactables/BigCandle/1.png')), (60, 20)), 
+        #             pygame.transform.scale((pygame.image.load('Assets/Interactables/BigCandle/2.png')), (60, 20))],pygame.Rect(i[0],i[1],50,50),self.create_obj,self.remove_obj))
 
         # print(astar_out)
         return astar_out
@@ -231,6 +232,13 @@ class Boss(Enemy):
     def handle_inventory_interaction(self,interaction_msg: InventoryMessage) -> None:
         pass
 
+    def change_force(self, x_force, y_force):
+        self._horizontal_force = x_force
+        self._verticalForce = y_force
+        self.net_force = (abs(self._horizontal_force) - abs(self.frictionForce))
+        if self._horizontal_force < 0:
+            self.net_force *= -1 
+
     def AI(self):
         try:
             # print(f" pose {self.current_player_pose}")
@@ -241,22 +249,22 @@ class Boss(Enemy):
                 x_error = self.last_astar_exec[0][self.last_astar_exec[1]][0] - self.get_hitbox().centerx 
                 y_error = self.last_astar_exec[0][self.last_astar_exec[1]][1] - self.get_hitbox().bottom 
                 error = math.dist((self.get_hitbox().centerx,self.get_hitbox().bottom),self.last_astar_exec[0][self.last_astar_exec[1]])
-                print(f"desired pose is {self.last_astar_exec[0][self.last_astar_exec[1]][0]}")
-                print(f"current pose is {self.get_hitbox().centerx }")
+                print(f"desired pose is {self.last_astar_exec[0][self.last_astar_exec[1]]}")
+                print(f"current pose is {self.get_hitbox().midbottom }")
 
-                print(f"error is {x_error}")
+                # print(f"error is {math.fabs(error)}")
 
-                if (math.fabs(x_error)+ math.fabs(y_error))>25:
+                if (math.fabs(x_error))>20:
                     pidOut = self.movement_pid_controller.calculate(self.get_hitbox().centerx, self.last_astar_exec[0][self.last_astar_exec[1]][0])
                     print(f"pidOut {pidOut}")
-                    self.change_force(pidOut+sign(pidOut)*0.2,0)
-                    if (self.get_hitbox().midbottom[1] - self.last_astar_exec[0][self.last_astar_exec[1]][1]) > 3:
+                    self.change_force(pidOut + sign(pidOut)*0.2,0)
+                    if (y_error) < -3:
                         self.jump()
                 else:
                     self.last_astar_exec = [self.last_astar_exec[0],self.last_astar_exec[1]+1,self.last_astar_exec[2]]
 
             else:
-                # self.populate_node_map()
+                # self.last_astar_exec = []
                 self.get_best_path()
             pass
         except Exception as e:

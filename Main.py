@@ -65,8 +65,7 @@ class Game():
 
         self.ui = UI()
         if self.level == 3:
-
-            self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 290, 100, 130), 16, self.create_object,self.remove_object)
+            self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 130, 50, 80), 16, self.create_object,self.remove_object)
         else:
             self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 290, 50, 80), 16, self.create_object,self.remove_object)
 
@@ -85,7 +84,7 @@ class Game():
         platforms = [Platform(entry[0], entry[1], entry[2],) for entry in terrain['Platform']]
         self.doors = [Door(entry[0], entry[1], level_requirments[self.level], self._controls_font) for entry in terrain['Door']]
         all_interactables: List[Interactable] = [Candle(entry[0], entry[1], self.remove_object, self.create_object) for entry in terrain['Candle']]
-        self.bosses = [Boss(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_pose_supplier()) for entry in terrain['Boss']]
+        self.bosses = [Boss(2, 8, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_pose_supplier()) for entry in terrain['Boss']]
         self._enemies = [Ghoul(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox, self.level) for entry in terrain['Ghoul']]
         self._enemies += [Skeleton(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox, self.level) for entry in terrain['Ghost']]
         self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]
@@ -466,7 +465,7 @@ def run_game(game: Game):
 if __name__ == "__main__":
     #pygame.mixer.music.load('Assets/Music/music_test.wav')
     #pygame.mixer.music.play(-1)
-    Castlevania = Game(1)
+    Castlevania = Game(4)
     while not Castlevania._game_started:
         Castlevania.starting_screen()
     # Castlevania.controls_screen()

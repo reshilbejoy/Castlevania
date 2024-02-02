@@ -63,7 +63,7 @@ class MainPlayer(Player):
         self.isMoving = False
         self.invince = False
         self.isAttacking = False
-        self.invince_time_ms = 500
+        self.invince_time_ms = 700
         self.last_invince_timstep = 0
         self.last_attack_timestep = 0
         self.player_jump_attack_count = 0
