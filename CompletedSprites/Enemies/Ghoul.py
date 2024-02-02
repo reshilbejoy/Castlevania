@@ -32,7 +32,7 @@ class Ghoul(Enemy):
         self._score = 200
 
     def init_obj(self):
-        self.create_obj(HarmingHitbox(pygame.Rect(50, 200, 100, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj))
+        self.create_obj(HarmingHitbox(pygame.Rect(50, 200, 100, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,3))
 
 
     def attack(self):

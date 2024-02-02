@@ -72,8 +72,8 @@ class Boss(Enemy):
         self.time =BackgroundEngine.get_current_time()
 
 
-    def init_obj(self):        
-        self.create_obj(HarmingHitbox(pygame.Rect(50, 200, 100, 100), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj))
+    def init_obj(self):
+        self.create_obj(HarmingHitbox(pygame.Rect(50, 200, 100, 100), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,5))
 
     def attack(self):
         pass
@@ -273,5 +273,3 @@ class Boss(Enemy):
             else:
                  self.remove_obj(self)
     
-
-            

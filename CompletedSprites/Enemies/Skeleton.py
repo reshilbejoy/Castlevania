@@ -35,11 +35,12 @@ class Skeleton(Enemy):
         
 
     def init_obj(self):
-        self.create_obj(HarmingHitbox (pygame.Rect(50, 200, 100, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj))
+        self.create_obj(HarmingHitbox (pygame.Rect(50, 200, 100, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,5))
 
 
     def attack(self):
-          self.create_obj(HarmingHitbox(pygame.Rect(50, 200, 100, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj))
+        pass
+        #   self.create_obj(HarmingHitbox(pygame.Rect(50, 200, 100, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,5))
 
     def return_current_image(self) -> pygame.Surface:
         if self._health > 0:
