@@ -62,4 +62,4 @@ class Cookie(Interactable):
         
             new_hitbox.x += self.direction * self.velocity
             new_hitbox.y = new_hitbox.y
-        self._hitbox = new_hitbox
+        self.hitbox = new_hitbox

@@ -20,7 +20,8 @@ class Parser:
             'Candle': [],
             'Door': [],
             'Ghoul': [],
-            'Ghost': []
+            'Ghost': [],
+            'Boss': []
         }
         
     
@@ -129,6 +130,11 @@ class Parser:
                     rect = pygame.Rect(self.curr_x, self.curr_y, 50, 50)
                     curr_list.append(rect)
                     self.built['Ghost'].append(curr_list)
+                
+                if y == "B":
+                    rect = pygame.Rect(self.curr_x, self.curr_y, 75, 100)
+                    curr_list.append(rect)
+                    self.built['Boss'].append(curr_list)
                 
                 curr_list = []
                 self.curr_x += height / self.line_height + 6

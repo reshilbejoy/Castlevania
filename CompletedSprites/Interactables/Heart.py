@@ -33,7 +33,7 @@ class Heart(Interactable):
         
 
     def get_hitbox(self):
-        return self._hitbox
+        return self.hitbox
 
     def handle_damage_interaction(self,interaction_msg: DamageMessage):
         if interaction_msg.target == (TargetType.ENEMY or TargetType.ALL_SPRITES):

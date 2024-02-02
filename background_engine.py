@@ -14,7 +14,8 @@ pygame.display.set_caption("Castlevania")
 
 _background_arr:List[pygame.Surface] = [pygame.transform.scale(pygame.image.load('Assets//Background/Level_1/1.png'), (background_length, height_ratio * size)),
                                         pygame.transform.scale(pygame.image.load('Assets//Background/Level_1/2.png'), (background_length, height_ratio * size)),
-                                        pygame.transform.scale(pygame.image.load('Assets//Background/Level_1/3.png'), (background_length, height_ratio * size))]
+                                        pygame.transform.scale(pygame.image.load('Assets//Background/Level_1/3.png'), (background_length, height_ratio * size)),
+                                        pygame.transform.scale(pygame.image.load('Assets//Background/Level_1/1.png'), (background_length, height_ratio * size))]
 _timer = pygame.time.Clock() 
 _draw_frame_size:Tuple[float,float] = (500,600)  #Width, Height
 _update_frame_size:Tuple[float,float] = (700,800)  #Width, Height

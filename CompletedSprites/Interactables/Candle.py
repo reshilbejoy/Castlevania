@@ -48,7 +48,7 @@ class Candle(Interactable):
             return self._death[2]
 
     def get_hitbox(self):
-        return self._hitbox
+        return self.hitbox
 
     def handle_damage_interaction(self,interaction_msg: DamageMessage) -> None:
         if interaction_msg.target == (TargetType.ENEMY or TargetType.ALL_SPRITES):
@@ -82,7 +82,7 @@ class Candle(Interactable):
         if self.life_span():
             self._movement()
         else:
-            self.create_obj(Heart(Rect(self._hitbox.left, self._hitbox.top, 35, 35), self.remove_obj))
+            self.create_obj(Heart(Rect(self.hitbox.left, self.hitbox.top, 35, 35), self.remove_obj))
             self.remove_obj(self)
 
     def _movement(self):

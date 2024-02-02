@@ -39,7 +39,7 @@ class Player(DynamicSprite):
         pass
 
     def inside_door(self, door):
-        if (self._hitbox.colliderect(door.get_hitbox())):
+        if (self.hitbox.colliderect(door.get_hitbox())):
             return True
         return False
     

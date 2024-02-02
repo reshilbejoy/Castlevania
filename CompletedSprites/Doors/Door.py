@@ -20,7 +20,7 @@ class Door(Sprite):
         return self._image_arr[0]
 
     def get_hitbox(self):
-        return self._hitbox
+        return self.hitbox
 
     def draw(self, rect, surface):
         hitbox = self.get_hitbox()

@@ -74,7 +74,7 @@ class MainPlayer(Player):
 
     def handle_damage_interaction(self,interaction_msg: DamageMessage) -> None:
         if interaction_msg.target == (TargetType.PLAYER or TargetType.ALL_SPRITES) and not self._hit:
-            print("hit")
+            # print("hit")
             if interaction_msg.damage > 0:
                 if((BackgroundEngine.get_current_time()-self.last_invince_timstep) > self.invince_time_ms):
                     self.invince = True
@@ -114,6 +114,7 @@ class MainPlayer(Player):
         pass
 
     def return_current_image(self) -> pygame.Surface:
+        # print(f"FUCK IN MY ASS {self._hitbox.midbottom}")
         # print(self._health)
 
         #player is not attacking
@@ -191,11 +192,15 @@ class MainPlayer(Player):
             if BackgroundEngine.get_current_time() - self.timestamp > 4000:
                 self._dead = True
             return self._death[1]
-
+        
+    # def get_hitbox(self):
+    #     print(f"player pose = {self._hitbox.center}")
+    #     return self._hitbox
+    
 
     def check_hit(self):
         if self._hit:
-            print(BackgroundEngine.get_current_time()-self._hit_time)
+            # print(BackgroundEngine.get_current_time()-self._hit_time)
             if BackgroundEngine.get_current_time()-self._hit_time >= 500:
                 self._hit = False
         return self._hit

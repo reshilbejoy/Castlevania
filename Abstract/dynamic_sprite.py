@@ -76,59 +76,59 @@ class DynamicSprite(Sprite,ABC):
 
         if not self.collision_detection: # collision_detection is true if there is a normal force
             self.current_velocity += self.gravity
-            self._hitbox.top += self.current_velocity
+            self.hitbox.top += self.current_velocity
             if self.current_velocity > 0:
                 self.isFalling = True
     
     def horizontal_movement(self):
         self.isMoving = True
-        if self.net_force > 0 and self._horizontal_force > 0 and self._hitbox.left <= background_length - self._hitbox.width: # and not self.collision_right:
+        if self.net_force > 0 and self._horizontal_force > 0 and self.hitbox.left <= background_length - self.hitbox.width: # and not self.collision_right:
             if not self.collision_right:
                 self.speeding_up()
-                self._hitbox.left += self.speed
+                self.hitbox.left += self.speed
             self.direction = 1
-        elif self.net_force < 0 and self._horizontal_force < 0 and self._hitbox.left >= 0: #and not self.collision_left:
+        elif self.net_force < 0 and self._horizontal_force < 0 and self.hitbox.left >= 0: #and not self.collision_left:
             if not self.collision_left:
                 self.speeding_up()
-                self._hitbox.left -= self.speed
+                self.hitbox.left -= self.speed
             self.direction = -1
 
         if not self.speed <= 0 and self._horizontal_force == 0:
-            if self._hitbox.left <= 0 or self._hitbox.left >= background_length - self._hitbox.width:
+            if self.hitbox.left <= 0 or self.hitbox.left >= background_length - self.hitbox.width:
                 self.speed = 0
             else:
                 self.slowing_down()
                 if self.direction > 0:
-                    self._hitbox.left += self.speed
+                    self.hitbox.left += self.speed
                 else:
-                    self._hitbox.left -= self.speed
+                    self.hitbox.left -= self.speed
 
     def platform_collision_detection(self, platform):
         # collision in the x direction
-        if platform._hitbox.colliderect(self._hitbox.left + (self._terminal_vel_x * self.direction), self._hitbox.top - 1, self._hitbox.width, self._hitbox.height):
+        if platform.hitbox.colliderect(self.hitbox.left + (self._terminal_vel_x * self.direction), self.hitbox.top - 1, self.hitbox.width, self.hitbox.height):
             self.speed = 0
             if self.direction > 0:
                 self.collision_right = True
-                self._hitbox.right = platform._hitbox.left
+                self.hitbox.right = platform.hitbox.left
             elif self.direction < 0:
                 self.collision_left = True
-                self._hitbox.left = platform._hitbox.right
+                self.hitbox.left = platform.hitbox.right
         
         # collision in the y direction
-        if platform._hitbox.colliderect(self._hitbox.left, self._hitbox.top + self.current_velocity, self._hitbox.width, self._hitbox.height):
+        if platform.hitbox.colliderect(self.hitbox.left, self.hitbox.top + self.current_velocity, self.hitbox.width, self.hitbox.height):
             if self.current_velocity < 0:
                 self.current_velocity = 0
-                self._hitbox.top = platform._hitbox.bottom + 1
+                self.hitbox.top = platform.hitbox.bottom + 1
             elif self.current_velocity >= 0:
                 self.current_velocity = 0
                 self.isJumping = False
                 self.isFalling = False
                 self.collision_detection = True
-                self._hitbox.bottom = platform._hitbox.top + 1
+                self.hitbox.bottom = platform.hitbox.top + 1
         
-        if self._hitbox.top <= 0:
+        if self.hitbox.top <= 0:
             self.current_velocity = 0
-            self._hitbox.top = 1
+            self.hitbox.top = 1
             self.isFalling = True
             
             
@@ -154,7 +154,7 @@ class DynamicSprite(Sprite,ABC):
         self.isJumping = True
         self.collision_detection = False
         self.current_velocity = -self._terminal_vel_y
-        self._hitbox.top += self.current_velocity
+        self.hitbox.top += self.current_velocity
 
     def get_pose_supplier(self):
         return lambda : (self.get_hitbox(),self.direction, self.alive())

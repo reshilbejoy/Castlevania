@@ -1,4 +1,5 @@
 from typing import Dict, List,TypedDict
+from CompletedSprites.Enemies.Boss import Boss
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
 from CompletedSprites.Interactables.BasicAttack import BasicAttack
@@ -28,7 +29,7 @@ from CompletedSprites.Interactables.Heart import Heart
 from CompletedSprites.Interactables.Cookie import Cookie
 
 
-DynamicSpriteTypes = {MainPlayer,Ghoul,Skeleton}
+DynamicSpriteTypes = {MainPlayer,Ghoul,Skeleton,Boss}
 InteractableSpriteTypes = {testPotion,BasicAttack,HarmingHitbox,CandyCane,Candle, Heart, Cookie}
 PlatformSpriteTypes = {Platform}
 DoorSpriteTypes = {Door}
@@ -63,21 +64,29 @@ class Game():
         p.build_level()
 
         self.ui = UI()
+                
+        self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 290, 50, 80), 16, self.create_object,self.remove_object)
+
+        terrain = p.built
+        # self.boss = Boss(5, 12, [],pygame.Rect(200, 290, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_pose_supplier())
+        self._is_paused = False
+        self._font = pygame.font.SysFont("couriernew", 50)
         self._intro_font = pygame.font.Font('Assets/Background/controls.ttf', (9 + int(size / 8)))
         self._controls_font = pygame.font.Font('Assets/Background/controls.ttf', 18)
         self._title_font = pygame.font.Font('Assets/Background/controls.ttf', 20)
         self._victory_font = pygame.font.Font('Assets/Background/controls.ttf', 30)
                 
-        self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_object,self.remove_object)
+        # self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_object,self.remove_object)
 
         terrain = p.built
         platforms = [Platform(entry[0], entry[1], entry[2],) for entry in terrain['Platform']]
         self.doors = [Door(entry[0], entry[1], level_requirments[self.level], self._controls_font) for entry in terrain['Door']]
         all_interactables: List[Interactable] = [Candle(entry[0], entry[1], self.remove_object, self.create_object) for entry in terrain['Candle']]
+        self.bosses = [Boss(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_pose_supplier()) for entry in terrain['Boss']]
         self._enemies = [Ghoul(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox, self.level) for entry in terrain['Ghoul']]
         self._enemies += [Skeleton(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox, self.level) for entry in terrain['Ghost']]
         self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]
-        self._all_sprites: List[Sprite] = [self._player] + self.doors + platforms + all_interactables + self._enemies
+        self._all_sprites: List[Sprite] = [self._player] + self.doors + platforms + all_interactables + self._enemies + self.bosses
         self._is_paused = False
         self._font = pygame.font.SysFont("couriernew", 50)
         self.current_map = p.get_current_map()
@@ -85,6 +94,7 @@ class Game():
         self.ui.change_score(player_score)
         self.ui.change_weapon(Item.WHIP)
         self.current_hearts = player_hearts
+        self.previous_update_frame = 0
 
         self.timer = Timer()
         if self.level == 3:
@@ -174,6 +184,7 @@ class Game():
             
 
     def starting_screen(self):
+        self.flag  = True
         window = BackgroundEngine.get_window()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -193,6 +204,7 @@ class Game():
         BackgroundEngine.tick_timer()
         
     def ending_screen(self):
+        
         window = BackgroundEngine.get_window()
         window.fill((0, 0, 0))
         window.blit(pygame.transform.scale(pygame.image.load('Assets/Background/Victory_screen.PNG'), (length, height + score_box_height)), (0, 0))
@@ -224,6 +236,7 @@ class Game():
         global player_hearts, player_score
         pressed = pygame.key.get_pressed()
         window = BackgroundEngine.get_window()
+        
         if not self.exit_condition():
             self.handle_pauses()
             if self._is_paused is False:
@@ -235,6 +248,8 @@ class Game():
                     
                     if i.should_update(self._player.get_hitbox()):
                         i.update()
+                        # self._player.update()
+                        # self.boss.update()
                         if i.should_draw(self._player.return_hitbox()):
                             if type(i) in DynamicSpriteTypes:
                                 self._sprite_dict["Active"]["Dynamic"].append(i)
@@ -279,6 +294,14 @@ class Game():
 
                 window.fill((0,0,0))
                 window.blit(surface, (0, 150))
+
+                if self.flag:
+                    for b in self.bosses:
+                        b.populate_node_map(self._sprite_dict["Active"]["Platform"]+self._sprite_dict["Inactive"]["Platform"])
+                        b.get_best_path()
+                        self.flag = False
+                
+
                 self.handle_keystrokes(pressed)
                 for i in self._sprite_dict["Active"]["Dynamic"]:
                     i.apply_force(self._sprite_dict["Active"]["Platform"])
@@ -307,6 +330,7 @@ class Game():
                 window.blit(surface, (0, 150))
                 self._sprite_dict = {"Active":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle" : [], "Heart": []},
                         "Inactive":{"Dynamic":[],"Interactable":[],"Platform":[], "Door": [], "Candle": [], "Heart": []}}
+                                    
                 BackgroundEngine.tick_timer()
                 
 
@@ -337,7 +361,7 @@ class Game():
         global player_hearts
         for dynSprite in self._sprite_dict["Active"]["Dynamic"]:
             for interactable in self._sprite_dict['Active']["Interactable"]:
-                if interactable._hitbox.colliderect(dynSprite.return_hitbox()):
+                if interactable.hitbox.colliderect(dynSprite.return_hitbox()):
                     dynSprite.handle_damage_interaction(interactable.get_damage_message())
                     dynSprite.handle_inventory_interaction(interactable.get_inventory_message())
                     if type(interactable) is BasicAttack and (type(dynSprite) is Ghoul or type(dynSprite) is Skeleton):
@@ -345,12 +369,12 @@ class Game():
                             self.ui.change_score(dynSprite.get_score() + 500 * (self.level - 1))
         for candle in self._sprite_dict["Active"]["Candle"]:
             for interactable in self._sprite_dict['Active']["Interactable"]:
-                if interactable._hitbox.colliderect(candle.return_hitbox()):
+                if interactable.hitbox.colliderect(candle.return_hitbox()):
                     candle.handle_damage_interaction(interactable.get_damage_message())
                     candle.handle_inventory_interaction(interactable.get_inventory_message())
         for heart in self._sprite_dict["Active"]["Heart"]:
             for interactable in self._sprite_dict['Active']["Interactable"]:
-                if interactable._hitbox.colliderect(heart.return_hitbox()):
+                if interactable.hitbox.colliderect(heart.return_hitbox()):
                     if (heart.handle_damage_interaction(interactable.get_damage_message())) and not heart._given_heart:
                         player_hearts += 1
                         heart._given_heart = True                     
@@ -419,6 +443,7 @@ class Game():
                 i.init_obj()
 
 
+
 def run_game(game: Game):
     game.init_sprites()
     game.timer.start()
@@ -429,11 +454,11 @@ def run_game(game: Game):
         game.ending_screen()
     
 if __name__ == "__main__":
-    pygame.mixer.music.load('Assets/Music/music_test.wav')
-    pygame.mixer.music.play(-1)
-    Castlevania = Game(1)
+    # pygame.mixer.music.load('Assets/Music/music_test.wav')
+    # pygame.mixer.music.play(-1)
+    Castlevania = Game(4)
     while not Castlevania._game_started:
         Castlevania.starting_screen()
-    Castlevania.controls_screen()
-    Castlevania.story_line()
+    # Castlevania.controls_screen()
+    # Castlevania.story_line()
     run_game(Castlevania)
