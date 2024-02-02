@@ -64,8 +64,11 @@ class Game():
         p.build_level()
 
         self.ui = UI()
-                
-        self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 290, 50, 80), 16, self.create_object,self.remove_object)
+        if self.level == 3:
+
+            self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 290, 100, 130), 16, self.create_object,self.remove_object)
+        else:
+            self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 290, 50, 80), 16, self.create_object,self.remove_object)
 
         terrain = p.built
         # self.boss = Boss(5, 12, [],pygame.Rect(200, 290, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_pose_supplier())
@@ -418,7 +421,7 @@ class Game():
                 player_score = self.ui.score_num
                 self.fade_screen(window)
                 if (self.level == max_level):
-                    self.ending_screen()
+                    self.ending_screen() 
                 else:
                     run_game(Game(self.level + 1))
                 
