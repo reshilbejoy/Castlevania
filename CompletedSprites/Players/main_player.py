@@ -115,7 +115,6 @@ class MainPlayer(Player):
         pass
 
     def return_current_image(self) -> pygame.Surface:
-        # print(f"FUCK IN MY ASS {self._hitbox.midbottom}")
         # print(self._health)
 
         #player is not attacking

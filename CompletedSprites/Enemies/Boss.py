@@ -273,7 +273,7 @@ class Boss(Enemy):
 
 
     def update(self):
-        if BackgroundEngine.get_current_time() >=  self.time + 10000:
+        if BackgroundEngine.get_current_time() >=  self.current_time + 10000:
 
             if self.lifespan():
                 self.AI()
