@@ -9,8 +9,8 @@ from background_engine import BackgroundEngine
 attack_span_ms = 1000
 
 class HarmingHitbox(Interactable):
-    def __init__(self,hitbox:Rect,pose_supplier:Callable,damage_target:TargetType, remove_obj:Callable):
-        super().__init__(images=[], hitbox = hitbox, damage = 7,remove_obj=remove_obj)
+    def __init__(self,hitbox:Rect,pose_supplier:Callable,damage_target:TargetType, remove_obj:Callable,damage:int):
+        super().__init__(images=[], hitbox = hitbox, damage = damage,remove_obj=remove_obj)
         self.damage_target = damage_target
         self.pose_supplier:Callable = pose_supplier
         self.images = pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Interactables/Whip_attack/3.png'), True, False), (hitbox.width, hitbox.height))
