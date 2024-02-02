@@ -87,6 +87,12 @@ class Game():
         self.ui.change_weapon(Item.WHIP)
         self.current_hearts = player_hearts
 
+
+        #whip_sound = pygame.mixer.Sound()
+        #damage_sound = pygame.mixer.Sound()
+        #progressing_sound = pygame.mixer.Sound()
+        #heart_sound = pygame.mixer.Sound()
+
         self.timer = Timer()
         #if self.level == 3:
             #self.timer.time = 100
