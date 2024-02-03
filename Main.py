@@ -1,6 +1,4 @@
-from typing import Dict, List
-from typing_extensions import TypedDict
-from CompletedSprites.Enemies.Boss import Boss
+from typing import Dict, List, TypedDict
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
 from CompletedSprites.Interactables.BasicAttack import BasicAttack
@@ -30,7 +28,7 @@ from CompletedSprites.Interactables.Heart import Heart
 from CompletedSprites.Interactables.Cookie import Cookie
 
 
-DynamicSpriteTypes = {MainPlayer,Ghoul,Skeleton,Boss}
+DynamicSpriteTypes = {MainPlayer,Ghoul,Skeleton}
 InteractableSpriteTypes = {testPotion,BasicAttack,HarmingHitbox,CandyCane,Candle, Heart, Cookie}
 PlatformSpriteTypes = {Platform}
 DoorSpriteTypes = {Door}
@@ -100,10 +98,22 @@ class Game():
         self.previous_update_frame = 0
 
 
-        #whip_sound = pygame.mixer.Sound()
-        #damage_sound = pygame.mixer.Sound()
-        #progressing_sound = pygame.mixer.Sound()
-        #heart_sound = pygame.mixer.Sound()
+        self.whip_sound = pygame.mixer.Sound("Assets/Music/Sounds/whip.wav")
+        self.whip_sound.set_volume(0.2)
+        self.damage_sound = pygame.mixer.Sound("Assets/Music/Sounds/damage.wav")
+        self.damage_sound.set_volume(0.2)
+        self.nextLevel_sound = pygame.mixer.Sound("Assets/Music/Sounds/next level.wav")
+        self.nextLevel_sound.set_volume(0.2)
+        self.heart_sound = pygame.mixer.Sound("Assets/Music/Sounds/heart.wav")
+        self.heart_sound.set_volume(0.2)
+        self.enemy_sound = pygame.mixer.Sound("Assets/Music/Sounds/enemy.wav")
+        self.enemy_sound.set_volume(0.2)
+        self.projectile_sound = pygame.mixer.Sound("Assets/Music/Sounds/projectile.wav")
+        self.projectile_sound.set_volume(0.6)
+        self.timer_sound = pygame.mixer.Sound("Assets/Music/Sounds/timer.wav")
+        self.timer_sound.set_volume(0.4)
+        self.whip_hit_sound = pygame.mixer.Sound("Assets/Music/Sounds/whip_hit.wav")
+        self.whip_hit_sound.set_volume(0.2)
 
         self.timer = Timer()
         #if self.level == 3:
@@ -374,16 +384,20 @@ class Game():
                     dynSprite.handle_damage_interaction(interactable.get_damage_message())
                     dynSprite.handle_inventory_interaction(interactable.get_inventory_message())
                     if type(interactable) is BasicAttack and (type(dynSprite) is Ghoul or type(dynSprite) is Skeleton):
+                        self.whip_hit_sound.play()
                         if dynSprite.get_health() <= 0 and not dynSprite.got_score:
                             self.ui.change_score(dynSprite.get_score() + 500 * (self.level - 1))
         for candle in self._sprite_dict["Active"]["Candle"]:
             for interactable in self._sprite_dict['Active']["Interactable"]:
                 if interactable.hitbox.colliderect(candle.return_hitbox()):
+                    if type(interactable) is BasicAttack:
+                        self.whip_hit_sound.play()
                     candle.handle_damage_interaction(interactable.get_damage_message())
                     candle.handle_inventory_interaction(interactable.get_inventory_message())
         for heart in self._sprite_dict["Active"]["Heart"]:
             for interactable in self._sprite_dict['Active']["Interactable"]:
                 if interactable.hitbox.colliderect(heart.return_hitbox()):
+                    self.heart_sound.play()
                     if (heart.handle_damage_interaction(interactable.get_damage_message())) and not heart._given_heart:
                         player_hearts += 1
                         heart._given_heart = True                     
@@ -407,6 +421,8 @@ class Game():
         if not (pressed[pygame.K_d] or pressed[pygame.K_a]) and not self._player.isCrouched:
             self._player.change_force(0, 0)
         if pressed[pygame.K_k] and not self._player._hit and not self._player.isCrouched:
+            if self._player.cur_weapon == Item.WHIP:
+                self.whip_sound.play()
             player_hearts = self._player.attack(player_hearts)
         if pressed[pygame.K_2]:
             self.ui.change_weapon(Item.WHIP)
@@ -418,6 +434,7 @@ class Game():
                 pass
         if pressed[pygame.K_q] and not self._player._hit and not self._player.isCrouched:
             if (self._player.inside_door(self.doors[0]) and self.ui.score_num >= level_requirments[self.level]): 
+                self.nextLevel_sound.play()
                 player_score = self.ui.score_num
                 self.fade_screen(window)
                 if (self.level == max_level):
@@ -446,6 +463,8 @@ class Game():
                 pygame.quit()
         hitbox = self._player.get_hitbox()
         if ((not self._player.lifespan()) or (hitbox.bottom > height)) or self.timer.get_time(BackgroundEngine.get_current_time() // 1000) == 1:
+            if self.timer.get_time(BackgroundEngine.get_current_time() // 1000) == 1:
+                self.timer_sound.play(2)
             return True
         return False
     
@@ -467,8 +486,8 @@ def run_game(game: Game):
         game.ending_screen()
     
 if __name__ == "__main__":
-    #pygame.mixer.music.load('Assets/Music/music_test.wav')
-    #pygame.mixer.music.play(-1)
+    pygame.mixer.music.load('Assets/Music/music_test.wav')
+    pygame.mixer.music.play(-1)
     Castlevania = Game(1)
     while not Castlevania._game_started:
         Castlevania.starting_screen()

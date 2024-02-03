@@ -32,6 +32,8 @@ class Skeleton(Enemy):
         self.walkIndex = 0
         self._score = 500
         self.flag = False
+        self.enemy_sound = pygame.mixer.Sound("Assets/Music/Sounds/enemy.wav")
+        self.enemy_sound.set_volume(0.2)
         
 
     def init_obj(self):
@@ -90,6 +92,7 @@ class Skeleton(Enemy):
         if (BackgroundEngine.get_current_time() // 2500) % 2 == 0:
             if not self.flag:
                 self.flag = True
+                self.enemy_sound.play()
                 self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,-1))
                 self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,1))
         else:

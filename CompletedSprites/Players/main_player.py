@@ -1,5 +1,4 @@
-from typing import Callable, List
-from typing_extensions import TypedDict
+from typing import Callable, List,TypedDict
 import pygame
 from Abstract.Player import Player
 from Abstract.Interaction import Interactable
@@ -73,8 +72,14 @@ class MainPlayer(Player):
         self._death = [pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_death/1.png'), (50, 50)), 
                        pygame.transform.scale(pygame.image.load('Assets/Sprites/Player_death/2.png'), (80, 30))]
 
+        self.damage_sound = pygame.mixer.Sound("Assets/Music/Sounds/damage.wav")
+        self.damage_sound.set_volume(0.2)
+        self.projectile_sound = pygame.mixer.Sound("Assets/Music/Sounds/projectile.wav")
+        self.projectile_sound.set_volume(0.2)
+
     def handle_damage_interaction(self,interaction_msg: DamageMessage) -> None:
         if interaction_msg.target == (TargetType.PLAYER or TargetType.ALL_SPRITES) and not self._hit:
+            self.damage_sound.play()
             # print("hit")
             if interaction_msg.damage > 0:
                 if((BackgroundEngine.get_current_time()-self.last_invince_timstep) > self.invince_time_ms):
@@ -106,6 +111,7 @@ class MainPlayer(Player):
                 if self.direction >= 0:
                     di = 1
                 if (self.last_attack_timestep + 1000) <  BackgroundEngine.get_current_time():
+                    self.projectile_sound.play()
                     self.create_obj(Cookie(pygame.Rect(50, 200, 30, 30), self.get_pose_supplier(),TargetType.ENEMY,self.remove_obj,di))
                     self.last_attack_timestep = BackgroundEngine.get_current_time()
                     player_hearts -= 1
