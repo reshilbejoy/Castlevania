@@ -1,4 +1,5 @@
-from typing import Dict, List,TypedDict
+from typing import Dict, List
+from typing_extensions import TypedDict
 from CompletedSprites.Enemies.Boss import Boss
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
@@ -468,9 +469,9 @@ def run_game(game: Game):
 if __name__ == "__main__":
     #pygame.mixer.music.load('Assets/Music/music_test.wav')
     #pygame.mixer.music.play(-1)
-    Castlevania = Game(4)
+    Castlevania = Game(1)
     while not Castlevania._game_started:
         Castlevania.starting_screen()
-    # Castlevania.controls_screen()
-    # Castlevania.story_line()
+    Castlevania.controls_screen()
+    Castlevania.story_line()
     run_game(Castlevania)
