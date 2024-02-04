@@ -1,3 +1,4 @@
+from copy import deepcopy
 import math
 import numpy as np
 from Abstract.dynamic_sprite import DynamicSprite
@@ -56,6 +57,7 @@ class Boss(Enemy):
                             pygame.transform.scale(pygame.image.load('Assets/Enemies/Ghoul_walk/2.png'),(hitbox.width, hitbox.height)),]
         self.walkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Enemies/Ghoul_walk/1.png'),True,False),(hitbox.width, hitbox.height)),
                         pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Enemies/Ghoul_walk/2.png'),True,False),(hitbox.width, hitbox.height)),]
+        self.start_coords = deepcopy(hitbox.center)
         self.pose_supplier:Callable = get_player_pose
         self.invincible = False
         self.invince_time_ms = 200
@@ -68,7 +70,10 @@ class Boss(Enemy):
         self.last_astar_exec = []
         self.movement_pid_controller = PIDController(0.001,0)
         self.current_player_pose = 0
-        self.path_replanning_thresh_ms = 1000
+        self.path_replanning_thresh_ms = 800
+        self.ts_flag = True
+        self.first_update_time = 0
+        self.replanning_path = False
 
 
     def init_obj(self):
@@ -127,7 +132,7 @@ class Boss(Enemy):
         self.last_astar_exec = [astar_out,0,BackgroundEngine.get_current_time()]
         # print(f"Last astar exec: {astar_out}")
         # for i in astar_out:
-        #     print(f"Last astar exec: {astar_out}")
+        # #     print(f"Last astar exec: {astar_out}")
         #     self.create_obj(Candle([pygame.transform.scale((pygame.image.load('Assets/Interactables/BigCandle/1.png')), (60, 20)), 
         #             pygame.transform.scale((pygame.image.load('Assets/Interactables/BigCandle/2.png')), (60, 20))],pygame.Rect(i[0],i[1],50,50),self.create_obj,self.remove_obj))
 
@@ -240,41 +245,47 @@ class Boss(Enemy):
             self.net_force *= -1 
 
     def AI(self):
-        try:
-            # print(f" pose {self.current_player_pose}")
-            
-            if self.last_astar_exec[1] <= len(self.last_astar_exec[0])-1 and (BackgroundEngine.get_current_time()-self.last_astar_exec[2])<self.path_replanning_thresh_ms:
-                # print("execution")
+        if BackgroundEngine.get_current_time() >= (self.first_update_time + 10000):
+            try:
+                # print(f" pose {self.current_player_pose}")
+                self.replanning_path = (BackgroundEngine.get_current_time()-self.last_astar_exec[2])<self.path_replanning_thresh_ms
+                print(f"replanning {self.replanning_path}")
+                if self.last_astar_exec[1] <= len(self.last_astar_exec[0])-1 and self.replanning_path:
+                    # print("execution")
 
-                x_error = self.last_astar_exec[0][self.last_astar_exec[1]][0] - self.get_hitbox().centerx 
-                y_error = self.last_astar_exec[0][self.last_astar_exec[1]][1] - self.get_hitbox().bottom 
-                error = math.dist((self.get_hitbox().centerx,self.get_hitbox().bottom),self.last_astar_exec[0][self.last_astar_exec[1]])
-                print(f"desired pose is {self.last_astar_exec[0][self.last_astar_exec[1]]}")
-                print(f"current pose is {self.get_hitbox().midbottom }")
+                    x_error = self.last_astar_exec[0][self.last_astar_exec[1]][0] - self.get_hitbox().centerx 
+                    y_error = self.last_astar_exec[0][self.last_astar_exec[1]][1] - self.get_hitbox().bottom 
+                    error = math.dist((self.get_hitbox().centerx,self.get_hitbox().bottom),self.last_astar_exec[0][self.last_astar_exec[1]])
+                    print(f"desired pose is {self.last_astar_exec[0][self.last_astar_exec[1]]}")
+                    print(f"current pose is {self.get_hitbox().midbottom }")
 
-                # print(f"error is {math.fabs(error)}")
+                    # print(f"error is {math.fabs(error)}")
 
-                if (math.fabs(x_error))>20:
-                    pidOut = self.movement_pid_controller.calculate(self.get_hitbox().centerx, self.last_astar_exec[0][self.last_astar_exec[1]][0])
-                    print(f"pidOut {pidOut}")
-                    self.change_force(pidOut + sign(pidOut)*0.2,0)
-                    if (y_error) < -3:
-                        self.jump()
+                    if (math.fabs(x_error))>30:
+                        pidOut = self.movement_pid_controller.calculate(self.get_hitbox().centerx, self.last_astar_exec[0][self.last_astar_exec[1]][0])
+                        print(f"pidOut {pidOut}")
+                        self.change_force(pidOut + sign(pidOut)*0.2,0)
+                        if (y_error) < -3:
+                            self.jump()
+                    else:
+                        self.last_astar_exec = [self.last_astar_exec[0],self.last_astar_exec[1]+1,self.last_astar_exec[2]]
+
                 else:
-                    self.last_astar_exec = [self.last_astar_exec[0],self.last_astar_exec[1]+1,self.last_astar_exec[2]]
+                    self.get_best_path()
 
-            else:
-                # self.last_astar_exec = []
-                self.get_best_path()
-            pass
-        except Exception as e:
-            print(e)
-        
+                pass
+            except Exception as e:
+                print(e)
+        else:
+            self.hitbox.center = self.start_coords
+            print(self.start_coords)
+            
 
 
     def update(self):
-        if BackgroundEngine.get_current_time() >=  self.current_time + 10000:
-
+            if self.ts_flag:
+                self.first_update_time = BackgroundEngine.get_current_time()
+                self.ts_flag = False
             if self.lifespan():
                 self.AI()
             else:

@@ -1,4 +1,5 @@
 from typing import Dict, List, TypedDict
+from CompletedSprites.Enemies.Boss import Boss
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
 from CompletedSprites.Interactables.BasicAttack import BasicAttack
@@ -28,7 +29,7 @@ from CompletedSprites.Interactables.Heart import Heart
 from CompletedSprites.Interactables.Cookie import Cookie
 
 
-DynamicSpriteTypes = {MainPlayer,Ghoul,Skeleton}
+DynamicSpriteTypes = {MainPlayer,Ghoul,Skeleton,Boss}
 InteractableSpriteTypes = {testPotion,BasicAttack,HarmingHitbox,CandyCane,Candle, Heart, Cookie}
 PlatformSpriteTypes = {Platform}
 DoorSpriteTypes = {Door}
