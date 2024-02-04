@@ -58,65 +58,71 @@ class Game():
         self._game_over = False
         self._game_started = False
         self.level = level
-
-        p = Parser(level)
-        p.load_tilemap()
-        p.build_level()
-
-        self.ui = UI()
-        if self.level == 3:
-            self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 130, 50, 80), 16, self.create_object,self.remove_object)
-        else:
-            self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 290, 50, 80), 16, self.create_object,self.remove_object)
-
-        terrain = p.built
-        # self.boss = Boss(5, 12, [],pygame.Rect(200, 290, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_pose_supplier())
         self._is_paused = False
         self._font = pygame.font.SysFont("couriernew", 50)
         self._intro_font = pygame.font.Font('Assets/Background/controls.ttf', (9 + int(size / 8)))
         self._controls_font = pygame.font.Font('Assets/Background/controls.ttf', 18)
         self._title_font = pygame.font.Font('Assets/Background/controls.ttf', 20)
         self._victory_font = pygame.font.Font('Assets/Background/controls.ttf', 30)
+        self.ui = UI()
+        self.ui.change_score(player_score)
+        self.ui.change_weapon(Item.WHIP)
+        if level == 5:
+            self.ending_screen()
+        else:  
+            p = Parser(level)
+            p.load_tilemap()
+            p.build_level()
+
+            
+            if self.level == 3:
+                self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 130, 50, 80), 16, self.create_object,self.remove_object)
+            else:
+                self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 290, 50, 80), 16, self.create_object,self.remove_object)
+
+            terrain = p.built
+            # self.boss = Boss(5, 12, [],pygame.Rect(200, 290, 50, 80), 5, 0.4, self.create_object,self.remove_object,self._player.get_pose_supplier())
+            
                 
         # self._player:MainPlayer = MainPlayer(5, 12, [], pygame.Rect(100, 100, 50, 80), 16, self.create_object,self.remove_object)
 
-        terrain = p.built
-        platforms = [Platform(entry[0], entry[1], entry[2],) for entry in terrain['Platform']]
-        self.doors = [Door(entry[0], entry[1], level_requirments[self.level], self._controls_font) for entry in terrain['Door']]
-        all_interactables: List[Interactable] = [Candle(entry[0], entry[1], self.remove_object, self.create_object) for entry in terrain['Candle']]
-        self.bosses = [Boss(2, 8, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_pose_supplier()) for entry in terrain['Boss']]
-        self._enemies = [Ghoul(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox, self.level) for entry in terrain['Ghoul']]
-        self._enemies += [Skeleton(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox, self.level) for entry in terrain['Ghost']]
-        self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]
-        self._all_sprites: List[Sprite] = [self._player] + self.doors + platforms + all_interactables + self._enemies + self.bosses
-        self._is_paused = False
-        self._font = pygame.font.SysFont("couriernew", 50)
-        self.current_map = p.get_current_map()
-        self.starting_screen_position = height + score_box_height + 50
-        self.ui.change_score(player_score)
-        self.ui.change_weapon(Item.WHIP)
-        self.current_hearts = player_hearts
-        self.previous_update_frame = 0
+            terrain = p.built
+            platforms = [Platform(entry[0], entry[1], entry[2],) for entry in terrain['Platform']]
+            self.doors = [Door(entry[0], entry[1], level_requirments[self.level], self._controls_font) for entry in terrain['Door']]
+            all_interactables: List[Interactable] = [Candle(entry[0], entry[1], self.remove_object, self.create_object) for entry in terrain['Candle']]
+            self.bosses = [Boss(2, 8, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_pose_supplier()) for entry in terrain['Boss']]
+            self._enemies = [Ghoul(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox, self.level) for entry in terrain['Ghoul']]
+            self._enemies += [Skeleton(5, 12, [], entry[0], 5, 0.4, self.create_object,self.remove_object,self._player.get_hitbox, self.level) for entry in terrain['Ghost']]
+            self.static_ui = [Static_UI(sprite[0], sprite[1]) for sprite in self.ui.all_ui]
+            self._all_sprites: List[Sprite] = [self._player] + self.doors + platforms + all_interactables + self._enemies + self.bosses
+            self._is_paused = False
+            self._font = pygame.font.SysFont("couriernew", 50)
+            self.current_map = p.get_current_map()
+            self.starting_screen_position = height + score_box_height + 50
+            self.ui.change_score(player_score)
+            self.ui.change_weapon(Item.WHIP)
+            self.current_hearts = player_hearts
+            self.previous_update_frame = 0
 
 
-        self.whip_sound = pygame.mixer.Sound("Assets/Music/Sounds/whip.wav")
-        self.whip_sound.set_volume(0.2)
-        self.damage_sound = pygame.mixer.Sound("Assets/Music/Sounds/damage.wav")
-        self.damage_sound.set_volume(0.2)
-        self.nextLevel_sound = pygame.mixer.Sound("Assets/Music/Sounds/next level.wav")
-        self.nextLevel_sound.set_volume(0.2)
-        self.heart_sound = pygame.mixer.Sound("Assets/Music/Sounds/heart.wav")
-        self.heart_sound.set_volume(0.2)
-        self.enemy_sound = pygame.mixer.Sound("Assets/Music/Sounds/enemy.wav")
-        self.enemy_sound.set_volume(0.2)
-        self.projectile_sound = pygame.mixer.Sound("Assets/Music/Sounds/projectile.wav")
-        self.projectile_sound.set_volume(0.6)
-        self.timer_sound = pygame.mixer.Sound("Assets/Music/Sounds/timer.wav")
-        self.timer_sound.set_volume(0.4)
-        self.whip_hit_sound = pygame.mixer.Sound("Assets/Music/Sounds/whip_hit.wav")
-        self.whip_hit_sound.set_volume(0.2)
+            self.whip_sound = pygame.mixer.Sound("Assets/Music/Sounds/whip.wav")
+            self.whip_sound.set_volume(0.2)
+            self.damage_sound = pygame.mixer.Sound("Assets/Music/Sounds/damage.wav")
+            self.damage_sound.set_volume(0.2)
+            self.nextLevel_sound = pygame.mixer.Sound("Assets/Music/Sounds/next level.wav")
+            self.nextLevel_sound.set_volume(0.2)
+            self.heart_sound = pygame.mixer.Sound("Assets/Music/Sounds/heart.wav")
+            self.heart_sound.set_volume(0.2)
+            self.enemy_sound = pygame.mixer.Sound("Assets/Music/Sounds/enemy.wav")
+            self.enemy_sound.set_volume(0.2)
+            self.projectile_sound = pygame.mixer.Sound("Assets/Music/Sounds/projectile.wav")
+            self.projectile_sound.set_volume(0.6)
+            self.timer_sound = pygame.mixer.Sound("Assets/Music/Sounds/timer.wav")
+            self.timer_sound.set_volume(0.4)
+            self.whip_hit_sound = pygame.mixer.Sound("Assets/Music/Sounds/whip_hit.wav")
+            self.whip_hit_sound.set_volume(0.2)
 
-        self.timer = Timer()
+            self.timer = Timer()
         #if self.level == 3:
             #self.timer.time = 100
     
@@ -136,7 +142,7 @@ class Game():
         texts = [
             "Hansel and Gretel have", 
             "been captured by the witch.",
-            "Hansel must find Gretel",
+            "Gretel must find Hansel",
             "in the castle and escape.",
             "Push 1 to Start."
         ]
@@ -334,7 +340,7 @@ class Game():
                 for i in self.static_ui:
                     window.blit(i.return_current_image(), i.get_hitbox())
                 num = self.ui.get_numbers()
-                weapon = self.ui.all_ui[6]
+                weapon = self.ui.all_ui[5]
                 window.blit(weapon[0][0], weapon[1])
                 for i in num:
                     for j in i:
@@ -388,6 +394,10 @@ class Game():
                         self.whip_hit_sound.play()
                         if dynSprite.get_health() <= 0 and not dynSprite.got_score:
                             self.ui.change_score(dynSprite.get_score() + 500 * (self.level - 1))
+                    elif type(interactable) is BasicAttack and type(dynSprite) is Boss:
+                        self.whip_hit_sound.play()
+                        if dynSprite.get_health() <= 0 and not dynSprite.got_score:
+                            self.ui.change_score(9999)
         for candle in self._sprite_dict["Active"]["Candle"]:
             for interactable in self._sprite_dict['Active']["Interactable"]:
                 if interactable.hitbox.colliderect(candle.return_hitbox()):

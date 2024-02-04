@@ -7,7 +7,9 @@ from typing import Callable, List
 from abc import ABC, abstractmethod 
 import pygame
 from Abstract.Interaction import Interactable
+from CompletedSprites.Interactables.CandyCane import CandyCane
 from CompletedSprites.Interactables.Candle import Candle
+
 from CompletedSprites.Interactables.HarmingHitbox import HarmingHitbox
 from background_engine import BackgroundEngine
 from CompletedSprites.Platforms.Platform import Platform
@@ -53,19 +55,22 @@ class Boss(Enemy):
 
         super().__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health, horizontal_force,create_interactable,remove_interctable) 
         self.alignment = 0
-        self.walkLeft = [pygame.transform.scale(pygame.image.load('Assets/Enemies/Ghoul_walk/1.png'),(hitbox.width, hitbox.height)),
-                            pygame.transform.scale(pygame.image.load('Assets/Enemies/Ghoul_walk/2.png'),(hitbox.width, hitbox.height)),]
-        self.walkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Enemies/Ghoul_walk/1.png'),True,False),(hitbox.width, hitbox.height)),
-                        pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Enemies/Ghoul_walk/2.png'),True,False),(hitbox.width, hitbox.height)),]
+        self.walkLeft = [pygame.transform.scale(pygame.image.load('Assets/Enemies/witch.png'),(hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.image.load('Assets/Enemies/witch.png'),(hitbox.width, hitbox.height)),]
+        self.walkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Enemies/witch.png'),True,False),(hitbox.width, hitbox.height)),
+                        pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Enemies/witch.png'),True,False),(hitbox.width, hitbox.height)),]
         self.start_coords = deepcopy(hitbox.center)
         self.pose_supplier:Callable = get_player_pose
         self.invincible = False
         self.invince_time_ms = 200
         self.last_invince_timestep = 0
+        self.enemy_sound = pygame.mixer.Sound("Assets/Music/Sounds/enemy.wav")
+        self.enemy_sound.set_volume(0.2)
         self.movement_time_ms = 1000
+        self._score = 1
         self.sp = 0
         self.walkIndex = 0
-        self._score = 200
+        self._score = 1
         self.a_star_nodes = []
         self.last_astar_exec = []
         self.movement_pid_controller = PIDController(0.001,0)
@@ -73,6 +78,7 @@ class Boss(Enemy):
         self.path_replanning_thresh_ms = 800
         self.ts_flag = True
         self.first_update_time = 0
+        self.last_attack_time = 0
         self.replanning_path = False
 
 
@@ -82,6 +88,7 @@ class Boss(Enemy):
 
     def attack(self):
         pass
+
 
     def populate_node_map(self,allPlats:[Platform]):
         self.a_star_nodes = []
@@ -246,20 +253,32 @@ class Boss(Enemy):
 
     def AI(self):
         if BackgroundEngine.get_current_time() >= (self.first_update_time + 10000):
+            
+                
             try:
                 # print(f" pose {self.current_player_pose}")
+                if BackgroundEngine.get_current_time() % 500 == 0:
+                    print("yes")
+                    print("yes")
+                    print("yes")
+                    temp = BackgroundEngine.get_current_time()
+                    self.enemy_sound.play()
+                    while BackgroundEngine.get_current_time() < temp + 1000:
+                        pass
+                    self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,-1))
+                    self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,1))
+            
                 self.replanning_path = (BackgroundEngine.get_current_time()-self.last_astar_exec[2])<self.path_replanning_thresh_ms
                 print(f"replanning {self.replanning_path}")
                 if self.last_astar_exec[1] <= len(self.last_astar_exec[0])-1 and self.replanning_path:
-                    # print("execution")
-
+                    
+                    print("execution")
                     x_error = self.last_astar_exec[0][self.last_astar_exec[1]][0] - self.get_hitbox().centerx 
                     y_error = self.last_astar_exec[0][self.last_astar_exec[1]][1] - self.get_hitbox().bottom 
                     error = math.dist((self.get_hitbox().centerx,self.get_hitbox().bottom),self.last_astar_exec[0][self.last_astar_exec[1]])
                     print(f"desired pose is {self.last_astar_exec[0][self.last_astar_exec[1]]}")
                     print(f"current pose is {self.get_hitbox().midbottom }")
-
-                    # print(f"error is {math.fabs(error)}")
+                  # print(f"error is {math.fabs(error)}")
 
                     if (math.fabs(x_error))>30:
                         pidOut = self.movement_pid_controller.calculate(self.get_hitbox().centerx, self.last_astar_exec[0][self.last_astar_exec[1]][0])
@@ -282,12 +301,18 @@ class Boss(Enemy):
             
 
 
+        
     def update(self):
             if self.ts_flag:
                 self.first_update_time = BackgroundEngine.get_current_time()
                 self.ts_flag = False
             if self.lifespan():
                 self.AI()
+                self.last_attack_time = BackgroundEngine.get_current_time()
             else:
-                 self.remove_obj(self)
+                print("FUCK")
+                print("FUCK")
+                print("FUCK")
+
+                self.remove_obj(self)
     
