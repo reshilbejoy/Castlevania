@@ -80,11 +80,12 @@ class Boss(Enemy):
         self.first_update_time = 0
         self.last_attack_time = 0
         self.replanning_path = False
+        self._score = 9999
 
 
     def init_obj(self):
 
-        self.create_obj(HarmingHitbox(pygame.Rect(50, 200, 100, 100), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,5))
+        self.create_obj(HarmingHitbox(pygame.Rect(50, 200, 100, 100), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,6))
 
     def attack(self):
         pass
@@ -258,31 +259,28 @@ class Boss(Enemy):
             try:
                 # print(f" pose {self.current_player_pose}")
                 if BackgroundEngine.get_current_time() % 500 == 0:
-                    print("yes")
-                    print("yes")
-                    print("yes")
                     temp = BackgroundEngine.get_current_time()
                     self.enemy_sound.play()
-                    while BackgroundEngine.get_current_time() < temp + 1000:
-                        pass
+                    #while BackgroundEngine.get_current_time() < temp + 1000:
+                        #pass
                     self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,-1))
                     self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,1))
             
                 self.replanning_path = (BackgroundEngine.get_current_time()-self.last_astar_exec[2])<self.path_replanning_thresh_ms
-                print(f"replanning {self.replanning_path}")
+                #print(f"replanning {self.replanning_path}")
                 if self.last_astar_exec[1] <= len(self.last_astar_exec[0])-1 and self.replanning_path:
                     
-                    print("execution")
+                    #print("execution")
                     x_error = self.last_astar_exec[0][self.last_astar_exec[1]][0] - self.get_hitbox().centerx 
                     y_error = self.last_astar_exec[0][self.last_astar_exec[1]][1] - self.get_hitbox().bottom 
                     error = math.dist((self.get_hitbox().centerx,self.get_hitbox().bottom),self.last_astar_exec[0][self.last_astar_exec[1]])
-                    print(f"desired pose is {self.last_astar_exec[0][self.last_astar_exec[1]]}")
-                    print(f"current pose is {self.get_hitbox().midbottom }")
+                    #print(f"desired pose is {self.last_astar_exec[0][self.last_astar_exec[1]]}")
+                    #print(f"current pose is {self.get_hitbox().midbottom }")
                   # print(f"error is {math.fabs(error)}")
 
                     if (math.fabs(x_error))>30:
                         pidOut = self.movement_pid_controller.calculate(self.get_hitbox().centerx, self.last_astar_exec[0][self.last_astar_exec[1]][0])
-                        print(f"pidOut {pidOut}")
+                        #print(f"pidOut {pidOut}")
                         self.change_force(pidOut + sign(pidOut)*0.2,0)
                         if (y_error) < -3:
                             self.jump()
@@ -297,7 +295,7 @@ class Boss(Enemy):
                 print(e)
         else:
             self.hitbox.center = self.start_coords
-            print(self.start_coords)
+            #(self.start_coords)
             
 
 
@@ -310,9 +308,5 @@ class Boss(Enemy):
                 self.AI()
                 self.last_attack_time = BackgroundEngine.get_current_time()
             else:
-                print("FUCK")
-                print("FUCK")
-                print("FUCK")
-
                 self.remove_obj(self)
     

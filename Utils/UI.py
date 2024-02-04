@@ -20,14 +20,14 @@ class UI:
         player_img = [pygame.transform.scale(pygame.image.load('Assets/Sprites/UI_text/Player.png'), (165, 35))]
         player_hitbox = pygame.Rect(5, 50, 155, 35)
 
-       # enemy_img = [pygame.transform.scale(pygame.image.load('Assets/Sprites/UI_text/enemy.png'), (145, 35))]
-       # enemy_hitbox = pygame.Rect(13, 100, 145, 35)
+        enemy_img = [pygame.transform.scale(pygame.image.load('Assets/Sprites/UI_text/enemy.png'), (145, 35))]
+        enemy_hitbox = pygame.Rect(13, 100, 145, 35)
  
         heart_img = [pygame.transform.scale(pygame.image.load('Assets/Sprites/UI_text/heart.png'), (90, 60))]
         heart_hitbox = pygame.Rect(570, 62, 90, 60)
 
-        #p_img = [pygame.transform.scale(pygame.image.load('Assets/Sprites/UI_text/p.png'), (40, 30))]
-        #p_hitbox = pygame.Rect(650, 100, 5, 10)
+        p_img = [pygame.transform.scale(pygame.image.load('Assets/Sprites/UI_text/p.png'), (40, 30))]
+        p_hitbox = pygame.Rect(650, 100, 5, 10)
 
         box_img = [pygame.transform.scale(pygame.image.load('Assets/Sprites/UI-other/inventory_box.png'), (100, 80))]
         box_hitbox = pygame.Rect(450, 50, 100, 100)
@@ -36,7 +36,7 @@ class UI:
                         [stage_img, stage_hitbox],
                         [time_img, time_hitbox],
                         [player_img, player_hitbox],
-                       # [enemy_img, enemy_hitbox], 
+                        [enemy_img, enemy_hitbox], 
                         [heart_img, heart_hitbox],
                         #[p_img, p_hitbox],
                         [box_img, box_hitbox]]
@@ -67,11 +67,12 @@ class UI:
         self.weapon = change
         print(self.weapon)
         if self.weapon is Item.DAGGER:
-            self.all_ui[5][0] = [pygame.transform.scale(pygame.image.load(self.item_list[self.weapon]), (60, 60))]
-            self.all_ui[5][1] = pygame.Rect(470, 60, 90, 90)
+            print("Im here")
+            self.all_ui[6][0] = [pygame.transform.scale(pygame.image.load(self.item_list[self.weapon]), (60, 60))]
+            self.all_ui[6][1] = pygame.Rect(470, 60, 90, 90)
         else:
-            self.all_ui[5][0] = [pygame.transform.scale(pygame.image.load(self.item_list[self.weapon]), (80, 110))]
-            self.all_ui[5][1] = pygame.Rect(460, 60, 90, 90)
+            self.all_ui[6][0] = [pygame.transform.scale(pygame.image.load(self.item_list[self.weapon]), (80, 110))]
+            self.all_ui[6][1] = pygame.Rect(460, 60, 90, 90)
 
 
     def change_p(self, change):
@@ -89,7 +90,6 @@ class UI:
                 num.convert_time(self.time),
                 num.convert_stage(self.stage),
                 num.convert_heart(self.heart),
-                #num.convert_p(self.p),
                 num.convert_player_health(self.player_health),
                 num.convert_enemy_health(self.enemy_health)]
 

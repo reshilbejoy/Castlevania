@@ -1,4 +1,5 @@
-from typing import Callable, List,TypedDict
+from typing import Callable, List
+from typing_extensions import TypedDict
 import pygame
 from Abstract.Player import Player
 from Abstract.Interaction import Interactable

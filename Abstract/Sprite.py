@@ -24,7 +24,8 @@ class Sprite():
         if image != None:
             surface.blit(image, (hitbox.left - rect.left, hitbox.top - rect.top))
         else:
-            print(type(self))
+            pass
+            #print(type(self))
         #pygame.draw.rect(surface, (200, 90, 90), (hitbox.left - rect.left,hitbox.top - rect.top, hitbox.width, hitbox.height), 2)
         return surface
 
