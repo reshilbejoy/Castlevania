@@ -11,7 +11,7 @@ class PlatformType(Enum):
 
 class FakePlatform(Platform):
     def __init__(self, images: List[Surface], hitbox: Rect, platform: PlatformType):
-        super().__init__(self, images: List[Surface], hitbox: Rect, platform: PlatformType): 
+        super().__init__9self, images: List[Surface], hitbox: Rect, platform: PlatformType): 
     
     def byebye(self):
         del(self)

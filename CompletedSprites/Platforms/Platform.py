@@ -18,7 +18,7 @@ class Platform(Sprite):
         return self._platform
     
     def update(self):
-        #Platform has no update since it does not move
+        #has no update since it does not move
         pass
 
     def return_current_image(self) -> pygame.Surface:
