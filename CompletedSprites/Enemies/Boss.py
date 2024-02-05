@@ -7,7 +7,7 @@ from typing import Callable, List
 from abc import ABC, abstractmethod 
 import pygame
 from Abstract.Interaction import Interactable
-from CompletedSprites.Interactables.CandyCane import CandyCane
+from CompletedSprites.Interactables.Skythe import Skythe
 from CompletedSprites.Interactables.Candle import Candle
 
 from CompletedSprites.Interactables.HarmingHitbox import HarmingHitbox
@@ -55,10 +55,10 @@ class Boss(Enemy):
 
         super().__init__(terminal_vel_x, terminal_vel_y, images, hitbox, health, horizontal_force,create_interactable,remove_interctable) 
         self.alignment = 0
-        self.walkLeft = [pygame.transform.scale(pygame.image.load('Assets/Enemies/witch.png'),(hitbox.width, hitbox.height)),
-                            pygame.transform.scale(pygame.image.load('Assets/Enemies/witch.png'),(hitbox.width, hitbox.height)),]
-        self.walkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Enemies/witch.png'),True,False),(hitbox.width, hitbox.height)),
-                        pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Enemies/witch.png'),True,False),(hitbox.width, hitbox.height)),]
+        self.walkLeft = [pygame.transform.scale(pygame.image.load('Assets/Enemies/Boss/1.png'),(hitbox.width, hitbox.height)),
+                            pygame.transform.scale(pygame.image.load('Assets/Enemies/Boss/1.png'),(hitbox.width, hitbox.height)),]
+        self.walkRight = [pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Enemies/Boss/1.png'),True,False),(hitbox.width, hitbox.height)),
+                        pygame.transform.scale(pygame.transform.flip(pygame.image.load('Assets/Enemies/Boss/1.png'),True,False),(hitbox.width, hitbox.height)),]
         self.start_coords = deepcopy(hitbox.center)
         self.pose_supplier:Callable = get_player_pose
         self.invincible = False
@@ -81,6 +81,8 @@ class Boss(Enemy):
         self.last_attack_time = 0
         self.replanning_path = False
         self._score = 9999
+        self.path_replanning_thresh_ms = 1000
+        self.time = BackgroundEngine.get_current_time()
 
 
     def init_obj(self):
@@ -263,8 +265,8 @@ class Boss(Enemy):
                     self.enemy_sound.play()
                     #while BackgroundEngine.get_current_time() < temp + 1000:
                         #pass
-                    self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,-1))
-                    self.create_obj(CandyCane(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,1))
+                    self.create_obj(Skythe(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,-1))
+                    self.create_obj(Skythe(pygame.Rect(50, 200, 50, 30), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,1))
             
                 self.replanning_path = (BackgroundEngine.get_current_time()-self.last_astar_exec[2])<self.path_replanning_thresh_ms
                 #print(f"replanning {self.replanning_path}")

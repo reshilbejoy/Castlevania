@@ -27,7 +27,7 @@ class BackgroundEngine(ABC):
     def get_current_image(player_global_hitbox:pygame.Rect, level): #-> pygame.Rect, pygame.Surface:
 
         # a surface which is the same dimensions
-        image_rect = BackgroundEngine.get_current_image_frame(player_global_hitbox)
+        image_rect = BackgroundEngine.get_current_image_frame(player_global_hitbox, level)
         surface = pygame.Surface((image_rect.width, image_rect.height))
         surface.blit(_background_arr[level], (-image_rect.left, 0))
 
@@ -38,13 +38,17 @@ class BackgroundEngine(ABC):
         return window
 
     @staticmethod
-    def get_current_image_frame(player_global_hitbox:pygame.Rect)-> pygame.rect:
+    def get_current_image_frame(player_global_hitbox:pygame.Rect, level)-> pygame.rect:
         # the rectangle around the player
+        if level == 3:
+            backgroundLength = 1590
+        else:
+            backgroundLength = background_length
         window_rect = pygame.Rect(0, 0, length, height)
         if (player_global_hitbox.left < (length / 2)):
             window_rect.left = 0
-        elif player_global_hitbox.left > (background_length - (length / 2)):
-            window_rect.left = (background_length - (length))
+        elif player_global_hitbox.left > (backgroundLength - (length / 2)):
+            window_rect.left = (backgroundLength - (length))
         else:
             window_rect.left = player_global_hitbox.left - (length / 2)
 

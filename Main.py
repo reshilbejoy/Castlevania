@@ -1,5 +1,4 @@
-from typing import Dict, List
-from typing_extensions import TypedDict
+from typing import Dict, List,TypedDict
 from CompletedSprites.Enemies.Boss import Boss
 from CompletedSprites.Enemies.Ghoul import Ghoul
 from CompletedSprites.Enemies.Skeleton import Skeleton
@@ -28,6 +27,7 @@ import time
 from CompletedSprites.Doors.Door import Door
 from CompletedSprites.Interactables.Heart import Heart
 from CompletedSprites.Interactables.Cookie import Cookie
+from CompletedSprites.Enemies.Boss import Boss
 
 
 DynamicSpriteTypes = {MainPlayer,Ghoul,Skeleton,Boss}
@@ -273,7 +273,7 @@ class Game():
                         i.update()
                         # self._player.update()
                         # self.boss.update()
-                        if i.should_draw(self._player.return_hitbox()):
+                        if i.should_draw(self._player.return_hitbox(), self.level):
                             if type(i) in DynamicSpriteTypes:
                                 self._sprite_dict["Active"]["Dynamic"].append(i)
                             elif type(i) in InteractableSpriteTypes:
@@ -501,9 +501,9 @@ def run_game(game: Game):
 if __name__ == "__main__":
     pygame.mixer.music.load('Assets/Music/music_test.wav')
     pygame.mixer.music.play(-1)
-    Castlevania = Game(1)
+    Castlevania = Game(4)
     while not Castlevania._game_started:
         Castlevania.starting_screen()
-    Castlevania.controls_screen()
-    Castlevania.story_line()
+    #Castlevania.controls_screen()
+    #Castlevania.story_line()
     run_game(Castlevania)
