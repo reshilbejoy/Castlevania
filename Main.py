@@ -501,7 +501,7 @@ def run_game(game: Game):
 if __name__ == "__main__":
     pygame.mixer.music.load('Assets/Music/music_test.wav')
     pygame.mixer.music.play(-1)
-    Castlevania = Game(4)
+    Castlevania = Game(1)
     while not Castlevania._game_started:
         Castlevania.starting_screen()
     Castlevania.controls_screen()
