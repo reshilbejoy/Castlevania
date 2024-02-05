@@ -132,7 +132,7 @@ class Parser:
                     self.built['Ghost'].append(curr_list)
                 
                 if y == "B":
-                    rect = pygame.Rect(self.curr_x, self.curr_y, 50, 80)
+                    rect = pygame.Rect(self.curr_x, self.curr_y, 70, 100)
                     curr_list.append(rect)
                     self.built['Boss'].append(curr_list)
                 

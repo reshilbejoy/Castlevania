@@ -504,6 +504,6 @@ if __name__ == "__main__":
     Castlevania = Game(4)
     while not Castlevania._game_started:
         Castlevania.starting_screen()
-    #Castlevania.controls_screen()
-    #Castlevania.story_line()
+    Castlevania.controls_screen()
+    Castlevania.story_line()
     run_game(Castlevania)

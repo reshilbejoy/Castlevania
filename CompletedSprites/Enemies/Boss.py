@@ -87,7 +87,7 @@ class Boss(Enemy):
 
     def init_obj(self):
 
-        self.create_obj(HarmingHitbox(pygame.Rect(50, 200, 100, 100), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,6))
+        self.create_obj(HarmingHitbox(pygame.Rect(50, 200, self.get_hitbox().width, self.get_hitbox().height), self.get_pose_supplier(),TargetType.PLAYER,self.remove_obj,6))
 
     def attack(self):
         pass
@@ -255,7 +255,7 @@ class Boss(Enemy):
             self.net_force *= -1 
 
     def AI(self):
-        if BackgroundEngine.get_current_time() >= (self.first_update_time + 10000):
+        if BackgroundEngine.get_current_time() >= (self.first_update_time + 3000):
             
                 
             try:
